@@ -22,6 +22,7 @@ conn.connect();
  * 회원가입 시 uid, nickName, loginType을 받아와 db에 저장한다.
  */
 router.post('/register', function(req, res){
+  console.log(req.body.uid);
   var uid = req.body.uid;
   var nickName = req.body.nickName;
   var loginType = req.body.loginType;
