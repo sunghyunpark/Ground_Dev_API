@@ -12,16 +12,20 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 */
+var users = require('./routes/users');
+
+app.use('/api', users);
+
+app.use(function(req, res, next){
+  res.status(404);
+  res.json({
+    error : 'Not Found'
+  });
+});
+
 app.use(bodyParser.urlencoded({
   extended:false
 }));
-
-app.post('/users/register', function(req, res){
-  var uid = req.body.uid;
-  var nickName = req.body.nickName;
-  var time = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  console.log(time);
-})
 
 app.listen(1038, function(){
   console.log('Connected, 1038 port!');
