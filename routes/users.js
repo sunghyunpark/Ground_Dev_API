@@ -38,6 +38,6 @@ router.post('/register', function(req, res){
       //res.json(result);
     }
   });
-})
+});
 
 module.exports = router;
