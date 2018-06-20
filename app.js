@@ -1,17 +1,15 @@
-require('date-utils');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 
 var users = require('./routes/users');
 
-app.use('/api/users', users);
-
 app.use(function(req, res, next){
   res.status(404);
   res.json({
     error : 'Not Found'
   });
+  return;
 });
 
 app.use(bodyParser.urlencoded({
