@@ -3,7 +3,7 @@ var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
 
-var users = require('./routes/users');
+var users = require('./routes/users.js');
 
 app.use('/users', users);
 
