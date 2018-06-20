@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 
 var users = require('./routes/users');
 
-app.use('/api', users);
+app.use('/api/users', users);
 
 app.use(function(req, res, next){
   res.status(404);
