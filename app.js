@@ -15,10 +15,6 @@ app.use(function(req, res, next){
   return;
 });
 
-app.use(bodyParser.urlencoded({
-  extended:false
-}));
-
 app.listen(1038, function(){
   console.log('Connected, 1038 port!');
 })

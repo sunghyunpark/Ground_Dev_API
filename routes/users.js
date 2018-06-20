@@ -5,6 +5,10 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
 
+app.use(bodyParser.urlencoded({
+  extended:false
+}));
+
 var mysql = require('mysql');
 var conn = mysql.createConnection({
   host     : 'localhost',
