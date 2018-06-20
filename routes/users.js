@@ -16,11 +16,11 @@ conn.connect();
 /*
  * 회원가입 시 uid, nickName, loginType을 받아와 db에 저장한다.
  */
-router.post('/register', function(req, res, next){
-  console.log(req.body.uid);
-  var uid = req.body.uid;
-  var nickName = req.body.nickName;
-  var loginType = req.body.loginType;
+router.post('/register', function(req, res){
+  console.log(req.params.uid);
+  var uid = req.params.uid;
+  var nickName = req.params.nickName;
+  var loginType = req.params.loginType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var sql = 'INSERT INTO users (uid, login_type, nick_name, created_at) VALUES(?, ?, ?, ?)';
 
