@@ -35,4 +35,4 @@ router.post('/register', function(req, res){
   });
 })
 
-module.exports = users;
+module.exports = router;
