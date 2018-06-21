@@ -11,6 +11,10 @@ var conn = mysql.createConnection({
   database : 'ground_dev'
 });
 conn.connect();
+var app = express();
+app.use(bodyParser.urlencoded({
+  extended:false
+}));
 /*
  * 회원가입 시 uid, nickName, loginType을 받아와 db에 저장한다.
  */
