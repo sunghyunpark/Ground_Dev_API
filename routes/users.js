@@ -32,6 +32,6 @@ var users = {
         //res.json(result);
       }
     });
-  };
+  }
 };
 module.exports = users;
