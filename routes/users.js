@@ -35,8 +35,8 @@ router.post('/', function(req, res){
           res.status(500).send('Internal Server Error');
         }else{
           res.json({
-            code : 200
-            message : 'Success'
+            code : 200,
+            message : 'Success',
             result : [
               uid : result[0]
             ]
