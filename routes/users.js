@@ -28,8 +28,7 @@ router.post('/register', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      console.log('mysql success');
-      //res.json(result);
+      res.json(result);
     }
   });
 })
