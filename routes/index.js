@@ -5,4 +5,4 @@ var user = require('./users.js');
 
 router.post('/register', user.create);
 
-module.exports = router
+module.exports = router;
