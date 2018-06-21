@@ -2,6 +2,7 @@ require('date-utils');
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var router = express.Router();
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -11,31 +12,26 @@ var conn = mysql.createConnection({
   database : 'ground_dev'
 });
 conn.connect();
-var app = express();
-app.use(bodyParser.urlencoded({
-  extended:false
-}));
+
 /*
  * 회원가입 시 uid, nickName, loginType을 받아와 db에 저장한다.
  */
-var users = {
-  create: function(req, res){
-    console.log(req.body.nickName);
-    //var uid = req.body.uid;
-    var nickName = req.body.nickName;
-    var loginType = req.body.loginType;
-    var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-    var sql = 'INSERT INTO users (uid, login_type, nick_name, created_at) VALUES(?, ?, ?, ?)';
+router.post('/register', function(req, res){
+  console.log(req.body.nickName);
+  //var uid = req.body.uid;
+  var nickName = req.body.nickName;
+  var loginType = req.body.loginType;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+  var sql = 'INSERT INTO users (uid, login_type, nick_name, created_at) VALUES(?, ?, ?, ?)';
 
-    conn.query(sql, [uid, loginType, nickName, currentTime], function(err, result, fields){
-      if(err){
-        console.log(err);
-        res.status(500).send('Internal Server Error');
-      }else{
-        console.log('mysql success');
-        //res.json(result);
-      }
-    });
-  }
-};
+  conn.query(sql, [uid, loginType, nickName, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      console.log('mysql success');
+      //res.json(result);
+    }
+  });
+})
 module.exports = users;
