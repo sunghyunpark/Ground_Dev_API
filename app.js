@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({
   extended:true
 }));
 
-var users = require('./routes/users');
+var users = require('./routes/users.js');
 app.use('/users', users);
 
 app.use(function(req, res, next){
