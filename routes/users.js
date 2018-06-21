@@ -28,11 +28,21 @@ router.post('/', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      res.json({
-        code : 200
-        loginType : result[0];
-      });
-      return;
+      var sql = 'SELECT * FROM users WHERE uid=?';
+      conn.query(sql, [uid], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200
+            message : 'Success'
+            result : [
+              uid : result[0]
+            ]
+          });
+        }
+      })
     }
   });
 })
