@@ -37,9 +37,7 @@ router.post('/', function(req, res){
           res.json({
             code : 200,
             message : 'Success',
-            result : {
-              uid : result[0]
-            }
+            result : result[0]
           });
         }
       })
