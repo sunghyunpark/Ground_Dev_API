@@ -42,9 +42,8 @@ router.post('/', function(req, res){
             });
           }else{
             res.json({
-              code : 200,
+              code : 1001,
               message : 'Not Exist User',
-              result : result[0]
             });
           }
         }
@@ -53,6 +52,9 @@ router.post('/', function(req, res){
   });
 })
 
+/*
+ * 로그인 시 uid값을 받아와 해당 user data를 내려준다.
+ */
 router.get('/', function(req, res){
   var uid = req.params.uid;
   var sql = 'SELECT * FROM users WHERE uid=?';
@@ -70,9 +72,8 @@ router.get('/', function(req, res){
         });
       }else{
         res.json({
-          code : 200,
+          code : 1001,
           message : 'Not Exist User',
-          result : result[0]
         });
       }
     }
