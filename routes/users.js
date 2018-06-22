@@ -34,11 +34,19 @@ router.post('/', function(req, res){
           console.log(err);
           res.status(500).send('Internal Server Error');
         }else{
-          res.json({
-            code : 200,
-            message : 'Success',
-            result : result[0]
-          });
+          if(result.length > 0){
+            res.json({
+              code : 200,
+              message : 'Success',
+              result : result[0]
+            });
+          }else{
+            res.json({
+              code : 200,
+              message : 'Not Exist User',
+              result : result[0]
+            });
+          }
         }
       })
     }
@@ -54,11 +62,19 @@ router.get('/', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      res.json({
-        code : 200,
-        message : 'Success',
-        result : result[0]
-      });
+      if(result.length > 0){
+        res.json({
+          code : 200,
+          message : 'Success',
+          result : result[0]
+        });
+      }else{
+        res.json({
+          code : 200,
+          message : 'Not Exist User',
+          result : result[0]
+        });
+      }
     }
   })
 })
