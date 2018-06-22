@@ -45,4 +45,22 @@ router.post('/', function(req, res){
   });
 })
 
+router.get('/', function(req, res){
+  var uid = req.params.uid;
+  var sql = 'SELECT * FROM users WHERE uid=?';
+
+  conn.query(sql, [uid], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result[0]
+      });
+    }
+  })
+})
+
 module.exports = router;
