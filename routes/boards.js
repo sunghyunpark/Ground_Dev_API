@@ -13,6 +13,9 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+/*
+ * areaNo를 받아와 판단하여 서울/경기를 구분한 뒤 해당 테이블로 insert.
+ */
 router.post('/matching', function(req, res){
   var areaNo = req.body.areaNo;
   var uid = req.body.uid;
@@ -40,6 +43,36 @@ router.post('/matching', function(req, res){
       res.json({
         code : 200,
         message : 'Success'
+      });
+    }
+  })
+})
+
+router.get('/matching/:areaNo', function(req, res){
+  var areaNo = req.params.areaNo;
+  var tableName;
+  console.log(areaNo);
+
+  if(areaNo < 9){
+    //seoul
+    tableName = 'MBoard_Seoul';
+  }else if(areaNo > 9){
+    //gyeong gi
+    tableName = 'MBoard_Gyeonggi';
+  }else{
+    console.log('error');
+  }
+  var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
+
+  conn.query(sql, [areaNo], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result[0]
       });
     }
   })
