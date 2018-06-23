@@ -13,7 +13,7 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-router.post('/matching/', function(req, res){
+router.post('/matching', function(req, res){
   var areaNo = req.body.areaNo;
   var uid = req.body.uid;
   var title = req.body.title;
