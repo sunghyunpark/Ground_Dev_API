@@ -18,14 +18,31 @@ router.post('/matching', function(req, res){
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+  var table;
 
   if(areaNo < 9){
-    console.log('seoul');
+    //seoul
+    table = 'MBoard_Seoul';
   }else if(areaNo > 9){
-    console.log('gyeong gi');
+    //gyeong gi
+    table = 'MBoard_Gyeonggi';
   }else{
     console.log('error');
   }
+
+  var sql = 'INSERT INTO ${table} (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success'
+      });
+    }
+  })
 })
 
 module.exports = router;
