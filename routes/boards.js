@@ -19,19 +19,19 @@ router.post('/matching', function(req, res){
   var title = req.body.title;
   var contents = req.body.contents;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var table;
+  var tableName;
 
   if(areaNo < 9){
     //seoul
-    table = 'MBoard_Seoul';
+    tableName = 'MBoard_Seoul';
   }else if(areaNo > 9){
     //gyeong gi
-    table = 'MBoard_Gyeonggi';
+    tableName = 'MBoard_Gyeonggi';
   }else{
     console.log('error');
   }
 
-  var sql = 'INSERT INTO ${table} (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
