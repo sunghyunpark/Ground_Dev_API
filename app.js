@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use('/api/users', require('./routes/users'));
+app.use('/api/boards', require('./routes/boards'));
 
 app.use(function(req, res, next){
   res.status(404);
