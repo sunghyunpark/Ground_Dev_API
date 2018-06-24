@@ -72,7 +72,7 @@ router.get('/matching/:areaNo', function(req, res){
       res.json({
         code : 200,
         message : 'Success',
-        result : result[0]
+        result : result
       });
     }
   })
