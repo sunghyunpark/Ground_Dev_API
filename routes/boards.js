@@ -21,7 +21,7 @@ router.post('/matching', function(req, res){
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
-  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS').toISOString().replace(/T/, ' ').replace(/\..+/,'');
   var tableName;
 
   if(areaNo < 9){
