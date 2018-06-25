@@ -62,7 +62,13 @@ router.get('/matching/:areaNo', function(req, res){
   }else{
     console.log('error');
   }
-  var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
+  /*
+  * SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name
+  FROM MBoard_Seoul AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_no = '1' ORDER BY a.created_at DESC;
+  */
+  //var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name FROM '+
+  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? ORDER BY a.created_at DESC';
 
   conn.query(sql, [areaNo], function(err, result, fields){
     if(err){
