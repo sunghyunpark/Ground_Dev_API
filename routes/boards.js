@@ -127,11 +127,6 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
         if(err){
           console.log(err);
           res.status(500).send('Internal Server Error');
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
         }
       })
     }
