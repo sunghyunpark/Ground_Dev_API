@@ -48,6 +48,9 @@ router.post('/matching', function(req, res){
   })
 })
 
+/*
+* 상세 지역 > 게시판 List를 내려준다.
+*/
 router.get('/matching/:areaNo', function(req, res){
   var areaNo = req.params.areaNo;
   var tableName;
@@ -80,6 +83,52 @@ router.get('/matching/:areaNo', function(req, res){
         message : 'Success',
         result : result
       });
+    }
+  })
+})
+
+router.get('/matching/view/:areaNo/:no', function(req, res){
+  var areaNo = req.params.areaNo;
+  var no = req.params.no;
+
+  var tableName;
+  console.log(areaNo);
+
+  if(areaNo < 9){
+    //seoul
+    tableName = 'MBoard_Seoul';
+  }else if(areaNo > 9){
+    //gyeong gi
+    tableName = 'MBoard_Gyeonggi';
+  }else{
+    console.log('error');
+  }
+
+/*
+ * SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name FROM
+Mboard_Seoul, AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no = '1';
+​
+UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
+*/
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name FROM '+
+  tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+  conn.query(sql, [no], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
+      conn.query(sql, [no], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
     }
   })
 })
