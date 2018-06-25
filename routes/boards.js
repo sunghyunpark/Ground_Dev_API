@@ -117,6 +117,11 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
       var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
       conn.query(sql, [no], function(err, result, fields){
         if(err){
