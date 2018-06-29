@@ -87,6 +87,9 @@ router.get('/matching/:areaNo', function(req, res){
   })
 })
 
+/*
+* 게시글 내용을 내려준다.
+*/
 router.get('/matching/view/:areaNo/:no', function(req, res){
   var areaNo = req.params.areaNo;
   var no = req.params.no;
@@ -145,13 +148,16 @@ router.post('/matching/view/comment', function(req, res){
   var comment = req.body.comment;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var board_type;
+  var tableName;
 
   if(areaNo < 9){
     //seoul
     board_type = 'Seoul';
+    tableName = 'MBoard_Seoul';
   }else if(areaNo > 9){
     //gyeong gi
     board_type = 'Gyeonggi';
+    tableName = 'MBoard_Gyeonggi';
   }else{
     console.log('error');
   }
@@ -163,10 +169,18 @@ router.post('/matching/view/comment', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      res.json({
-        code : 200,
-        message : 'Success'
-      });
+      var sql = 'UPDATE '+tableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
+      conn.query(sql, [no], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
     }
   })
 
