@@ -178,7 +178,7 @@ router.get('/matching/view/:articleNo/:boardType/commentList', function(req, res
   var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
   'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=?';
 
-  conn.query(sql, [articleNo, boardType], function(err, result, fields){
+  conn.query(sql, [boardType, articleNo], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
