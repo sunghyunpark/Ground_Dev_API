@@ -172,8 +172,8 @@ router.post('/matching/view/comment', function(req, res){
 
 })
 
-router.get('/matching/view/:no/:board_type/commentList', function(req, res){
-  var no = req.params.no;
+router.get('/matching/view/:articleNo/:boardType/commentList', function(req, res){
+  var articleNo = req.params.articleNo;
   var boardType = req.params.boardType;
   var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
   'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=?';
