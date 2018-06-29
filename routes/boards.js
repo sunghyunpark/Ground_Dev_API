@@ -135,4 +135,45 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
   })
 })
 
+/*
+* 게시글 화면에서 코멘트 Insert
+*/
+router.post('/matching/view/comment', function(req, res){
+  var areaNo = req.body.areaNo;
+  var no = req.body.no;
+  var writer_id = req.body.writer_id;
+  var comment = req.body.comment;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+  var board_type;
+
+  if(areaNo < 9){
+    //seoul
+    board_type = 'MBoard_Seoul';
+  }else if(areaNo > 9){
+    //gyeong gi
+    board_type = 'MBoard_Gyeonggi';
+  }else{
+    console.log('error');
+  }
+
+  var sql = 'INSERT INTO MComment (article_no, board_type, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
+
+  conn.query(sql, [no, board_type, writer_id, comment, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+      });
+    }
+  })
+
+})
+
+router.get('/matching/view/:areaNo/:no/comment', function(req, res){
+
+})
+
 module.exports = router;
