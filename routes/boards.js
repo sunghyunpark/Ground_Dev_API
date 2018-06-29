@@ -148,10 +148,10 @@ router.post('/matching/view/comment', function(req, res){
 
   if(areaNo < 9){
     //seoul
-    board_type = 'MBoard_Seoul';
+    board_type = 'Seoul';
   }else if(areaNo > 9){
     //gyeong gi
-    board_type = 'MBoard_Gyeonggi';
+    board_type = 'Gyeonggi';
   }else{
     console.log('error');
   }
@@ -165,14 +165,32 @@ router.post('/matching/view/comment', function(req, res){
     }else{
       res.json({
         code : 200,
-        message : 'Success',
+        message : 'Success'
       });
     }
   })
 
 })
 
-router.get('/matching/view/:areaNo/:no/comment', function(req, res){
+router.get('/matching/view/:no/:board_type/commentList', function(req, res){
+  var no = req.params.no;
+  var boardType = req.params.boardType;
+  var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
+  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=?';
+
+  conn.query(sql, [no, board_type], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+
 
 })
 
