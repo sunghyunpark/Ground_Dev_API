@@ -77,7 +77,7 @@ router.get('/matching/:areaNo/:no', function(req, res){
     offsetSql = '';
   }
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 5';
+  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [areaNo, no], function(err, result, fields){
     if(err){
@@ -192,13 +192,18 @@ router.post('/matching/view/comment', function(req, res){
 
 })
 
-router.get('/matching/view/:articleNo/:boardType/commentList', function(req, res){
+router.get('/matching/view/:articleNo/:boardType/commentList/:no', function(req, res){
+  var no = req.params.no;
   var articleNo = req.params.articleNo;
   var boardType = req.params.boardType;
+  var offsetSql = 'AND a.created_at < (SELECT created_at FROM MComment WHERE no=?)';
+  if(no == 0){
+    offsetSql = '';
+  }
   var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
-  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=?';
+  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 5';
 
-  conn.query(sql, [boardType, articleNo], function(err, result, fields){
+  conn.query(sql, [boardType, articleNo, no], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
