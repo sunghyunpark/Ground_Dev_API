@@ -51,7 +51,8 @@ router.post('/matching', function(req, res){
 /*
 * 상세 지역 > 게시판 List를 내려준다.
 */
-router.get('/matching/:areaNo', function(req, res){
+router.get('/matching/:areaNo/:no', function(req, res){
+  var no = req.params.no;
   var areaNo = req.params.areaNo;
   var tableName;
   console.log(areaNo);
@@ -70,10 +71,11 @@ router.get('/matching/:areaNo', function(req, res){
   FROM MBoard_Seoul AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_no = '1' ORDER BY a.created_at DESC;
   */
   //var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
+  //"AND a.created_at < (SELECT created_at FROM comment WHERE comment_id = '$bottom_comment') ";
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? ORDER BY a.created_at DESC';
+  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?) ORDER BY a.created_at DESC LIMIT 5';
 
-  conn.query(sql, [areaNo], function(err, result, fields){
+  conn.query(sql, [areaNo, no], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
