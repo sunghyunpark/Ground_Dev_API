@@ -72,8 +72,12 @@ router.get('/matching/:areaNo/:no', function(req, res){
   */
   //var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
   //"AND a.created_at < (SELECT created_at FROM comment WHERE comment_id = '$bottom_comment') ";
+  var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+  if(no == 0){
+    offsetSql = '';
+  }
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?) ORDER BY a.created_at DESC LIMIT 5';
+  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 5';
 
   conn.query(sql, [areaNo, no], function(err, result, fields){
     if(err){
