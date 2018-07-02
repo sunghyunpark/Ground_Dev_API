@@ -149,7 +149,7 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
 */
 router.post('/matching/view/comment', function(req, res){
   var areaNo = req.body.areaNo;
-  var articleNo = req.body.aritlceNo;
+  var articleNo = req.body.artilceNo;
   var writer_id = req.body.writer_id;
   var comment = req.body.comment;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
