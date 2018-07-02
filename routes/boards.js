@@ -149,7 +149,7 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
 */
 router.post('/matching/view/comment', function(req, res){
   var areaNo = req.body.areaNo;
-  var no = req.body.no;
+  var articleNo = req.body.aritlceNo;
   var writer_id = req.body.writer_id;
   var comment = req.body.comment;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
@@ -170,13 +170,13 @@ router.post('/matching/view/comment', function(req, res){
 
   var sql = 'INSERT INTO MComment (article_no, board_type, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
 
-  conn.query(sql, [no, board_type, writer_id, comment, currentTime], function(err, result, fields){
+  conn.query(sql, [articleNo, board_type, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
       var sql = 'UPDATE '+tableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
-      conn.query(sql, [no], function(err, result, fields){
+      conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
           res.status(500).send('Internal Server Error');
@@ -192,18 +192,18 @@ router.post('/matching/view/comment', function(req, res){
 
 })
 
-router.get('/matching/view/:articleNo/:boardType/commentList/:no', function(req, res){
-  var no = req.params.no;
+router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', function(req, res){
+  var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
   var boardType = req.params.boardType;
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM MComment WHERE no=?)';
-  if(no == 0){
+  if(commentNo == 0){
     offsetSql = '';
   }
   var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
   'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
-  conn.query(sql, [boardType, articleNo, no], function(err, result, fields){
+  conn.query(sql, [boardType, articleNo, commentNo], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
