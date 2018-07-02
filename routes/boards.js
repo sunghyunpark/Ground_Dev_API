@@ -201,7 +201,7 @@ router.get('/matching/view/:articleNo/:boardType/commentList/:no', function(req,
     offsetSql = '';
   }
   var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name FROM MComment '+
-  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 5';
+  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [boardType, articleNo, no], function(err, result, fields){
     if(err){
