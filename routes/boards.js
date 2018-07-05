@@ -226,6 +226,21 @@ router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', functi
 })
 
 
-router.get('/matching/updated')
+router.get('/matching/updated', function(req, res){
+  var sql = 'SELECT * FROM MBoardUpdate';
+
+  conn.query(sql, function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+})
 
 module.exports = router;
