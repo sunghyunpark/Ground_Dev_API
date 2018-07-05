@@ -40,10 +40,18 @@ router.post('/matching', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      res.json({
-        code : 200,
-        message : 'Success'
-      });
+      var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
     }
   })
 })
@@ -215,8 +223,9 @@ router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', functi
       });
     }
   })
-
-
 })
+
+
+router.get('/matching/updated')
 
 module.exports = router;
