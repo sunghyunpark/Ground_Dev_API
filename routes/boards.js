@@ -200,6 +200,9 @@ router.post('/matching/view/comment', function(req, res){
 
 })
 
+/*
+* 댓글 리스트를 내려준다.
+*/
 router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', function(req, res){
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
@@ -225,9 +228,29 @@ router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', functi
   })
 })
 
-
+/*
+* 매칭 지역별 최근 업데이트 정보를 내려준다
+*/
 router.get('/matching/updated', function(req, res){
   var sql = 'SELECT * FROM MBoardUpdate';
+
+  conn.query(sql, function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+})
+
+router.get('/matching/recent', function(req, res){
+  var sql = 'SELECT * FROM (SELECT * FROM (SELECT * FROM MBoard_Seoul ORDER BY created_at DESC LIMIT 5) AS a '+
+  'UNION ALL SELECT * FROM (SELECT * FROM MBoard_Gyeonggi ORDER BY created_at DESC LIMIT 5) AS b) AS c ORDER BY created_at DESC LIMIT 5';
 
   conn.query(sql, function(err, result, fields){
     if(err){
