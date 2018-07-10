@@ -188,28 +188,44 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
 /*
 * 게시글 화면에서 코멘트 Insert
 */
-router.post('/matching/view/comment', function(req, res){
+router.post('/view/comment', function(req, res){
   var areaNo = req.body.areaNo;
   var articleNo = req.body.articleNo;
   var writer_id = req.body.writer_id;
   var comment = req.body.comment;
+  var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var areaName;
   var tableName;
+  var updateTableName;
 
-  if(areaNo < 9){
-    //seoul
-    areaName = 'Seoul';
-    tableName = 'MBoard_Seoul';
-  }else if(areaNo > 9){
-    //gyeong gi
-    areaName = 'Gyeonggi';
-    tableName = 'MBoard_Gyeonggi';
-  }else{
-    console.log('error');
-  }
+  /**
+  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+  */
+    if(boardType == 'match'){
+      tableName = 'MComment';
+      if(areaNo < 9){
+        //seoul
+        areaName = 'Seoul';
+        updateTableName = 'MBoard_Seoul';
+      }else if(areaNo > 9){
+        //gyeong gi
+        areaName = 'Gyeonggi';
+        updateTableName = 'MBoard_Gyeonggi';
+      }else{
+        console.log('error');
+      }
+    }else if(boardType == 'hire'){
+      areaName = '';
+      tableName = 'HComment';
+      updateTableName = 'HBoard';
+    }else if(boardType == 'recruit'){
+      areaName = '';
+      tableName = 'RComment';
+      updateTableName = 'RBoard';
+    }
 
-  var sql = 'INSERT INTO MComment (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
+  var sql = 'INSERT INTO '+tableName+' (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
 
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
