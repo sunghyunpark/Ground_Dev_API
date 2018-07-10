@@ -69,89 +69,34 @@ router.post('/', function(req, res){
     }
   })
 })
-
-/*
-* Hire : 게시판 insert
-*/
-router.post('/hire', function(req, res){
-  var areaNo = req.body.areaNo;
-  var uid = req.body.uid;
-  var title = req.body.title;
-  var contents = req.body.contents;
-  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-
-  var sql = 'INSERT INTO HBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
-    }else{
-      var sql = 'UPDATE HBoardUpdate SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.status(500).send('Internal Server Error');
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
-        }
-      })
-    }
-  })
-})
-
-/*
-* recruit insert
-*/
-router.post('/recruit', function(req, res){
-  var areaNo = req.body.areaNo;
-  var uid = req.body.uid;
-  var title = req.body.title;
-  var contents = req.body.contents;
-  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-
-  var sql = 'INSERT INTO RBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
-    }else{
-      var sql = 'UPDATE RBoardUpdate SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.status(500).send('Internal Server Error');
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
-        }
-      })
-    }
-  })
-})
-
 /*
 * 상세 지역 > 게시판 List를 내려준다.
 */
-router.get('/matching/:areaNo/:no', function(req, res){
+router.get('/:boardType/:areaNo/:no', function(req, res){
   var no = req.params.no;
   var areaNo = req.params.areaNo;
+  var boardType = req.params.boardType;
   var tableName;
   console.log(areaNo);
 
-  if(areaNo < 9){
-    //seoul
-    tableName = 'MBoard_Seoul';
-  }else if(areaNo > 9){
-    //gyeong gi
-    tableName = 'MBoard_Gyeonggi';
-  }else{
-    console.log('error');
-  }
+  /**
+  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+  */
+    if(boardType == 'match'){
+      if(areaNo < 9){
+        //seoul
+        tableName = 'MBoard_Seoul';
+      }else if(areaNo > 9){
+        //gyeong gi
+        tableName = 'MBoard_Gyeonggi';
+      }else{
+        console.log('error');
+      }
+    }else if(boardType == 'hire'){
+      tableName = 'HBoard';
+    }else if(boardType == 'recruit'){
+      tableName = 'RBoard';
+    }
   /*
   * SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name
   FROM MBoard_Seoul AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_no = '1' ORDER BY a.created_at DESC;
