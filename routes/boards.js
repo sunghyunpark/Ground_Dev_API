@@ -246,11 +246,6 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
   var tableName;
   var areaNameSql;
 
-    if(commentNo == 0){
-      offsetSql = '';
-    }else{
-      offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
-    }
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
   */
@@ -263,6 +258,12 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
         areaName = 'Gyeonggi';
       }
       tableName = 'MComment';
+
+      if(commentNo == 0){
+        offsetSql = '';
+      }else{
+        offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+      }
 
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
       ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
