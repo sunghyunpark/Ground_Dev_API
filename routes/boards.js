@@ -241,7 +241,7 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
   var areaNo = req.params.areaNo;
-  var offsetSql = 'AND a.created_at < (SELECT created_at FROM MComment WHERE no=?)';
+  var offsetSql;
   var areaName;    // 게시글의 지역 HBoard, RBoard에서는 빈값으로 들어간다.
   var tableName;
   var areaNameSql;
@@ -270,6 +270,8 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
 
   if(commentNo == 0){
     offsetSql = '';
+  }else{
+    offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   }
   var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
   ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+areaNameSql+' ORDER BY a.created_at DESC LIMIT 10';
