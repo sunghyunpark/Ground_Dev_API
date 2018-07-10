@@ -14,7 +14,7 @@ var conn = mysql.createConnection({
 conn.connect();
 
 /*
- * areaNo를 받아와 판단하여 서울/경기를 구분한 뒤 해당 테이블로 insert.
+ * Match : areaNo를 받아와 판단하여 서울/경기를 구분한 뒤 해당 테이블로 insert.
  */
 router.post('/matching', function(req, res){
   var areaNo = req.body.areaNo;
@@ -41,6 +41,38 @@ router.post('/matching', function(req, res){
       res.status(500).send('Internal Server Error');
     }else{
       var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
+    }
+  })
+})
+
+/*
+* Hire : 게시판 insert
+*/
+router.post('/hire', function(req, res){
+  var areaNo = req.body.areaNo;
+  var uid = req.body.uid;
+  var title = req.body.title;
+  var contents = req.body.contents;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+
+  var sql = 'INSERT INTO HBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      var sql = 'UPDATE HBoardUpdate SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         if(err){
           console.log(err);
