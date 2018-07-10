@@ -261,34 +261,31 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       }else if(areaNo > 9){
         //gyeong gi
         areaName = 'Gyeonggi';
-      }else{
-        console.log('error');
       }
       tableName = 'MComment';
-      areaNameSql = ' AND a.area_name=? ';
-    }else if(boardType == 'hire'){
-      tableName = 'HComment';
-      areaNameSql = '?';
-    }else if(boardType == 'recruit'){
-      tableName = 'RComment';
-      areaNameSql = '?';
-    }
 
-  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
-  ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+areaNameSql+' ORDER BY a.created_at DESC LIMIT 10';
+      var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
+      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+      conn.query(sql, [articleNo, commentNo], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success',
+            result : result
+          });
+        }
+      })
 
-  conn.query(sql, [articleNo, commentNo, areaName], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
     }else{
-      res.json({
-        code : 200,
-        message : 'Success',
-        result : result
-      });
+      if(boardType == 'hire'){
+        tableName = 'HComment';
+      }else if(boardType == 'recruit'){
+        tableName = 'RComment';
+      }
     }
-  })
 })
 
 /*
