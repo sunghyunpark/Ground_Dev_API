@@ -236,28 +236,45 @@ router.post('/matching/view/comment', function(req, res){
 /*
 * 댓글 리스트를 내려준다.
 */
-router.get('/matching/view/:articleNo/:areaNo/commentList/:commentNo', function(req, res){
+router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', function(req, res){
+  var boardType = req.params.boardType;
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
   var areaNo = req.params.areaNo;
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM MComment WHERE no=?)';
-  var areaName;
-  if(areaNo < 9){
-    //seoul
-    areaName = 'Seoul';
-  }else if(areaNo > 9){
-    //gyeong gi
-    areaName = 'Gyeonggi';
-  }else{
-    console.log('error');
-  }
+  var areaName;    // 게시글의 지역 HBoard, RBoard에서는 빈값으로 들어간다.
+  var tableName;
+  var areaNameSql;
+  /**
+  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+  */
+    if(boardType == 'match'){
+      if(areaNo < 9){
+        //seoul
+        areaName = 'Seoul';
+      }else if(areaNo > 9){
+        //gyeong gi
+        areaName = 'Gyeonggi';
+      }else{
+        console.log('error');
+      }
+      tableName = 'MBoard';
+      areaNameSql = ' AND a.area_name=? ';
+    }else if(boardType == 'hire'){
+      tableName = 'HBoard';
+      areaNameSql = '';
+    }else if(boardType == 'recruit'){
+      tableName = 'RBoard';
+      areaNameSql = '';
+    }
+
   if(commentNo == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM MComment '+
-  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_name=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
+  ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+areaNameSql+' ORDER BY a.created_at DESC LIMIT 10';
 
-  conn.query(sql, [areaName, articleNo, commentNo], function(err, result, fields){
+  conn.query(sql, [articleNo, commentNo, areaName], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
