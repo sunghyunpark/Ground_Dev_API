@@ -16,22 +16,36 @@ conn.connect();
 /*
  * Match : areaNo를 받아와 판단하여 서울/경기를 구분한 뒤 해당 테이블로 insert.
  */
-router.post('/matching', function(req, res){
+router.post('/', function(req, res){
   var areaNo = req.body.areaNo;
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
+  var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var tableName;
+  var updateTableName;
 
-  if(areaNo < 9){
-    //seoul
-    tableName = 'MBoard_Seoul';
-  }else if(areaNo > 9){
-    //gyeong gi
-    tableName = 'MBoard_Gyeonggi';
-  }else{
-    console.log('error');
+/**
+* boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+*/
+  if(boardType == 'match'){
+    if(areaNo < 9){
+      //seoul
+      tableName = 'MBoard_Seoul';
+    }else if(areaNo > 9){
+      //gyeong gi
+      tableName = 'MBoard_Gyeonggi';
+    }else{
+      console.log('error');
+    }
+    updateTableName = 'MBoardUpdate';
+  }else if(boardType == 'hire'){
+    tableName = 'HBoard';
+    updateTableName = 'HBoardUpdate';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBoard';
+    updateTableName = 'RBoardUpdate';
   }
 
   var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
@@ -40,7 +54,7 @@ router.post('/matching', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+      var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         if(err){
           console.log(err);
@@ -192,7 +206,7 @@ router.get('/hire/:areaNo/:no', function(req, res){
 })
 
 /*
-*
+* recruit 게시판 리스트
 */
 router.get('/recruit/:areaNo/:no', function(req, res){
   var no = req.params.no;
