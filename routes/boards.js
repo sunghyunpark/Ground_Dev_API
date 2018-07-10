@@ -245,6 +245,12 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
   var areaName;    // 게시글의 지역 HBoard, RBoard에서는 빈값으로 들어간다.
   var tableName;
   var areaNameSql;
+
+    if(commentNo == 0){
+      offsetSql = '';
+    }else{
+      offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+    }
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
   */
@@ -262,17 +268,12 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       areaNameSql = ' AND a.area_name=? ';
     }else if(boardType == 'hire'){
       tableName = 'HComment';
-      areaNameSql = '';
+      areaNameSql = '?';
     }else if(boardType == 'recruit'){
       tableName = 'RComment';
-      areaNameSql = '';
+      areaNameSql = '?';
     }
 
-  if(commentNo == 0){
-    offsetSql = '';
-  }else{
-    offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
-  }
   var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
   ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+areaNameSql+' ORDER BY a.created_at DESC LIMIT 10';
 
