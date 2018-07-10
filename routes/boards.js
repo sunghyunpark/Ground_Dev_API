@@ -89,6 +89,38 @@ router.post('/hire', function(req, res){
 })
 
 /*
+* recruit insert
+*/
+router.post('/recruit', function(req, res){
+  var areaNo = req.body.areaNo;
+  var uid = req.body.uid;
+  var title = req.body.title;
+  var contents = req.body.contents;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+
+  var sql = 'INSERT INTO RBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      var sql = 'UPDATE RBoardUpdate SET updated_at=? WHERE area_no=?';
+      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.status(500).send('Internal Server Error');
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
+    }
+  })
+})
+
+/*
 * 상세 지역 > 게시판 List를 내려준다.
 */
 router.get('/matching/:areaNo/:no', function(req, res){
@@ -144,6 +176,32 @@ router.get('/hire/:areaNo/:no', function(req, res){
     offsetSql = '';
   }
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM HBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+
+  conn.query(sql, [areaNo, no], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+})
+
+/*
+*
+*/
+router.get('/recruit/:areaNo/:no', function(req, res){
+  var no = req.params.no;
+  var areaNo = req.params.areaNo;
+  var offsetSql = 'AND a.created_at < (SELECT created_at FROM RBoard WHERE no=?)';
+  if(no == 0){
+    offsetSql = '';
+  }
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM RBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [areaNo, no], function(err, result, fields){
     if(err){
