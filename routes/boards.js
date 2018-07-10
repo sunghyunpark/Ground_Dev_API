@@ -232,7 +232,7 @@ router.post('/view/comment', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      var sql = 'UPDATE '+tableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
+      var sql = 'UPDATE '+updateTableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
