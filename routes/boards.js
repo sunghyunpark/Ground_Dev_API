@@ -258,13 +258,13 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       }else{
         console.log('error');
       }
-      tableName = 'MBoard';
+      tableName = 'MComment';
       areaNameSql = ' AND a.area_name=? ';
     }else if(boardType == 'hire'){
-      tableName = 'HBoard';
+      tableName = 'HComment';
       areaNameSql = '';
     }else if(boardType == 'recruit'){
-      tableName = 'RBoard';
+      tableName = 'RComment';
       areaNameSql = '';
     }
 
