@@ -134,6 +134,32 @@ router.get('/matching/:areaNo/:no', function(req, res){
 })
 
 /*
+* hire 게시판 리스트
+*/
+router.get('/hire/:areaNo/:no', function(req, res){
+  var no = req.params.no;
+  var areaNo = req.params.areaNo;
+  var offsetSql = 'AND a.created_at < (SELECT created_at FROM HBoard WHERE no=?)';
+  if(no == 0){
+    offsetSql = '';
+  }
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM HBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+
+  conn.query(sql, [areaNo, no], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.status(500).send('Internal Server Error');
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+})
+
+/*
 * 게시글 내용을 내려준다.
 */
 router.get('/matching/view/:areaNo/:no', function(req, res){
