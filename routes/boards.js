@@ -161,24 +161,24 @@ router.post('/matching/view/comment', function(req, res){
   var writer_id = req.body.writer_id;
   var comment = req.body.comment;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var board_type;
+  var areaName;
   var tableName;
 
   if(areaNo < 9){
     //seoul
-    board_type = 'Seoul';
+    areaName = 'Seoul';
     tableName = 'MBoard_Seoul';
   }else if(areaNo > 9){
     //gyeong gi
-    board_type = 'Gyeonggi';
+    areaName = 'Gyeonggi';
     tableName = 'MBoard_Gyeonggi';
   }else{
     console.log('error');
   }
 
-  var sql = 'INSERT INTO MComment (article_no, board_type, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
+  var sql = 'INSERT INTO MComment (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
 
-  conn.query(sql, [articleNo, board_type, writer_id, comment, currentTime], function(err, result, fields){
+  conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
@@ -203,18 +203,28 @@ router.post('/matching/view/comment', function(req, res){
 /*
 * 댓글 리스트를 내려준다.
 */
-router.get('/matching/view/:articleNo/:boardType/commentList/:commentNo', function(req, res){
+router.get('/matching/view/:articleNo/:areaNo/commentList/:commentNo', function(req, res){
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
-  var boardType = req.params.boardType;
+  var areaNo = req.params.areaNo;
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM MComment WHERE no=?)';
+  var areaName;
+  if(areaNo < 9){
+    //seoul
+    areaName = 'Seoul';
+  }else if(areaNo > 9){
+    //gyeong gi
+    areaName = 'Gyeonggi';
+  }else{
+    console.log('error');
+  }
   if(commentNo == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.article_no, a.board_type, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM MComment '+
-  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.board_type=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM MComment '+
+  'AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_name=? AND a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
-  conn.query(sql, [boardType, articleNo, commentNo], function(err, result, fields){
+  conn.query(sql, [areaName, articleNo, commentNo], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
