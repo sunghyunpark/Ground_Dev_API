@@ -70,31 +70,32 @@ router.post('/', function(req, res){
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
     updateTableName = 'HBoardUpdate';
+
+    var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+    conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }else{
+        var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
+        conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+          if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+          }else{
+            res.json({
+              code : 200,
+              message : 'Success'
+            });
+          }
+        })
+      }
+    })
   }else if(boardType == 'recruit'){
     tableName = 'RBoard';
     updateTableName = 'RBoardUpdate';
   }
 
-  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
-    }else{
-      var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.status(500).send('Internal Server Error');
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
-        }
-      })
-    }
-  })
 })
 /*
 * 상세 지역 > 게시판 List를 내려준다.
