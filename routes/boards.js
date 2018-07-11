@@ -13,9 +13,14 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-/*
- * Match : areaNo를 받아와 판단하여 서울/경기를 구분한 뒤 해당 테이블로 insert.
- */
+/**
+* [게시판 글쓰기]
+* MBoard Table에 먼저 insert를 한다.
+* area_no을 통해 서울, 경기를 나눈뒤에 그에 맞는 SubTable(MBoard_Seoul, MBoard_Gyeonggi)에 insert한다.
+* MBoard에 insert를 한 뒤 insertId(no)를 받아와 SubTable에 똑같이 insert를 해준다.
+* Hire, Recruit의 경우는 SubTable이 없으므로 바로 insert를 해준다.
+* boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+*/
 router.post('/', function(req, res){
   var areaNo = req.body.areaNo;
   var uid = req.body.uid;
@@ -26,19 +31,19 @@ router.post('/', function(req, res){
   var tableName;
   var updateTableName;
 
-/**
-* boardType으로 먼저 매칭, 용병, 모집을 나눈다.
-*/
   if(boardType == 'match'){
+    //Mboard에 insert를 한다.
     var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
     conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
       if(err){
+        //MBoard insert 실패
         console.log(err);
         res.json({
           code : 500,
           message : 'Internal Server Error'
         });
       }else{
+        //Mboard insert 성공 후 area_no를 통해 SubTable을 분기처리.
         if(areaNo < 9){
           //seoul
           tableName = 'MBoard_Seoul';
@@ -48,15 +53,18 @@ router.post('/', function(req, res){
         }else{
           console.log('error');
         }
+        //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, currentTime], function(err, result, fields){
           if(err){
+            //SubTable insert 실패
             console.log(err);
             res.json({
               code : 500,
               message : 'Internal Server Error'
             });
           }else{
+            //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
             var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
             conn.query(sql, [currentTime, areaNo], function(err, result, fields){
               if(err){
@@ -85,15 +93,18 @@ router.post('/', function(req, res){
     updateTableName = 'RBoardUpdate';
   }
 
+  //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
   var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
     if(err){
+      // insert 실패
       console.log(err);
       res.json({
         code : 500,
         message : 'Internal Server Error'
       });
     }else{
+      // insert 성공 후 해당 테이블의 UpdateTable에 최근 시간 업데이트
       var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         if(err){
@@ -114,6 +125,7 @@ router.post('/', function(req, res){
 
 })
 /*
+* [게시판 목록]
 * 상세 지역 > 게시판 List를 내려준다.
 */
 router.get('/:boardType/:areaNo/:no', function(req, res){
@@ -172,7 +184,11 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
 })
 
 /*
-* 게시글 내용을 내려준다.
+* [게시글 상세화면의 데이터]
+* boardType을 통해 match/hire/recruit를 받아온다.
+* match의 경우 area_no를 통해 서울, 경기를 분기처리한다.
+* 게시글의 데이터를 조회하기전에 해당 게시글의 조회수를 +1하도록 update 쿼리를 수행한다.
+* 조회수 update 쿼리가 성공하게되면 해당 게시글의 데이터를 조회한다.
 */
 router.get('/:boardType/view/:areaNo/:no', function(req, res){
   var boardType = req.params.boardType;
@@ -201,44 +217,54 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
       tableName = 'RBoard';
     }
 
-/*
- * SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name FROM
-Mboard_Seoul, AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no = '1';
-​
-UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
-*/
-  var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
-  conn.query(sql, [no], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
-    }else{
-      var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
-      tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-      conn.query(sql, [no], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
-        }else{
-          console.log(result[0].created_at);
-          res.json({
-            code : 200,
-            message : 'Success',
-            result : result
-          });
-        }
-      })
-    }
-  })
+    //MBoard에 view_cnt를 증가시킨다.
+    var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
+    conn.query(sql, [no], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
+      }else{
+        // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
+        var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
+        conn.query(sql, [no], function(err, result, fields){
+          if(err){
+            //조회수 쿼리 실패
+            console.log(err);
+            res.json({
+              code : 500,
+              message : 'Internal Server Error'
+            });
+          }else{
+            // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
+            var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+            tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+            conn.query(sql, [no], function(err, result, fields){
+              if(err){
+                console.log(err);
+                res.json({
+                  code : 500,
+                  message : 'Internal Server Error'
+                });
+              }else{
+                console.log(result[0].created_at);
+                res.json({
+                  code : 200,
+                  message : 'Success',
+                  result : result
+                });
+              }
+            })
+          }
+        })
+      }
+    })
 })
 
 /*
+* [게시글 상세 화면에서 댓글 입력]
 * 게시글 화면에서 코멘트 Insert
 */
 router.post('/view/comment', function(req, res){
@@ -309,6 +335,7 @@ router.post('/view/comment', function(req, res){
 })
 
 /*
+* [댓글 리스트]
 * 댓글 리스트를 내려준다.
 */
 router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', function(req, res){
