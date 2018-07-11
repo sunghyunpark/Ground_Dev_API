@@ -34,7 +34,10 @@ router.post('/', function(req, res){
     conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
       if(err){
         console.log(err);
-        res.status(500).send('Internal Server Error');
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
       }else{
         if(areaNo < 9){
           //seoul
@@ -49,13 +52,19 @@ router.post('/', function(req, res){
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, currentTime], function(err, result, fields){
           if(err){
             console.log(err);
-            res.status(500).send('Internal Server Error');
+            res.json({
+              code : 500,
+              message : 'Internal Server Error'
+            });
           }else{
             var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
             conn.query(sql, [currentTime, areaNo], function(err, result, fields){
               if(err){
                 console.log(err);
-                res.status(500).send('Internal Server Error');
+                res.json({
+                  code : 500,
+                  message : 'Internal Server Error'
+                });
               }else{
                 res.json({
                   code : 200,
@@ -80,13 +89,19 @@ router.post('/', function(req, res){
   conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
         }else{
           res.json({
             code : 200,
@@ -142,7 +157,10 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
   conn.query(sql, [areaNo, no], function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       res.json({
         code : 200,
@@ -193,14 +211,20 @@ UPDATE MBoard_Seoul SET view_cnt = view_cnt + 1 WHERE no=?;​
   conn.query(sql, [no], function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
       tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
       conn.query(sql, [no], function(err, result, fields){
         if(err){
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
         }else{
           console.log(result[0].created_at);
           res.json({
@@ -259,13 +283,19 @@ router.post('/view/comment', function(req, res){
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       var sql = 'UPDATE '+updateTableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
         }else{
           res.json({
             code : 200,
@@ -315,7 +345,10 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       conn.query(sql, [articleNo, areaName, commentNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
         }else{
           res.json({
             code : 200,
@@ -342,7 +375,10 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       conn.query(sql, [articleNo, commentNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.status(500).send('Internal Server Error');
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
         }else{
           res.json({
             code : 200,
@@ -364,7 +400,10 @@ router.get('/matching/updated', function(req, res){
   conn.query(sql, function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       res.json({
         code : 200,
@@ -382,7 +421,10 @@ router.get('/matching/recent', function(req, res){
   conn.query(sql, function(err, result, fields){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
     }else{
       res.json({
         code : 200,
