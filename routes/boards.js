@@ -31,7 +31,7 @@ router.post('/', function(req, res){
 */
   if(boardType == 'match'){
     var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-    conn.qeury(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+    conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
       if(err){
         console.log(err);
         res.status(500).send('Internal Server Error');
