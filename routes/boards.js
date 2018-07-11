@@ -30,16 +30,43 @@ router.post('/', function(req, res){
 * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
 */
   if(boardType == 'match'){
-    if(areaNo < 9){
-      //seoul
-      tableName = 'MBoard_Seoul';
-    }else if(areaNo > 9){
-      //gyeong gi
-      tableName = 'MBoard_Gyeonggi';
-    }else{
-      console.log('error');
-    }
-    updateTableName = 'MBoardUpdate';
+    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+    conn.qeury(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }else{
+        if(areaNo < 9){
+          //seoul
+          tableName = 'MBoard_Seoul';
+        }else if(areaNo > 9){
+          //gyeong gi
+          tableName = 'MBoard_Gyeonggi';
+        }else{
+          console.log('error');
+        }
+        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
+        conn.query(sql, [result[0].no, areaNo, uid, title, contents, currentTime], function(err, result, fields){
+          if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+          }else{
+            var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+            conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+              if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+              }else{
+                res.json({
+                  code : 200,
+                  message : 'Success'
+                });
+              }
+            })
+          }
+        })
+      }
+    })
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
     updateTableName = 'HBoardUpdate';
