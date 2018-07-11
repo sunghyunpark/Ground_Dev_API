@@ -35,7 +35,6 @@ router.post('/', function(req, res){
       if(err){
         console.log(err);
         res.status(500).send('Internal Server Error');
-        return;
       }else{
         if(areaNo < 9){
           //seoul
@@ -45,33 +44,30 @@ router.post('/', function(req, res){
           tableName = 'MBoard_Gyeonggi';
         }else{
           console.log('error');
-          return;
         }
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, currentTime], function(err, result, fields){
           if(err){
             console.log(err);
             res.status(500).send('Internal Server Error');
-            return;
           }else{
             var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
             conn.query(sql, [currentTime, areaNo], function(err, result, fields){
               if(err){
                 console.log(err);
                 res.status(500).send('Internal Server Error');
-                return;
               }else{
                 res.json({
                   code : 200,
                   message : 'Success'
                 });
-                return;
               }
             })
           }
         })
       }
     })
+    return;
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
     updateTableName = 'HBoardUpdate';
