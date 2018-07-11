@@ -298,6 +298,8 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
 /*
 * [게시글 상세 화면에서 댓글 입력]
 * 게시글 화면에서 코멘트 Insert
+* 댓글 insert 후 해당 게시글의 comment_cnt를 +1 해주며 업데이트한다.
+* boardType이 match인 경우에는 최종적으로 MBoard에서도 comment_cnt를 업데이트해준다.
 */
 router.post('/view/comment', function(req, res){
   var areaNo = req.body.areaNo;
@@ -336,6 +338,7 @@ router.post('/view/comment', function(req, res){
       updateTableName = 'RBoard';
     }
 
+  // 분기처리된 Table에 댓글을 insert 한다.
   var sql = 'INSERT INTO '+tableName+' (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
@@ -345,6 +348,7 @@ router.post('/view/comment', function(req, res){
         message : 'Internal Server Error'
       });
     }else{
+      //댓글 insert 성공 후 해당 게시글 Table에서 comment_Cnt를 +1 업데이트해준다.
       var sql = 'UPDATE '+updateTableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
