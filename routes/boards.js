@@ -45,6 +45,7 @@ router.post('/', function(req, res){
         }else{
           console.log('error');
         }
+        console.log(result.insertId);
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
         conn.query(sql, [result[0].no, areaNo, uid, title, contents, currentTime], function(err, result, fields){
           if(err){
