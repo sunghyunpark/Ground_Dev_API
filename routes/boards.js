@@ -211,52 +211,84 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
       }else{
         console.log('error');
       }
+      //MBoard에 view_cnt를 증가시킨다.
+      var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
+      conn.query(sql, [no], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
+        }else{
+          // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
+          var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
+          conn.query(sql, [no], function(err, result, fields){
+            if(err){
+              //조회수 쿼리 실패
+              console.log(err);
+              res.json({
+                code : 500,
+                message : 'Internal Server Error'
+              });
+            }else{
+              // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
+              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+              tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+              conn.query(sql, [no], function(err, result, fields){
+                if(err){
+                  console.log(err);
+                  res.json({
+                    code : 500,
+                    message : 'Internal Server Error'
+                  });
+                }else{
+                  console.log(result[0].created_at);
+                  res.json({
+                    code : 200,
+                    message : 'Success',
+                    result : result
+                  });
+                }
+              })
+            }
+          })
+        }
+      })
+      return;
     }else if(boardType == 'hire'){
       tableName = 'HBoard';
     }else if(boardType == 'recruit'){
       tableName = 'RBoard';
     }
-
-    //MBoard에 view_cnt를 증가시킨다.
-    var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
+    //hire / recruit인 경우
+    var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
     conn.query(sql, [no], function(err, result, fields){
       if(err){
+        //조회수 쿼리 실패
         console.log(err);
         res.json({
           code : 500,
           message : 'Internal Server Error'
         });
       }else{
-        // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
-        var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
+        // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
+        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+        tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
         conn.query(sql, [no], function(err, result, fields){
           if(err){
-            //조회수 쿼리 실패
             console.log(err);
             res.json({
               code : 500,
               message : 'Internal Server Error'
             });
           }else{
-            // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-            var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
-            tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-            conn.query(sql, [no], function(err, result, fields){
-              if(err){
-                console.log(err);
-                res.json({
-                  code : 500,
-                  message : 'Internal Server Error'
-                });
-              }else{
-                console.log(result[0].created_at);
-                res.json({
-                  code : 200,
-                  message : 'Success',
-                  result : result
-                });
-              }
-            })
+            console.log(result[0].created_at);
+            res.json({
+              code : 200,
+              message : 'Success',
+              result : result
+            });
           }
         })
       }
@@ -305,7 +337,6 @@ router.post('/view/comment', function(req, res){
     }
 
   var sql = 'INSERT INTO '+tableName+' (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
-
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
