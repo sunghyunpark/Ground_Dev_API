@@ -473,7 +473,7 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
 })
 
 /*
-* 매칭 지역별 최근 업데이트 정보를 내려준다
+* match / hire / recruit의 게시글의 최근 업데이트 시간 리스트를 내려준다.
 */
 router.get('/:boardType/updated', function(req, res){
   var boardType = req.params.boardType;
@@ -505,10 +505,22 @@ router.get('/:boardType/updated', function(req, res){
   })
 })
 
-router.get('/matching/recent', function(req, res){
-  var sql = 'SELECT * FROM (SELECT * FROM (SELECT * FROM MBoard_Seoul ORDER BY created_at DESC LIMIT 5) AS a '+
-  'UNION ALL SELECT * FROM (SELECT * FROM MBoard_Gyeonggi ORDER BY created_at DESC LIMIT 5) AS b) AS c ORDER BY created_at DESC LIMIT 5';
+/*
+* 최신글 리스트를 5개씩 내려준다.(match / hire / recruit)
+*/
+router.get('/:boardType/recent', function(req, res){
+  var boardType = req.params.boardType;
+  var tableName;
 
+  if(boardType == 'match'){
+    tableName = 'MBoard';
+  }else if(boardType == 'hire'){
+    tableName = 'HBoard';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBoard';
+  }
+
+  var sql = 'SELECT * FROM '+tableName+' ORDER BY created_at DESC LIMIT 5';
   conn.query(sql, function(err, result, fields){
     if(err){
       console.log(err);
