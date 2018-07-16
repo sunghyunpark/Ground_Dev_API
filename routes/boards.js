@@ -475,8 +475,18 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
 /*
 * 매칭 지역별 최근 업데이트 정보를 내려준다
 */
-router.get('/matching/updated', function(req, res){
-  var sql = 'SELECT * FROM MBoardUpdate';
+router.get('/:boardType/updated', function(req, res){
+  var boardType = req.params.boardType;
+  var tableName;
+
+  if(boardType == 'match'){
+    tableName = 'MBoardUpdate';
+  }else if(boardType == 'hire'){
+    tableName = 'HBoardUpdate';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBoardUpdate';
+  }
+  var sql = 'SELECT * FROM '+tableName;
 
   conn.query(sql, function(err, result, fields){
     if(err){
