@@ -61,21 +61,25 @@ router.get('/comment/:boardType/:uid/:no', function(req, res){
   var uid = req.params.uid;
   var no = req.params.no;
   var tableName;
+  var boardTableName;
 
   if(boardType == 'match'){
     tableName = 'MComment';
+    boardTableName = 'MBoard';
   }else if(boardType == 'hire'){
     tableName = 'HComment';
+    boardTableName = 'HBoard';
   }else if(boardType == 'recruit'){
     tableName = 'RComment';
+    boardTableName = 'RBoard';
   }
 
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
-  ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb, c.area_no FROM '+tableName+
+  ' AS a JOIN users AS b ON(a.writer_id = b.uid) JOIN '+boardTableName+' AS c ON(a.article_no = c.no) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
     if(err){
