@@ -56,7 +56,7 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
 /*
 * 내가 쓴 댓글 match / hire / recruit
 */
-router.get('/comment/:boardType/:uid', function(req, res){
+router.get('/comment/:boardType/:uid/:no', function(req, res){
   var boardType = req.params.boardType;
   var uid = req.params.uid;
   var no = req.params.no;
