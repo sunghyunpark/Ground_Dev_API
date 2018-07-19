@@ -78,7 +78,7 @@ router.get('/comment/:boardType/:uid/:no', function(req, res){
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb, c.area_no, c.boardType FROM '+tableName+
+  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb, c.area_no, c.board_type FROM '+tableName+
   ' AS a JOIN users AS b ON(a.writer_id = b.uid) JOIN '+boardTableName+' AS c ON(a.article_no = c.no) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
