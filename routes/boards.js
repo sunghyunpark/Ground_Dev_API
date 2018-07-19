@@ -566,7 +566,7 @@ router.post('/favorite', function(req, res){
     tableName = 'RBFavorite';
   }
 
-  if(favoriteState = true){
+  if(favoriteState == 'Y'){
     //like
     var sql = 'INSERT INTO '+tableName+' (article_no, uid, created_at) VALUES(?,?,?)';
     conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
