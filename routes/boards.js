@@ -196,6 +196,7 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
   var no = req.params.no;
 
   var tableName;
+  var tableNameOfFavorite;
   console.log(areaNo);
 
   /**
@@ -233,9 +234,10 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
               });
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, '+
+              'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=?)) AS favoriteState FROM '+
               tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-              conn.query(sql, [no], function(err, result, fields){
+              conn.query(sql, [no, no], function(err, result, fields){
                 if(err){
                   console.log(err);
                   res.json({
@@ -258,8 +260,10 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
       return;
     }else if(boardType == 'hire'){
       tableName = 'HBoard';
+      tableNameOfFavorite = 'HBFavorite';
     }else if(boardType == 'recruit'){
       tableName = 'RBoard';
+      tableNameOfFavorite = 'RBFavorite';
     }
     //hire / recruit인 경우
     var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
@@ -273,9 +277,10 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
         });
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, '+
+        'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=?)) AS favoriteState FROM '+
         tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-        conn.query(sql, [no], function(err, result, fields){
+        conn.query(sql, [no, no], function(err, result, fields){
           if(err){
             console.log(err);
             res.json({
