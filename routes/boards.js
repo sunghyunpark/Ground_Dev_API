@@ -538,4 +538,63 @@ router.get('/:boardType/recent', function(req, res){
   })
 })
 
+/*
+* 임의의 아티클을 좋아요 눌렀을 때 favoriteState(boolean)을 통해 좋아요인지 취소인지 판별한다.
+*/
+router.post('/favorite', function(req, res){
+  var favoriteState = req.body.favoriteState;
+  var articleNo = req.body.articleNo;
+  var uid = req.body.uid;
+  var boardType = req.body.boardType;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+  var tableName;
+
+  /*
+  * boardType으로 MBFavorite / HBFavorite / RBFavorite 분기처리
+  */
+  if(boardType == 'match'){
+    tableName = 'MBFavorite';
+  }else if(boardType == 'hire'){
+    tableName = 'HBFavorite';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBFavorite';
+  }
+
+  if(favoriteState){
+    //like
+    var sql = 'INSERT INTO '+tableName+' (article_no, uid, created_at) VALUES(?,?,?)';
+    conn.qeury(sql, [articleNo, uid, currentTime], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
+      }else{
+        res.json({
+          code : 200,
+          message : 'Success'
+        });
+      }
+    })
+  }else{
+    //not like
+    var sql = 'DELETE FROM '+tableName+' WHERE uid =? AND article_no =?';
+    conn.query(sql, [uid, articleNo], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
+      }else{
+        res.json({
+          code : 200,
+          message : 'Success'
+        });
+      }
+    })
+  }
+})
+
 module.exports = router;
