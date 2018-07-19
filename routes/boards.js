@@ -569,7 +569,7 @@ router.post('/favorite', function(req, res){
   if(favoriteState){
     //like
     var sql = 'INSERT INTO '+tableName+' (article_no, uid, created_at) VALUES(?,?,?)';
-    conn.qeury(sql, [articleNo, uid, currentTime], function(err, result, fields){
+    conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
       if(err){
         console.log(err);
         res.json({
