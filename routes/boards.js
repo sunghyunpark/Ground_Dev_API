@@ -189,6 +189,7 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
 * match의 경우 area_no를 통해 서울, 경기를 분기처리한다.
 * 게시글의 데이터를 조회하기전에 해당 게시글의 조회수를 +1하도록 update 쿼리를 수행한다.
 * 조회수 update 쿼리가 성공하게되면 해당 게시글의 데이터를 조회한다.
+* FavoriteState > 0: not like, 1: like
 */
 router.get('/:boardType/view/:areaNo/:no', function(req, res){
   var boardType = req.params.boardType;
