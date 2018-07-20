@@ -102,22 +102,15 @@ router.get('/comment/:boardType/:uid/:no', function(req, res){
 /*
 * 관심있는 글 리스트 match / hire / recruit
 */
-router.get('/favorite/:boardType/:uid/:areaNo/:no', function(req, res){
+router.get('/favorite/:boardType/:uid/:no', function(req, res){
   var boardType = req.params.boardType;
   var uid = req.params.uid;
-  var areaNo = req.params.areaNo;
   var no = req.params.no;
   var tableName;
   var tableNameOfBoard;
 
   if(boardType == 'match'){
-    if(areaNo < 9){
-      //Seoul
-      tableNameOfBoard = 'MBoard_Seoul';
-    }else if(areaNo > 9){
-      //Gyeonggi
-      tableNameOfBoard = 'MBoard_Gyeonggi';
-    }
+    tableNameOfBoard = 'MBoard';
     tableName = 'MBFavorite';
   }else if(boardType == 'hire'){
     tableName = 'HBFavorite';
