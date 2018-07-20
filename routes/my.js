@@ -102,8 +102,51 @@ router.get('/comment/:boardType/:uid/:no', function(req, res){
 /*
 * 관심있는 글 리스트 match / hire / recruit
 */
-router.get('/favorite/:boardType/:uid', function(req, res){
+router.get('/favorite/:boardType/:uid/:areaNo/:no', function(req, res){
+  var boardType = req.params.boardType;
+  var uid = req.params.uid;
+  var areaNo = req.params.areaNo;
+  var no = req.params.no;
+  var tableName;
+  var tableNameOfBoard;
 
+  if(boardType == 'match'){
+    if(areaNo < 9){
+      //Seoul
+      tableNameOfBoard = 'MBoard_Seoul';
+    }else if(areaNo > 9){
+      //Gyeonggi
+      tableNameOfBoard = 'MBoard_Gyeonggi';
+    }
+    tableName = 'MBFavorite';
+  }else if(boardType == 'hire'){
+    tableName = 'HBFavorite';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBFavorite';
+  }
+
+  var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+  if(no == 0){
+    offsetSql = '';
+  }
+  var sql = 'SELECT a.article_no, c.board_type, c.area_no, c.writer_id, c.title, c.contents, c.blocked, c.view_cnt, c.comment_cnt, c.created_at, b.nick_name FROM '+
+  tableName+' AS a JOIN users AS b ON(c.writer_id=b.uid) JOIN '+tableNameOfBoard+' AS c ON(a.article_no=c.no) WHERE a.uid=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+
+  conn.query(sql, [uid, no], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
 })
 
 
