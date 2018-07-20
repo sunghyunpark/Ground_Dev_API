@@ -130,7 +130,7 @@ router.get('/favorite/:boardType/:uid/:areaNo/:no', function(req, res){
     offsetSql = '';
   }
   var sql = 'SELECT a.article_no, b.board_type, b.area_no, b.writer_id, b.title, b.contents, b.blocked, b.view_cnt, b.comment_cnt, b.created_at, c.nick_name FROM '+
-  tableName+' AS a JOIN '+tableNameOfBoard+' AS b ON(b.no=a.article_no) JOIN users AS c ON(c.writer_id=b.uid) WHERE a.uid=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  tableName+' AS a JOIN '+tableNameOfBoard+' AS b ON(b.no=a.article_no) JOIN users AS c ON(b.writer_id=c.uid) WHERE a.uid=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
     if(err){
