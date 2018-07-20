@@ -113,8 +113,10 @@ router.get('/favorite/:boardType/:uid/:no', function(req, res){
     tableNameOfBoard = 'MBoard';
     tableName = 'MBFavorite';
   }else if(boardType == 'hire'){
+    tableNameOfBoard = 'HBoard';
     tableName = 'HBFavorite';
   }else if(boardType == 'recruit'){
+    tableNameOfBoard = 'RBoard';
     tableName = 'RBFavorite';
   }
 
