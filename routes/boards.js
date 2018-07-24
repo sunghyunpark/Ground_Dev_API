@@ -131,6 +131,7 @@ router.post('/', function(req, res){
 */
 router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var boardType = req.params.boardType;
+  console.log(boardType+"123");
   var areaNo = req.params.areaNo;
   var no = req.params.no;
   var title = req.params.title;
