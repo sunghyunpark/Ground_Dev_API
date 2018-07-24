@@ -133,6 +133,7 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var boardType = req.params.boardType;
   var areaNo = req.params.areaNo;
   var no = req.params.no;
+  console.log("areaNO : "+areaNo);
   var title = req.params.title;
   var contents = req.params.contents;
   var tableName;
