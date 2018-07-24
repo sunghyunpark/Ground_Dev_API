@@ -144,8 +144,6 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
     }else if(areaNo > 9){
       //gyeong gi
       tableName = 'MBoard_Gyeonggi';
-    }else{
-      console.log('error');
     }
     var sql = 'UPDATE MBoard SET title=?, contents=? WHERE no=?';
     conn.query(sql, [title, contents, no], function(err, result, fields){
@@ -162,7 +160,7 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   }else if(boardType == 'recruit'){
     tableName = 'RBoard';
   }
-  console.log("tableName : "+tableName);
+
   var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';
   conn.query(sql, [title, contents, no], function(err, result, fields){
     if(err){
@@ -188,8 +186,6 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
   var tableName;
-  console.log(areaNo);
-
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
   */
