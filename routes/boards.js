@@ -131,7 +131,6 @@ router.post('/', function(req, res){
 */
 router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var boardType = req.params.boardType;
-  console.log(boardType+"123");
   var areaNo = req.params.areaNo;
   var no = req.params.no;
   var title = req.params.title;
@@ -164,6 +163,7 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   }else if(boardType == 'recruit'){
     tableName = 'RBoard';
   }
+  console.log("tableName : "+tableName);
   var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';
   conn.query(sql, [title, contents, no], function(err, result, fields){
     if(err){
