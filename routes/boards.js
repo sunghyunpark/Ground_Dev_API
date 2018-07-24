@@ -138,6 +138,15 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var tableName;
 
   if(boardType == 'match'){
+    if(areaNo < 9){
+      //seoul
+      tableName = 'MBoard_Seoul';
+    }else if(areaNo > 9){
+      //gyeong gi
+      tableName = 'MBoard_Gyeonggi';
+    }else{
+      console.log('error');
+    }
     var sql = 'UPDATE MBoard SET title=?, contents=? WHERE no=?';
     conn.query(sql, [title, contents, no], function(err, result, fields){
       if(err){
@@ -146,16 +155,6 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
           code : 500,
           message : 'Internal Server Error'
         });
-      }else{
-        if(areaNo < 9){
-          //seoul
-          tableName = 'MBoard_Seoul';
-        }else if(areaNo > 9){
-          //gyeong gi
-          tableName = 'MBoard_Gyeonggi';
-        }else{
-          console.log('error');
-        }
       }
     })
   }else if(boardType == 'hire'){
