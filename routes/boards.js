@@ -153,30 +153,17 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
         }else if(areaNo > 9){
           //gyeong gi
           tableName = 'MBoard_Gyeonggi';
+        }else{
+          console.log('error');
         }
-        var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';
-        conn.query(sql, [title, contents, no], function(err, result, fields){
-          if(err){
-            console.log(err);
-            res.json({
-              code : 500,
-              message : 'Internal Server Error'
-            });
-          }else{
-            res.json({
-              code : 200,
-              message : 'Success'
-            });
-          }
-        })
       }
-      return;
     })
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
   }else if(boardType == 'recruit'){
     tableName = 'RBoard';
   }
+  console.log("tableName : "+tableName);
   var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';
   conn.query(sql, [title, contents, no], function(err, result, fields){
     if(err){
