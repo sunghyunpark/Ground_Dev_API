@@ -124,6 +124,61 @@ router.post('/', function(req, res){
   })
 
 })
+
+/**
+* [게시판 글 수정]
+* boardType을 가지고 분기처리 후 그에 맞게 Update문을 실행한다.
+*/
+router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
+  var boardType = req.params.boardType;
+  var areaNo = req.params.areaNo;
+  var no = req.params.no;
+  var title = req.params.title;
+  var contents = req.params.contents;
+  var tableName;
+
+  if(boardType == 'match'){
+    var sql = 'UPDATE MBoard SET title=?, contents=? WHERE no=?';
+    conn.query(sql, [title, contents, no], function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
+      }else{
+        if(areaNo < 9){
+          //seoul
+          tableName = 'MBoard_Seoul';
+        }else if(areaNo > 9){
+          //gyeong gi
+          tableName = 'MBoard_Gyeonggi';
+        }else{
+          console.log('error');
+        }
+      }
+    })
+  }else if(boardType == 'hire'){
+    tableName = 'HBoard';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBoard';
+  }
+  var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';
+  conn.query(sql, [title, contents, no], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success'
+      });
+    }
+  })
+})
 /*
 * [게시판 목록]
 * 상세 지역 > 게시판 List를 내려준다.
