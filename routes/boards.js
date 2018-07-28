@@ -177,6 +177,41 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
     }
   })
 })
+
+/*
+* 게시글 삭제
+* MBoard의 경우 MBoard에서 삭제하면 서브 테이블인 MBoard_Seoul, MBoard_Gyeonggi에서도 자동으로 삭제된다.
+*/
+router.delete('/delete/:boardType/:no/:uid', function(req, res){
+  var boardType = req.params.boardType;
+  var no = req.params.no;
+  var uid = req.params.uid;
+  var tableName;
+
+  if(boardType == 'match'){
+    tableName = 'MBoard';
+  }else if(boardType = 'hire'){
+    tableName = 'HBoard';
+  }else if(boardType == 'recruit'){
+    tableName = 'RBoard';
+  }
+
+  var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
+  conn.query(sql, [no, uid], function(err, result, fields){
+    if(err){
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success'
+      });
+    }
+  })
+})
+
 /*
 * [게시판 목록]
 * 상세 지역 > 게시판 List를 내려준다.
