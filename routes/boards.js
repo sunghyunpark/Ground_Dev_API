@@ -621,7 +621,7 @@ router.get('/:boardType/recent/:no', function(req, res){
     offsetSql = ' WHERE a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   }
 
-  var sql = 'SELECT * FROM '+tableName+' AS a'+offsetSql+' ORDER BY created_at DESC LIMIT '+limit;
+  var sql = 'SELECT * FROM '+tableName+' AS a'+offsetSql+' ORDER BY a.created_at DESC LIMIT '+limit;
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
       console.log(err);
