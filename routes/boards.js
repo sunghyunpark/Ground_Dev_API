@@ -601,11 +601,11 @@ router.get('/:boardType/updated', function(req, res){
 /*
 * 최신글 리스트를 5개씩 내려준다.(match / hire / recruit)
 */
-router.get('/recent/:boardType/:no/recent', function(req, res){
+router.get('/recent/:boardType/:no/:limit', function(req, res){
   var boardType = req.params.boardType;
   var articleNo = req.params.no;
   var tableName;
-  var limit = 5;
+  var limit = req.params.limit;
   var offsetSql;
 
   if(boardType == 'match'){
@@ -618,7 +618,6 @@ router.get('/recent/:boardType/:no/recent', function(req, res){
   if(articleNo == 0){
     offsetSql = '';
   }else{
-    limit = 10;
     offsetSql = ' WHERE a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   }
 
