@@ -628,7 +628,7 @@ router.get('/recent/:boardType/:no', function(req, res){
       console.log(err);
       res.json({
         code : 500,
-        message : 'Internal Server Error'
+        message : 'Internal Server Error Recent'
       });
     }else{
       res.json({
