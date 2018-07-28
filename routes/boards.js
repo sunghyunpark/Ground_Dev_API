@@ -242,10 +242,11 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
 * 조회수 update 쿼리가 성공하게되면 해당 게시글의 데이터를 조회한다.
 * FavoriteState > 0: not like, 1: like
 */
-router.get('/:boardType/view/:areaNo/:no', function(req, res){
+router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
   var boardType = req.params.boardType;
   var areaNo = req.params.areaNo;
   var no = req.params.no;
+  var uid = req.params.uid;
 
   var tableName;
   var tableNameOfFavorite;
@@ -287,9 +288,9 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
               var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, '+
-              'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=?)) AS favoriteState FROM '+
+              'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?)) AS favoriteState FROM '+
               tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-              conn.query(sql, [no, no], function(err, result, fields){
+              conn.query(sql, [no, uid, no], function(err, result, fields){
                 if(err){
                   console.log(err);
                   res.json({
@@ -330,9 +331,9 @@ router.get('/:boardType/view/:areaNo/:no', function(req, res){
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
         var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, '+
-        'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=?)) AS favoriteState FROM '+
+        'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?)) AS favoriteState FROM '+
         tableName+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
-        conn.query(sql, [no, no], function(err, result, fields){
+        conn.query(sql, [no, uid, no], function(err, result, fields){
           if(err){
             console.log(err);
             res.json({
