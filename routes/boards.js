@@ -606,6 +606,7 @@ router.get('/:boardType/recent/:no', function(req, res){
   var articleNo = req.params.no;
   var tableName;
   var limit = 5;
+  var offsetSql;
 
   if(boardType == 'match'){
     tableName = 'MBoard';
