@@ -13,6 +13,20 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+/*
+* post > '/' -> 글 쓰기
+* put > '/edit/:boardType/:areaNo/:no/:title/:contents' -> 글 수정
+* delete > '/delete/:boardType/:no/:uid' -> 글 삭제
+* get > '/:boardType/:areaNo/:no' -> 글 목록 내려줌.
+* get > '/:boardType/view/:areaNo/:no/:uid' -> 글 상세화면
+* post > '/view/comment' -> 댓글 입력
+* get > '/:boardType/view/:articleNo/:areaNo/commentList/:commentNo' -> 댓글 목록 내려줌.
+* get > '/:boardType/updated' -> 게시글 업데이트 시간
+* get > '/recent/:boardType/:no/:limit' -> 최신글 내려줌.
+* post > '/favorite' -> 좋아요 및 취소
+*
+*/
+
 /**
 * [게시판 글쓰기]
 * MBoard Table에 먼저 insert를 한다.
