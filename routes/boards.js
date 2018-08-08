@@ -579,18 +579,29 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
     }
 })
 
-router.delete('/view/comment/delete/:boardType/:no/:articleNo', function(req, res){
+router.delete('/view/comment/delete/:boardType/:no/:articleNo/:areaNo', function(req, res){
   var boardType = req.params.boardType;
   var no = req.params.no;
   var articleNo = req.params.articleNo;
+  var areaNo = req.params.areaNo;
   var tableName;
+  var updateTableName;
 
   if(boardType == 'match'){
+    if(areaNo < 9){
+      //seoul
+      updateTableName = 'MBoard_Seoul';
+    }else if(areaNo > 9){
+      //gyeong gi
+      updateTableName = 'MBoard_Gyeonggi';
+    }
     tableName = 'MComment';
   }else if(boardType == 'hire'){
     tableName = 'HComment';
+    updateTableName = 'HBoard';
   }else if(boardType = 'recruit'){
     tableName = 'RComment';
+    updateTableName = 'RBoard';
   }
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=?';
