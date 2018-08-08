@@ -594,7 +594,7 @@ router.delete('/view/comment/delete/:boardType/:no/:articleNo', function(req, re
   }
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=?';
-  conn.query(sql, function(err, result, fields){
+  conn.query(sql, [no], function(err, result, fields){
     if(err){
       res.json({
         code : 500,
