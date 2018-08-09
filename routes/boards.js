@@ -529,7 +529,7 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       }
 
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
-      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
       conn.query(sql, [articleNo, areaName, commentNo], function(err, result, fields){
         if(err){
           console.log(err);
@@ -559,7 +559,7 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       }
 
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
-      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
       conn.query(sql, [articleNo, commentNo], function(err, result, fields){
         if(err){
           console.log(err);
