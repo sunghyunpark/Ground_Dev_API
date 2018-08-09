@@ -24,6 +24,7 @@ conn.connect();
 * get > '/:boardType/updated' -> 게시글 업데이트 시간
 * get > '/recent/:boardType/:no/:limit' -> 최신글 내려줌.
 * post > '/favorite' -> 좋아요 및 취소
+* put > 'view/matchState/:areaNo/:no/:state' -> 매칭 상태
 *
 */
 
@@ -782,6 +783,49 @@ router.post('/favorite', function(req, res){
       }
     })
   }
+})
+
+router.put('/view/matchState/:areaNo/:no/:state', function(req, res){
+  var areaNo = req.params.areaNo;
+  var articleNo = req.params.no;
+  var state = req.params.state;
+  var updateTableName;
+
+  if(areaNo < 9){
+    //seoul
+    updateTableName = 'MBoard_Seoul';
+  }else if(areaNo > 9){
+    //gyeong gi
+    updateTableName = 'MBoard_Gyeonggi';
+  }
+
+  //Sub 테이블의 match_state의 상태를 변경해준다.
+  var sql = 'UPDATE '+updateTableName+' SET match_state=? WHERE no=?';
+  conn.query(sql, [state, articleNo], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      //서브 테이블의 match_state를 변경 후 부모테이블의 상태도 변경해준다.
+      var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
+      conn.query(sql, [state, articleNo], function(err, result, fields){
+        if(err){
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success'
+          });
+        }
+      })
+    }
+  })
 })
 
 module.exports = router;
