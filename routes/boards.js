@@ -525,7 +525,7 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       if(commentNo == 0){
         offsetSql = '';
       }else{
-        offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+        offsetSql = 'AND a.created_at > (SELECT created_at FROM '+tableName+' WHERE no=?)';
       }
 
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+
