@@ -33,7 +33,7 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM '+
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name FROM '+
   tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
@@ -124,7 +124,7 @@ router.get('/favorite/:boardType/:uid/:no', function(req, res){
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.article_no AS no, b.board_type, b.area_no, b.writer_id, b.title, b.contents, b.blocked, b.view_cnt, b.comment_cnt, b.created_at, c.nick_name FROM '+
+  var sql = 'SELECT a.article_no AS no, b.board_type, b.area_no, b.writer_id, b.title, b.contents, b.match_state, b.blocked, b.view_cnt, b.comment_cnt, b.created_at, c.nick_name FROM '+
   tableName+' AS a JOIN '+tableNameOfBoard+' AS b ON(b.no=a.article_no) JOIN users AS c ON(b.writer_id=c.uid) WHERE a.uid=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
