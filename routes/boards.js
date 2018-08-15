@@ -346,7 +346,6 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
                     message : 'Internal Server Error'
                   });
                 }else{
-                  console.log(result[0].created_at);
                   res.json({
                     code : 200,
                     message : 'Success',
@@ -387,7 +386,6 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
               message : 'Internal Server Error'
             });
           }else{
-            console.log(result[0].created_at);
             res.json({
               code : 200,
               message : 'Success',
