@@ -349,7 +349,7 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
                   res.json({
                     code : 200,
                     message : 'Success',
-                    result : result
+                    result : result[0].favoriteState
                   });
                 }
               })
@@ -389,7 +389,7 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
             res.json({
               code : 200,
               message : 'Success',
-              result : result
+              result : result[0].favoriteState
             });
           }
         })
