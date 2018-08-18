@@ -48,3 +48,37 @@ module.exports.sortTableNameOfFavorite = function(boardType){
 
   return tableNameOfFavorite;
 }
+
+module.exports.sortTableNameOfComment = function(boardType){
+  var tableNameOfComment;
+
+  if(boardType == 'match'){
+    tableNameOfComment = 'MComment';
+  }else if(boardType == 'hire'){
+    tableNameOfComment = 'HComment';
+  }else if(boardType == 'recruit'){
+    tableNameOfComment = 'RComment';
+  }
+
+  return tableNameOfComment;
+}
+
+module.exports.sortAreaName = function(boardType, areaNo){
+  var areaName;
+
+  if(boardType == 'match'){
+    if(areaNo < 9){
+      //seoul
+      areaName = 'Seoul';
+    }else if(areaNo > 9){
+      //gyeong gi
+      areaName = 'Gyeonggi';
+    }else{
+      console.log('error to sortAreaName');
+    }
+  }else(boardType == 'hire'){
+    areaName = '';
+  }
+
+  return areaName;
+}

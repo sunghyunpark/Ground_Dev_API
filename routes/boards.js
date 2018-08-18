@@ -342,34 +342,12 @@ router.post('/view/comment', function(req, res){
   var comment = req.body.comment;
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var areaName;
-  var tableName;
+  var areaName = sortModule.sortAreaName(boardType, areaNo);
+  var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
   var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
-  /**
-  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
-  */
-    if(boardType == 'match'){
-      tableName = 'MComment';
-      if(areaNo < 9){
-        //seoul
-        areaName = 'Seoul';
-      }else if(areaNo > 9){
-        //gyeong gi
-        areaName = 'Gyeonggi';
-      }else{
-        console.log('error');
-      }
-    }else if(boardType == 'hire'){
-      areaName = '';
-      tableName = 'HComment';
-    }else if(boardType == 'recruit'){
-      areaName = '';
-      tableName = 'RComment';
-    }
-
   // 분기처리된 Table에 댓글을 insert 한다.
-  var sql = 'INSERT INTO '+tableName+' (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
+  var sql = 'INSERT INTO '+tableNameOfComment+' (article_no, area_name, writer_id, comment, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
