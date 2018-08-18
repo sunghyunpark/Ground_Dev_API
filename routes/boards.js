@@ -344,7 +344,7 @@ router.post('/view/comment', function(req, res){
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var areaName;
   var tableName;
-  var updateTableName;
+  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
@@ -354,22 +354,18 @@ router.post('/view/comment', function(req, res){
       if(areaNo < 9){
         //seoul
         areaName = 'Seoul';
-        updateTableName = 'MBoard_Seoul';
       }else if(areaNo > 9){
         //gyeong gi
         areaName = 'Gyeonggi';
-        updateTableName = 'MBoard_Gyeonggi';
       }else{
         console.log('error');
       }
     }else if(boardType == 'hire'){
       areaName = '';
       tableName = 'HComment';
-      updateTableName = 'HBoard';
     }else if(boardType == 'recruit'){
       areaName = '';
       tableName = 'RComment';
-      updateTableName = 'RBoard';
     }
 
   // 분기처리된 Table에 댓글을 insert 한다.
@@ -383,7 +379,7 @@ router.post('/view/comment', function(req, res){
       });
     }else{
       //댓글 insert 성공 후 해당 게시글 Table에서 comment_Cnt를 +1 업데이트해준다.
-      var sql = 'UPDATE '+updateTableName+' SET comment_cnt = comment_cnt +1 WHERE no=?';
+      var sql = 'UPDATE '+tableNameOfArticle+' SET comment_cnt = comment_cnt +1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
