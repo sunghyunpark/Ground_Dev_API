@@ -179,10 +179,8 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
 
   if(boardType == 'match'){
     tableName = 'MBoard';
-  }else if(boardType = 'hire'){
-    tableName = 'HBoard';
-  }else if(boardType == 'recruit'){
-    tableName = 'RBoard';
+  }else{
+    tableName = sortModule.sortTableName(boardType, 0);    // hire, recruit 의 경우엔 areaNo가 필요없어서 0값으로 넣어준다.
   }
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
@@ -209,31 +207,8 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
   var no = req.params.no;
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
-  var tableName;
-  /**
-  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
-  */
-    if(boardType == 'match'){
-      if(areaNo < 9){
-        //seoul
-        tableName = 'MBoard_Seoul';
-      }else if(areaNo > 9){
-        //gyeong gi
-        tableName = 'MBoard_Gyeonggi';
-      }else{
-        console.log('error');
-      }
-    }else if(boardType == 'hire'){
-      tableName = 'HBoard';
-    }else if(boardType == 'recruit'){
-      tableName = 'RBoard';
-    }
-  /*
-  * SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.blocked, a.view_cnt, a.created_at, b.nick_name
-  FROM MBoard_Seoul AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.area_no = '1' ORDER BY a.created_at DESC;
-  */
-  //var sql = 'SELECT * FROM '+tableName+' WHERE area_no=?';
-  //"AND a.created_at < (SELECT created_at FROM comment WHERE comment_id = '$bottom_comment') ";
+  var tableName = sortModule.sortTableName(boardType, areaNo);
+
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   if(no == 0){
     offsetSql = '';
