@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
+var sortModule = require('./module.js');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -43,7 +44,7 @@ router.post('/', function(req, res){
   var contents = req.body.contents;
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var tableName;
+  var tableName = sortModule.sortTableNameByAreaNo(areaNo);
   var updateTableName;
 
   if(boardType == 'match'){
@@ -59,6 +60,7 @@ router.post('/', function(req, res){
         });
       }else{
         //Mboard insert 성공 후 area_no를 통해 SubTable을 분기처리.
+        /*
         if(areaNo < 9){
           //seoul
           tableName = 'MBoard_Seoul';
@@ -67,7 +69,7 @@ router.post('/', function(req, res){
           tableName = 'MBoard_Gyeonggi';
         }else{
           console.log('error');
-        }
+        }*/
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, currentTime], function(err, result, fields){
