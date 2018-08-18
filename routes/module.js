@@ -76,7 +76,7 @@ module.exports.sortAreaName = function(boardType, areaNo){
     }else{
       console.log('error to sortAreaName');
     }
-  }else(boardType == 'hire'){
+  }else{
     areaName = '';
   }
 
