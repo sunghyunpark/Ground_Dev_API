@@ -45,7 +45,7 @@ router.post('/', function(req, res){
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var tableName = sortModule.sortTableName(boardType, areaNo);
-  var updateTableName;
+  var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
     //Mboard에 insert를 한다.
@@ -91,10 +91,6 @@ router.post('/', function(req, res){
       }
     })
     return;
-  }else if(boardType == 'hire'){
-    updateTableName = 'HBoardUpdate';
-  }else if(boardType == 'recruit'){
-    updateTableName = 'RBoardUpdate';
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
@@ -139,16 +135,9 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var no = req.params.no;
   var title = req.params.title;
   var contents = req.params.contents;
-  var tableName;
+  var tableName = sortModule.sortTableName(boardType, areaNo);
 
   if(boardType == 'match'){
-    if(areaNo < 9){
-      //seoul
-      tableName = 'MBoard_Seoul';
-    }else if(areaNo > 9){
-      //gyeong gi
-      tableName = 'MBoard_Gyeonggi';
-    }
     var sql = 'UPDATE MBoard SET title=?, contents=? WHERE no=?';
     conn.query(sql, [title, contents, no], function(err, result, fields){
       if(err){
@@ -159,10 +148,6 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
         });
       }
     })
-  }else if(boardType == 'hire'){
-    tableName = 'HBoard';
-  }else if(boardType == 'recruit'){
-    tableName = 'RBoard';
   }
 
   var sql = 'UPDATE '+tableName+' SET title=?, contents=? WHERE no=?';

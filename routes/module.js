@@ -20,3 +20,17 @@ module.exports.sortTableName = function (boardType, areaNo){
 
   return tableName;
 }
+
+module.exports.sortUpdateTableName = function(boardType){
+  var updateTableName;
+
+  if(boardType == 'match'){
+    updateTableName = 'MBoardUpdate';
+  }else if(boardType == 'hire'){
+    updateTableName = 'HBoardUpdate';
+  }else if(boardType == 'recruit'){
+    updateTableName = 'RBoardUpdate';
+  }
+
+  return updateTableName;
+}
