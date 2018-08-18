@@ -1,4 +1,4 @@
-module.exports.sortTableName = function (boardType, areaNo){
+module.exports.sortTableNameOfArticle = function (boardType, areaNo){
   var tableName;
   if(boardType == 'match'){
     if(areaNo < 9){
@@ -33,4 +33,18 @@ module.exports.sortUpdateTableName = function(boardType){
   }
 
   return updateTableName;
+}
+
+module.exports.sortTableNameOfFavorite = function(boardType){
+  var tableNameOfFavorite;
+
+  if(boardType == 'match'){
+    tableNameOfFavorite = 'MBFavorite';
+  }else if(boardType == 'hire'){
+    tableNameOfFavorite = 'HBFavorite';
+  }else if(boardType == 'recruit'){
+    tableNameOfFavorite = 'RBFavorite';
+  }
+
+  return tableNameOfFavorite;
 }

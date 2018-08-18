@@ -44,7 +44,7 @@ router.post('/', function(req, res){
   var contents = req.body.contents;
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var tableName = sortModule.sortTableName(boardType, areaNo);
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
@@ -135,7 +135,7 @@ router.put('/edit/:boardType/:areaNo/:no/:title/:contents', function(req, res){
   var no = req.params.no;
   var title = req.params.title;
   var contents = req.params.contents;
-  var tableName = sortModule.sortTableName(boardType, areaNo);
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
   if(boardType == 'match'){
     var sql = 'UPDATE MBoard SET title=?, contents=? WHERE no=?';
@@ -180,7 +180,7 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
   if(boardType == 'match'){
     tableName = 'MBoard';
   }else{
-    tableName = sortModule.sortTableName(boardType, 0);    // hire, recruit 의 경우엔 areaNo가 필요없어서 0값으로 넣어준다.
+    tableName = sortModule.sortTableNameOfArticle(boardType, 0);    // hire, recruit 의 경우엔 areaNo가 필요없어서 0값으로 넣어준다.
   }
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
@@ -207,7 +207,7 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
   var no = req.params.no;
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
-  var tableName = sortModule.sortTableName(boardType, areaNo);
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
   var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   if(no == 0){
@@ -246,24 +246,13 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
   var areaNo = req.params.areaNo;
   var no = req.params.no;
   var uid = req.params.uid;
-
-  var tableName;
-  var tableNameOfFavorite;
-  console.log(areaNo);
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
+  var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
 
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
   */
     if(boardType == 'match'){
-      if(areaNo < 9){
-        //seoul
-        tableName = 'MBoard_Seoul';
-      }else if(areaNo > 9){
-        //gyeong gi
-        tableName = 'MBoard_Gyeonggi';
-      }else{
-        console.log('error');
-      }
       //MBoard에 view_cnt를 증가시킨다.
       var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
       conn.query(sql, [no], function(err, result, fields){
@@ -307,12 +296,6 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
         }
       })
       return;
-    }else if(boardType == 'hire'){
-      tableName = 'HBoard';
-      tableNameOfFavorite = 'HBFavorite';
-    }else if(boardType == 'recruit'){
-      tableName = 'RBoard';
-      tableNameOfFavorite = 'RBFavorite';
     }
     //hire / recruit인 경우
     var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
