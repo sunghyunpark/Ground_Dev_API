@@ -590,7 +590,7 @@ router.post('/favorite', function(req, res){
   var uid = req.body.uid;
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var tableNameOfFavorite = sortModule.tableNameOfFavorite(boardType);
+  var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
 
   if(favoriteState == 'Y'){
     //like
