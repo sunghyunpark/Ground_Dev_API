@@ -50,7 +50,6 @@ router.post('/', function(req, res){
  */
 router.get('/:uid', function(req, res){
   var uid = req.params.uid;
-  console.log(uid);
   var sql = 'SELECT * FROM users WHERE uid=?';
 
   conn.query(sql, [uid], function(err, result, fields){

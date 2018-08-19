@@ -456,32 +456,18 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
     }
 })
 
+/*
+* 댓글 삭제
+*/
 router.delete('/view/comment/delete/:boardType/:no/:articleNo/:areaNo', function(req, res){
   var boardType = req.params.boardType;
   var no = req.params.no;
   var articleNo = req.params.articleNo;
   var areaNo = req.params.areaNo;
-  var tableName;
-  var updateTableName;
+  var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
+  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
-  if(boardType == 'match'){
-    if(areaNo < 9){
-      //seoul
-      updateTableName = 'MBoard_Seoul';
-    }else if(areaNo > 9){
-      //gyeong gi
-      updateTableName = 'MBoard_Gyeonggi';
-    }
-    tableName = 'MComment';
-  }else if(boardType == 'hire'){
-    tableName = 'HComment';
-    updateTableName = 'HBoard';
-  }else if(boardType = 'recruit'){
-    tableName = 'RComment';
-    updateTableName = 'RBoard';
-  }
-
-  var sql = 'DELETE FROM '+tableName+' WHERE no=?';
+  var sql = 'DELETE FROM '+tableNameOfComment+' WHERE no=?';
   conn.query(sql, [no], function(err, result, fields){
     if(err){
       res.json({
@@ -490,7 +476,7 @@ router.delete('/view/comment/delete/:boardType/:no/:articleNo/:areaNo', function
       });
     }else{
       //댓글 delete 성공 후 해당 게시글 Table에서 comment_Cnt를 -1 업데이트해준다.
-      var sql = 'UPDATE '+updateTableName+' SET comment_cnt = comment_cnt -1 WHERE no=?';
+      var sql = 'UPDATE '+tableNameOfArticle+' SET comment_cnt = comment_cnt -1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
@@ -533,16 +519,8 @@ router.delete('/view/comment/delete/:boardType/:no/:articleNo/:areaNo', function
 */
 router.get('/:boardType/updated', function(req, res){
   var boardType = req.params.boardType;
-  var tableName;
-
-  if(boardType == 'match'){
-    tableName = 'MBoardUpdate';
-  }else if(boardType == 'hire'){
-    tableName = 'HBoardUpdate';
-  }else if(boardType == 'recruit'){
-    tableName = 'RBoardUpdate';
-  }
-  var sql = 'SELECT * FROM '+tableName;
+  var updateTableName = sortModule.sortUpdateTableName(boardType);
+  var sql = 'SELECT * FROM '+updateTableName;
 
   conn.query(sql, function(err, result, fields){
     if(err){
@@ -612,22 +590,11 @@ router.post('/favorite', function(req, res){
   var uid = req.body.uid;
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var tableName;
-
-  /*
-  * boardType으로 MBFavorite / HBFavorite / RBFavorite 분기처리
-  */
-  if(boardType == 'match'){
-    tableName = 'MBFavorite';
-  }else if(boardType == 'hire'){
-    tableName = 'HBFavorite';
-  }else if(boardType == 'recruit'){
-    tableName = 'RBFavorite';
-  }
+  var tableNameOfFavorite = sortModule.tableNameOfFavorite(boardType);
 
   if(favoriteState == 'Y'){
     //like
-    var sql = 'INSERT INTO '+tableName+' (article_no, uid, created_at) VALUES(?,?,?)';
+    var sql = 'INSERT INTO '+tableNameOfFavorite+' (article_no, uid, created_at) VALUES(?,?,?)';
     conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
       if(err){
         console.log(err);
@@ -644,7 +611,7 @@ router.post('/favorite', function(req, res){
     })
   }else{
     //not like
-    var sql = 'DELETE FROM '+tableName+' WHERE uid =? AND article_no =?';
+    var sql = 'DELETE FROM '+tableNameOfFavorite+' WHERE uid =? AND article_no =?';
     conn.query(sql, [uid, articleNo], function(err, result, fields){
       if(err){
         console.log(err);
@@ -662,6 +629,9 @@ router.post('/favorite', function(req, res){
   }
 })
 
+/*
+* 게시글의 매칭 상태 변경
+*/
 router.put('/view/matchState/:areaNo/:no/:state', function(req, res){
   var areaNo = req.params.areaNo;
   var articleNo = req.params.no;
