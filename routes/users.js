@@ -66,4 +66,29 @@ router.get('/:uid', function(req, res){
   })
 })
 
+/*
+* User profile(nickName) 수정 
+*/
+router.put('/profile/:uid/:userName', function(req, res){
+  var uid = req.params.uid;
+  var userName = req.params.userName;
+
+  var sql = 'UPDATE users SET nick_name=? WHERE uid=?';
+
+  conn.query(sql, [userName, uid], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success'
+      });
+    }
+  })
+})
+
 module.exports = router;
