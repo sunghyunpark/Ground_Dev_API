@@ -20,10 +20,11 @@ router.post('/', function(req, res){
   var uid = req.body.uid;
   var nickName = req.body.nickName;
   var loginType = req.body.loginType;
+  var fcmToken = req.body.fcmToken;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var sql = 'INSERT INTO users (uid, login_type, nick_name, created_at) VALUES(?, ?, ?, ?)';
+  var sql = 'INSERT INTO users (uid, login_type, nick_name, fcm_token, created_at) VALUES(?, ?, ?, ?, ?)';
 
-  conn.query(sql, [uid, loginType, nickName, currentTime], function(err, result, fields){
+  conn.query(sql, [uid, loginType, nickName, fcmToken, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
       res.status(500).send('Internal Server Error');
@@ -67,7 +68,7 @@ router.get('/:uid', function(req, res){
 })
 
 /*
-* User profile(nickName) 수정 
+* User profile(nickName) 수정
 */
 router.put('/profile/:uid/:userName', function(req, res){
   var uid = req.params.uid;
