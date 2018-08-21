@@ -254,6 +254,28 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
   */
     if(boardType == 'match'){
       //MBoard에 view_cnt를 증가시킨다.
+      if(updateViewCnt('MBoard', no)){
+        if(updateViewCnt(tableName, no)){
+          // 조회수 쿼리 성공 시 해당 게시글의 etc data를 내려준다.
+          var sql = 'SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?) AS favoriteState';
+          conn.query(sql, [no, uid], function(err, result, fields){
+            if(err){
+              console.log(err);
+              res.json({
+                code : 500,
+                message : 'Internal Server Error'
+              });
+            }else{
+              res.json({
+                code : 200,
+                message : 'Success',
+                favoriteState : result[0].favoriteState
+              });
+            }
+          })
+        }
+      }
+      /*
       var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
       conn.query(sql, [no], function(err, result, fields){
         if(err){
@@ -294,7 +316,7 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
             }
           })
         }
-      })
+      })*/
       return;
     }
     //hire / recruit인 경우
@@ -328,6 +350,18 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
       }
     })
 })
+
+function updateViewCnt(tableName, articleNo){
+  var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
+  conn.query(sql, [articleNo], function(err, result, fields){
+    if(err){
+      console.log(err);
+      return false;
+    }else{
+      return true;
+    }
+  })
+}
 
 /*
 * [게시글 상세 화면에서 댓글 입력]
