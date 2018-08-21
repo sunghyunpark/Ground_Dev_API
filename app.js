@@ -3,8 +3,9 @@ var path = require('path');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
-  extended:true
+  extended:false
 }));
+app.use(bodyParser.json());
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/boards', require('./routes/boards'));
