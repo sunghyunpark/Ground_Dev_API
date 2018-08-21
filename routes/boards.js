@@ -254,8 +254,8 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
   */
     if(boardType == 'match'){
       //MBoard에 view_cnt를 증가시킨다.
-      if(updateViewCnt('MBoard', no)){
-        if(updateViewCnt(tableName, no)){
+      if(updateViewCnt('MBoard', no) == 'Y'){
+        if(updateViewCnt(tableName, no) == 'Y'){
           // 조회수 쿼리 성공 시 해당 게시글의 etc data를 내려준다.
           var sql = 'SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?) AS favoriteState';
           conn.query(sql, [no, uid], function(err, result, fields){
@@ -356,9 +356,9 @@ function updateViewCnt(tableName, articleNo){
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
       console.log(err);
-      return false;
+      return 'N';
     }else{
-      return true;
+      return 'Y';
     }
   })
 }
