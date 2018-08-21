@@ -330,6 +330,107 @@ router.get('/:boardType/view/:areaNo/:no/:uid', function(req, res){
 })
 
 /*
+* 위의 api와는 다른게 사용해야함
+* 본 api는 boardType, areaNo, articleNo, uid만 있으면 해당 게시글의 데이터를 가져올 수 있다.
+* 스키마, 푸시, 댓글 탭하여 상세 게시글 이동에 사용된다.
+*/
+router.get('/:boardType/detailView/:areaNo/:no/:uid', function(req, res){
+  var boardType = req.params.boardType;
+  var areaNo = req.params.areaNo;
+  var no = req.params.no;
+  var uid = req.params.uid;
+
+  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
+  var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
+  console.log(areaNo);
+
+  /**
+  * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+  */
+    if(boardType == 'match'){
+      //MBoard에 view_cnt를 증가시킨다.
+      var sql = 'UPDATE MBoard SET view_cnt = view_cnt +1 WHERE no=?';
+      conn.query(sql, [no], function(err, result, fields){
+        if(err){
+          console.log(err);
+          res.json({
+            code : 500,
+            message : 'Internal Server Error'
+          });
+        }else{
+          // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
+          var sql = 'UPDATE '+tableNameOfArticle+' SET view_cnt = view_cnt +1 WHERE no=?';
+          conn.query(sql, [no], function(err, result, fields){
+            if(err){
+              //조회수 쿼리 실패
+              console.log(err);
+              res.json({
+                code : 500,
+                message : 'Internal Server Error'
+              });
+            }else{
+              // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
+              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
+              'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?)) AS favoriteState FROM '+
+              tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+              conn.query(sql, [no, uid, no], function(err, result, fields){
+                if(err){
+                  console.log(err);
+                  res.json({
+                    code : 500,
+                    message : 'Internal Server Error'
+                  });
+                }else{
+                  console.log(result[0].created_at);
+                  res.json({
+                    code : 200,
+                    message : 'Success',
+                    result : result
+                  });
+                }
+              })
+            }
+          })
+        }
+      })
+      return;
+    }
+    //hire / recruit인 경우
+    var sql = 'UPDATE '+tableNameOfArticle+' SET view_cnt = view_cnt +1 WHERE no=?';
+    conn.query(sql, [no], function(err, result, fields){
+      if(err){
+        //조회수 쿼리 실패
+        console.log(err);
+        res.json({
+          code : 500,
+          message : 'Internal Server Error'
+        });
+      }else{
+        // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
+        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
+        'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?)) AS favoriteState FROM '+
+        tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+        conn.query(sql, [no, uid, no], function(err, result, fields){
+          if(err){
+            console.log(err);
+            res.json({
+              code : 500,
+              message : 'Internal Server Error'
+            });
+          }else{
+            console.log(result[0].created_at);
+            res.json({
+              code : 200,
+              message : 'Success',
+              result : result
+            });
+          }
+        })
+      }
+    })
+})
+
+/*
 * [게시글 상세 화면에서 댓글 입력]
 * 게시글 화면에서 코멘트 Insert
 * 댓글 insert 후 해당 게시글의 comment_cnt를 +1 해주며 업데이트한다.
