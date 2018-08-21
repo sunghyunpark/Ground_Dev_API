@@ -25,7 +25,7 @@ router.get('/kakao/keyboard', function(req, res){
 
 router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
-  var response;
+  var response = {};
 
   switch (msg) {
     case 'ground1':
