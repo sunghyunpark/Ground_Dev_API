@@ -54,7 +54,7 @@ router.post('/kakao/message', function(req, res){
     }
       break;
   }
-res.json(reponse);
+res.json(response);
 })
 
 module.exports = router;
