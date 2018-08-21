@@ -27,10 +27,10 @@ router.post('/kakao/message', function(req, res){
   var response;
 
   switch (msg) {
-    case 'hi':
+    case 'ground1':
     response = {
       'message' : {
-        'text' : 'hi 선택'
+        'text' : 'ground1 선택'
       }
     }
       break;
