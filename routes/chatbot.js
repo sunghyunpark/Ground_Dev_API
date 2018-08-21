@@ -25,6 +25,7 @@ router.get('/kakao/keyboard', function(req, res){
 
 router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
+  console.log('전달받은 메시지 : ' + msg);
   var response = {};
 
   switch (msg) {
