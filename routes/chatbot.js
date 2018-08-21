@@ -21,6 +21,7 @@ router.get('/kakao/keyboard', function(req, res){
   res.json(data);
 })
 
+/*
 router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
   console.log('전달받은 메시지 : ' + msg);
@@ -59,5 +60,6 @@ router.post('/kakao/message', function(req, res){
         'content-type': 'application/json'
     }).send(JSON.stringify(response));
 })
+*/
 
 module.exports = router;
