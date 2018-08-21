@@ -13,14 +13,13 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-/*
 router.get('/kakao/keyboard', function(req, res){
   var data = {
     'type' : 'buttons',
     'buttons' : ['ground1', 'ground2', 'ground3']
   };
   res.json(data);
-})*/
+})
 
 router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
