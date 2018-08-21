@@ -18,9 +18,7 @@ router.get('/kakao/keyboard', function(req, res){
     'type' : 'buttons',
     'buttons' : ['ground1', 'ground2', 'ground3']
   };
-  res.set({
-      'content-type': 'application/json'
-  }).send(JSON.stringify(data));
+  res.json(data);
 })
 
 router.post('/kakao/message', function(req, res){
