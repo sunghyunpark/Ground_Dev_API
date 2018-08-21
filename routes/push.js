@@ -1,3 +1,7 @@
+var express = require('express');
+var bodyParser = require('body-parser');
+var router = express.Router();
+
 var FCM = require('fcm-node');
     var serverKey = 'AAAAYpyLRuA:APA91bHTx-Hr4U5_BOwXzZerbNmqHpE3qFi524p1DAQzug_GyU_-NrrWEM_esngFImr2S4WKYnBGhQZ1HV0_qHWFqVHj45mqvCgY_y6xX-3yDhRboWJPNBaR5OcvCYzqifEB62aglxTrXpc2xsGTKZ6myaSSX1T_ZQ'; //put your server key here
     var fcm = new FCM(serverKey);
@@ -24,3 +28,5 @@ var FCM = require('fcm-node');
             console.log("Successfully sent with response: ", response);
         }
     });
+    
+module.exports = router;
