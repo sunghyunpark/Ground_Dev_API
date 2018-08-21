@@ -32,7 +32,6 @@ router.post('/kakao/message', function(req, res){
   var response = {};
 
   switch (msg) {
-
     case 'ground1':
     response = {
       'message' : {
@@ -41,8 +40,7 @@ router.post('/kakao/message', function(req, res){
     }
       break;
 
-
-      case 'ground2':
+    case 'ground2':
       response = {
         'message' : {
           'text' : 'ground2 선택'
