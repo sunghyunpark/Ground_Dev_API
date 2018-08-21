@@ -20,7 +20,7 @@ router.get('/kakao/keyboard', function(req, res){
   };
   res.set({
       'content-type': 'application/json'
-  }).send(JSON.stringify(menu));
+  }).send(JSON.stringify(data));
 })
 
 
