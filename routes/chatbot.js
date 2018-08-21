@@ -18,16 +18,21 @@ router.get('/kakao/keyboard', function(req, res){
     'type' : 'buttons',
     'buttons' : ['ground1', 'ground2', 'ground3']
   };
-  res.json(data);
+  res.set({
+      'content-type': 'application/json'
+  }).send(JSON.stringify(menu));
 })
 
 
 router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
   console.log('전달받은 메시지 : ' + msg);
+  var type = req.body.type;
+  console.log('전달받은 타입 : ' + type);
   var response = {};
 
   switch (msg) {
+
     case 'ground1':
     response = {
       'message' : {
@@ -35,6 +40,7 @@ router.post('/kakao/message', function(req, res){
       }
     }
       break;
+
 
       case 'ground2':
       response = {
