@@ -705,10 +705,10 @@ router.get('/today/:no/:limit', function(req, res){
   if(articleNo == 0){
     offsetSql = '';
   }else{
-    offsetSql = ' WHERE a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
+    offsetSql = 'a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
   }
 
-  var sql = 'SELECT a.*, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a JOIN users AS b ON(a.writer_id=b.uid) '+
+  var sql = 'SELECT a.*, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.match_date=? AND '+
   offsetSql+' ORDER BY a.created_at DESC LIMIT '+limit;
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
