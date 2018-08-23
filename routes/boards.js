@@ -215,7 +215,8 @@ router.get('/:boardType/:areaNo/:no', function(req, res){
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.comment_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
+  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
+  'a.comment_cnt, a.match_date, a.average_age, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
   tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [areaNo, no], function(err, result, fields){
@@ -372,7 +373,7 @@ router.get('/:boardType/detailView/:areaNo/:no/:uid', function(req, res){
               });
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
+              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.match_date, a.average_age, '+
               'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?)) AS favoriteState FROM '+
               tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
               conn.query(sql, [no, uid, no], function(err, result, fields){
@@ -409,7 +410,7 @@ router.get('/:boardType/detailView/:areaNo/:no/:uid', function(req, res){
         });
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
+        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.match_date, a.average_age, '+
         'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?)) AS favoriteState FROM '+
         tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
         conn.query(sql, [no, uid, no], function(err, result, fields){
