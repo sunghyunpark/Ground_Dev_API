@@ -660,7 +660,7 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
 
   if(boardType == 'match'){
     tableName = 'MBoard';
-    matchData = 'a.match_date, a.averageAge,'
+    matchData = 'a.match_date, a.average_age,'
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
   }else if(boardType == 'recruit'){
