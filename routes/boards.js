@@ -694,13 +694,38 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
   })
 })
 
-router.get('/today/:boardType/:no/:limit', function(req, res){
-  var boardType = req.params.boardType;
-  var articleNo = req.params.articleNo;
+/*
+* 오늘의 시합
+*/
+router.get('/today/:no/:limit', function(req, res){
+  var articleNo = req.params.no;
   var limit = req.params.limit;
   var todayDate = new Date().toFormat('YYYY-MM-DD');
+  var offsetSql;
+  if(articleNo == 0){
+    offsetSql = '';
+  }else{
+    offsetSql = ' WHERE a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
+  }
 
-  console.log(todayDate);
+  var sql = 'SELECT a.*, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a JOIN users AS b ON(a.writer_id=b.uid) '+
+  offsetSql+' ORDER BY a.created_at DESC LIMIT '+limit;
+  conn.query(sql, [articleNo], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error Recent'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success',
+        result : result
+      });
+    }
+  })
+
 })
 
 /*
