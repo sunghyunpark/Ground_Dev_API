@@ -698,6 +698,7 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
 * 오늘의 시합
 */
 router.get('/today/:no/:limit', function(req, res){
+  console.log('today api');
   var articleNo = req.params.no;
   var limit = req.params.limit;
   var todayDate = new Date().toFormat('YYYY-MM-DD');
@@ -710,7 +711,7 @@ router.get('/today/:no/:limit', function(req, res){
 
   var sql = 'SELECT a.*, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.match_date=? '+
   offsetSql+' ORDER BY a.created_at DESC LIMIT '+limit;
-  conn.query(sql, [articleNo], function(err, result, fields){
+  conn.query(sql, [todayDate, articleNo], function(err, result, fields){
     if(err){
       console.log(err);
       res.json({
