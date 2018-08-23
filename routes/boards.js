@@ -694,6 +694,15 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
   })
 })
 
+router.get('/today/:boardType/:no/:limit', function(req, res){
+  var boardType = req.params.boardType;
+  var articleNo = req.params.articleNo;
+  var limit = req.params.limit;
+  var todayDate = new Date().toFormat('YYYY-MM-DD');
+
+  console.log(todayDate);
+})
+
 /*
 * 임의의 아티클을 좋아요 눌렀을 때 favoriteState(boolean)을 통해 좋아요인지 취소인지 판별한다.
 */
