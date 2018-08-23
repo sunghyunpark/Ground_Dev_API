@@ -34,7 +34,7 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.* b.nick_name FROM '+
+  var sql = 'SELECT a.*, b.nick_name FROM '+
   tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
