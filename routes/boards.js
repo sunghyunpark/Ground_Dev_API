@@ -43,14 +43,16 @@ router.post('/', function(req, res){
   var title = req.body.title;
   var contents = req.body.contents;
   var boardType = req.body.boardType;
+  var matchDate = req.body.matchDate;
+  var averageAge = req.body.averageAge;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
     //Mboard에 insert를 한다.
-    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-    conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?)';
+    conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
       if(err){
         //MBoard insert 실패
         console.log(err);
@@ -60,8 +62,8 @@ router.post('/', function(req, res){
         });
       }else{
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
-        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?)';
-        conn.query(sql, [result.insertId, areaNo, uid, title, contents, currentTime], function(err, result, fields){
+        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?,?)';
+        conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
           if(err){
             //SubTable insert 실패
             console.log(err);
@@ -94,8 +96,8 @@ router.post('/', function(req, res){
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
-  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?)';
+  conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
     if(err){
       // insert 실패
       console.log(err);
