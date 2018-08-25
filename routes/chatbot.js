@@ -13,6 +13,11 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+var areaArray = ['서울', '도봉/노원/강북/중랑', '성북/동대문/종로', '은평/서대문/마포', '용산/중구',
+'성동/광진/강동', '송파/서초/강남', '양천/구로/영등포/강서', '금천/관악/동작', '경기', '고양',
+'인천/부천/김포', '구리/남양주/하남', '시흥/안산/광명', '과천/안양/군포/의왕',
+'수원/용인/화성/오산', '파주', '성남/광주/이천', '평택/안성', '의정부/양주/그 외'];
+
 router.get('/kakao/keyboard', function(req, res){
   var data = {
     'type' : 'buttons',
@@ -41,7 +46,7 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += (i+1)+'. '+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] '+result[i].title + '\n';
         }
         console.log('log'+responseText);
         response = {
