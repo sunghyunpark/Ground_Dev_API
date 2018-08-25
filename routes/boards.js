@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('./module.js');
+var fcmModule = require('./push.js');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -501,6 +502,24 @@ router.post('/view/comment', function(req, res){
         }
         }
       })
+    }
+  })
+
+  var tableNameOfArticle;
+  if(boardType == 'match'){
+    tableNameOfArticle = 'MBoard';
+  }else if(boardType == 'hire'){
+    tableNameOfArticle = 'HBoard';
+  }else{
+    tableNameOfArticle = 'RBoard';
+  }
+  var sql = 'SELECT a.fcm_token FROM users AS a JOIN '+tableNameOfArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
+  conn.query(sql, [articleNo], function(err, result, fields){
+    if(err){
+      console.log(err);
+    }else{
+      fcmModule.sendPushMyArticleByComment(result[0].fcm_token);
+      console.log('push ok');
     }
   })
 
