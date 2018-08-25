@@ -2,7 +2,7 @@ require('date-utils');
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-var chatbotModule = require('./module.js');
+var router = express.Router();
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -51,7 +51,7 @@ router.post('/kakao/message', function(req, res){
             'buttons' : ['오늘의 시합', '최신글 보기']
           }
         }
-    
+
         res.set({
               'content-type': 'application/json'
           }).send(JSON.stringify(response));
