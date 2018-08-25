@@ -2,7 +2,7 @@ require('date-utils');
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
-var router = express.Router();
+var chatbotModule = require('./module.js');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -40,27 +40,23 @@ router.post('/kakao/message', function(req, res){
       if(err){
         responseText = err;
       }else{
-        for(var i=0;i<result.length;i++){
-          responseText += result[i].title;
+        responseText += result[i].title;
+        console.log('log'+responseText);
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
         }
+    
+        res.set({
+              'content-type': 'application/json'
+          }).send(JSON.stringify(response));
       }
     });
-
-    console.log('log'+responseText);
-    response = {
-      'message' : {
-        'text' : responseText
-      },
-      keyboard : {
-        'type' : 'buttons',
-        'buttons' : ['오늘의 시합', '최신글 보기']
-      }
-    }
-
-    res.set({
-          'content-type': 'application/json'
-      }).send(JSON.stringify(response));
-
   }
 
 /*
