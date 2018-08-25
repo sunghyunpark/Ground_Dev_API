@@ -39,7 +39,7 @@ router.post('/kakao/message', function(req, res){
 
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
-    var sql = 'SELECT title FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
+    var sql = 'SELECT title, area_no FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
     conn.query(sql, [todayDate], function(err, result, fields){
       if(err){
