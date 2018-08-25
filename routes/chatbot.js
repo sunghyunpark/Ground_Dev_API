@@ -52,7 +52,7 @@ router.post('/kakao/message', function(req, res){
           }else{
             matchState = '진행중';
           }
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+')'+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
           'message' : {
