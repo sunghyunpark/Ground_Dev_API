@@ -47,6 +47,7 @@ router.post('/kakao/message', function(req, res){
         }
       }
     })
+    console.log(responseText);
 
     response = {
       'message' : {
