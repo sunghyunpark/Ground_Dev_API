@@ -42,7 +42,7 @@ router.post('/kakao/message', function(req, res){
       if(err){
         responseText = err;
       }else{
-        for(int i=0;i<result.length;i++){
+        for(var i=0;i<result.length;i++){
           responseText += result[i].title;
         }
       }
