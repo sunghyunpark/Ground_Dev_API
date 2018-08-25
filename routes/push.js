@@ -6,7 +6,7 @@ var FCM = require('fcm-node');
 var serverKey = 'AAAAYpyLRuA:APA91bHTx-Hr4U5_BOwXzZerbNmqHpE3qFi524p1DAQzug_GyU_-NrrWEM_esngFImr2S4WKYnBGhQZ1HV0_qHWFqVHj45mqvCgY_y6xX-3yDhRboWJPNBaR5OcvCYzqifEB62aglxTrXpc2xsGTKZ6myaSSX1T_ZQ'; //put your server key here
 var fcm = new FCM(serverKey);
 
-module.exports.sendPushMyArticleByComment = function(toToken, areaNum){
+module.exports.sendPushMyArticleByComment = function(toToken, areaNum, typeOfBoard){
   var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
       to: toToken,
       //collapse_key: 'your_collapse_key',
@@ -20,6 +20,7 @@ module.exports.sendPushMyArticleByComment = function(toToken, areaNum){
           type : 'comment',
           title: 'GROUND-그라운드',
           areaNo: areaNum,
+          boardType: typeOfBoard,
           message: '작성한 게시글에 댓글이 달렸습니다.'
       }
   };
