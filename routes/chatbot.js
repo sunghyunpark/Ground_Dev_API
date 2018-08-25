@@ -30,7 +30,7 @@ router.post('/kakao/message', function(req, res){
   var type = req.body.type;
   console.log('전달받은 타입 : ' + type);
   var response = {};
-  var responseText = '';
+  var responseText = 'test';
 
   switch (msg) {
 
