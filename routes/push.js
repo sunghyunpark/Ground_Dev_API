@@ -17,8 +17,9 @@ module.exports.sendPushMyArticleByComment = function(toToken){
       },
 
       data: {  //you can send only notification or only data(or include both)
-          title: 'push title',
-          my_another_key: 'my another value'
+          type : 'comment',
+          title: 'GROUND-그라운드',
+          message: '작성한 게시글에 댓글이 달렸습니다.'
       }
   };
 
