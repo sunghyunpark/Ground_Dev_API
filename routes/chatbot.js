@@ -55,7 +55,7 @@ router.post('/kakao/message', function(req, res){
             'buttons' : ['오늘의 시합', '최신글 보기']
           }
       }
-    })
+    });
 /*
     response = {
       'message' : {
