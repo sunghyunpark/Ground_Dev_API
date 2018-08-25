@@ -43,18 +43,19 @@ router.post('/kakao/message', function(req, res){
         for(var i=0;i<result.length;i++){
           responseText += result[i].title;
         }
-        console.log('log'+responseText);
-        response = {
-          'message' : {
-            'text' : responseText
-          },
-          keyboard : {
-            'type' : 'buttons',
-            'buttons' : ['오늘의 시합', '최신글 보기']
-          }
-        }
       }
     });
+
+    console.log('log'+responseText);
+    response = {
+      'message' : {
+        'text' : responseText
+      },
+      keyboard : {
+        'type' : 'buttons',
+        'buttons' : ['오늘의 시합', '최신글 보기']
+      }
+    }
 
     res.set({
           'content-type': 'application/json'
