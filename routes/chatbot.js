@@ -30,7 +30,7 @@ router.post('/kakao/message', function(req, res){
   var type = req.body.type;
   console.log('전달받은 타입 : ' + type);
   var response = {};
-  var responseText = 'test';
+  var responseText = '';
 
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
@@ -41,7 +41,7 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += result[i].title;  
+          responseText += (i+1)+'. '+result[i].title + '\n';
         }
         console.log('log'+responseText);
         response = {
