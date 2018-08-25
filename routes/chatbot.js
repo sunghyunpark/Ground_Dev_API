@@ -16,7 +16,7 @@ conn.connect();
 router.get('/kakao/keyboard', function(req, res){
   var data = {
     'type' : 'buttons',
-    'buttons' : ['ground1', 'ground2', 'ground3']
+    'buttons' : ['오늘의 시합', '최신글 보기']
   };
   res.set({
       'content-type': 'application/json'
@@ -32,25 +32,40 @@ router.post('/kakao/message', function(req, res){
   var response = {};
 
   switch (msg) {
-    case 'ground1':
+
+    case '오늘의 시합':  
     response = {
       'message' : {
-        'text' : 'ground1 선택'
+        'text' : '오늘의 시합 선택'
+      },
+      keyboard : {
+        'type' : 'buttons',
+        'buttons' : ['뒤로가기']
       }
     }
       break;
 
-    case 'ground2':
+      case '최신글 보기':
       response = {
         'message' : {
-          'text' : 'ground2 선택'
+          'text' : '최신글 보기 선택'
         },
         keyboard : {
           'type' : 'buttons',
-          'buttons' : ['button1', 'button2']
+          'buttons' : ['뒤로가기']
         }
       }
       break;
+
+      case '뒤로가기':
+      response = {
+        keyboard : {
+          'type' : 'buttons',
+          'buttons' : ['오늘의 시합', '최신글 보기']
+        }
+      }
+      break;
+
 
     default:
     response = {
