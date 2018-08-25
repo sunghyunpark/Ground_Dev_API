@@ -33,14 +33,14 @@ router.post('/kakao/message', function(req, res){
 
   switch (msg) {
 
-    case '오늘의 시합':  
+    case '오늘의 시합':
     response = {
       'message' : {
         'text' : '오늘의 시합 선택'
       },
       keyboard : {
         'type' : 'buttons',
-        'buttons' : ['뒤로가기']
+        'buttons' : ['오늘의 시합', '최신글 보기']
       }
     }
       break;
@@ -52,20 +52,10 @@ router.post('/kakao/message', function(req, res){
         },
         keyboard : {
           'type' : 'buttons',
-          'buttons' : ['뒤로가기']
-        }
-      }
-      break;
-
-      case '뒤로가기':
-      response = {
-        keyboard : {
-          'type' : 'buttons',
           'buttons' : ['오늘의 시합', '최신글 보기']
         }
       }
       break;
-
 
     default:
     response = {
