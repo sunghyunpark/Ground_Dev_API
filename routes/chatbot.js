@@ -34,7 +34,7 @@ router.post('/kakao/message', function(req, res){
   switch (msg) {
 
     case '오늘의 시합':
-    var responseText;
+    var responseText = '';
     var todayDate = new Date().toFormat('YYYY-MM-DD');
     var sql = 'SELECT title FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
