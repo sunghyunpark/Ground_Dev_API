@@ -30,11 +30,11 @@ router.post('/kakao/message', function(req, res){
   var type = req.body.type;
   console.log('전달받은 타입 : ' + type);
   var response = {};
+  var responseText = '';
 
   switch (msg) {
 
     case '오늘의 시합':
-    var responseText = '';
     var todayDate = new Date().toFormat('YYYY-MM-DD');
     var sql = 'SELECT title FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
@@ -46,18 +46,9 @@ router.post('/kakao/message', function(req, res){
           responseText += result[i].title;
         }
         console.log(responseText);
-        response = {
-          'message' : {
-            'text' : responseText
-          },
-          keyboard : {
-            'type' : 'buttons',
-            'buttons' : ['오늘의 시합', '최신글 보기']
-          }
       }
-    }
     })
-/*
+
     response = {
       'message' : {
         'text' : responseText
@@ -66,7 +57,7 @@ router.post('/kakao/message', function(req, res){
         'type' : 'buttons',
         'buttons' : ['오늘의 시합', '최신글 보기']
       }
-    }*/
+    }
       break;
 
       case '최신글 보기':
