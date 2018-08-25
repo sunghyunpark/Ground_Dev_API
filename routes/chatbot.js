@@ -46,18 +46,17 @@ router.post('/kakao/message', function(req, res){
           responseText += result[i].title;
         }
         console.log(responseText);
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
+        }
       }
     })
-
-    response = {
-      'message' : {
-        'text' : responseText
-      },
-      keyboard : {
-        'type' : 'buttons',
-        'buttons' : ['오늘의 시합', '최신글 보기']
-      }
-    }
       break;
 
       case '최신글 보기':
