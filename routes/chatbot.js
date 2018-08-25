@@ -47,7 +47,7 @@ router.post('/kakao/message', function(req, res){
       }else{
         for(var i=0;i<result.length;i++){
           console.log(result[i].area_no);
-          cosole.log(areaArray[result[i].area_no]);
+          console.log(areaArray[result[i].area_no]);
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] '+result[i].title + '\n';
         }
         console.log('log'+responseText);
