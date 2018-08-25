@@ -45,9 +45,9 @@ router.post('/kakao/message', function(req, res){
         for(var i=0;i<result.length;i++){
           responseText += result[i].title;
         }
+        console.log(responseText);
       }
     })
-    console.log(responseText);
 
     response = {
       'message' : {
