@@ -32,6 +32,37 @@ router.post('/kakao/message', function(req, res){
   var response = {};
   var responseText = 'test';
 
+  if(msg == '오늘의 시합'){
+    var todayDate = new Date().toFormat('YYYY-MM-DD');
+    var sql = 'SELECT title FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
+
+    conn.query(sql, [todayDate], function(err, result, fields){
+      if(err){
+        responseText = err;
+      }else{
+        for(var i=0;i<result.length;i++){
+          responseText += result[i].title;
+        }
+        console.log('log'+responseText);
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
+        }
+      }
+    });
+
+    res.set({
+          'content-type': 'application/json'
+      }).send(JSON.stringify(response));
+
+  }
+
+/*
   switch (msg) {
 
     case '오늘의 시합':
@@ -83,6 +114,7 @@ router.post('/kakao/message', function(req, res){
   res.set({
         'content-type': 'application/json'
     }).send(JSON.stringify(response));
+    */
 })
 
 
