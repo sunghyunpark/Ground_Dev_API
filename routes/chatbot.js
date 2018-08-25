@@ -39,18 +39,21 @@ router.post('/kakao/message', function(req, res){
 
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
-    var sql = 'SELECT title, area_no FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
+    var sql = 'SELECT title, area_no, match_state FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
     conn.query(sql, [todayDate], function(err, result, fields){
       if(err){
         responseText = err;
       }else{
+        var matchState;
         for(var i=0;i<result.length;i++){
-          console.log(result[i].area_no);
-          console.log(areaArray[result[i].area_no]);
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] '+result[i].title + '\n';
+          if(result[i].match_state == 'Y'){
+            matchState = '매칭완료';
+          }else{
+            matchState = '진행중';
+          }
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+')'+result[i].title + '\n';
         }
-        console.log('log'+responseText);
         response = {
           'message' : {
             'text' : responseText
