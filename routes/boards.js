@@ -513,12 +513,12 @@ router.post('/view/comment', function(req, res){
   }else{
     tableNameOfCommnetArticle = 'RBoard';
   }
-  var sql = 'SELECT a.fcm_token FROM users AS a JOIN '+tableNameOfCommnetArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
+  var sql = 'SELECT a.fcm_token, b.area_no FROM users AS a JOIN '+tableNameOfCommnetArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
       console.log(err);
     }else{
-      fcmModule.sendPushMyArticleByComment(result[0].fcm_token);
+      fcmModule.sendPushMyArticleByComment(result[0].fcm_token, result[0].area_no);
       console.log('push ok');
     }
   })
