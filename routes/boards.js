@@ -505,15 +505,15 @@ router.post('/view/comment', function(req, res){
     }
   })
 
-  var tableNameOfArticle;
+  var tableNameOfCommnetArticle;
   if(boardType == 'match'){
-    tableNameOfArticle = 'MBoard';
+    tableNameOfCommnetArticle = 'MBoard';
   }else if(boardType == 'hire'){
-    tableNameOfArticle = 'HBoard';
+    tableNameOfCommnetArticle = 'HBoard';
   }else{
-    tableNameOfArticle = 'RBoard';
+    tableNameOfCommnetArticle = 'RBoard';
   }
-  var sql = 'SELECT a.fcm_token FROM users AS a JOIN '+tableNameOfArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
+  var sql = 'SELECT a.fcm_token FROM users AS a JOIN '+tableNameOfCommnetArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
       console.log(err);
