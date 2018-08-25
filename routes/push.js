@@ -17,7 +17,7 @@ module.exports.sendPushMyArticleByComment = function(toToken){
       },
 
       data: {  //you can send only notification or only data(or include both)
-          my_key: 'my value',
+          title: 'push title',
           my_another_key: 'my another value'
       }
   };
