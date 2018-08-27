@@ -33,10 +33,11 @@ router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
   var type = req.body.type;
   var response = {};
-  var responseText = 'GROUND-그라운드입니다.\n'+todayDate+' 기준 오늘의 시합 게시글입니다.\n';
+  var responseText = 'GROUND-그라운드입니다.\n';
 
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
+    responseText += todayDate+' 기준 오늘의 시합 게시글입니다.\n';
     var sql = 'SELECT title, area_no, match_state FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
     conn.query(sql, [todayDate], function(err, result, fields){
