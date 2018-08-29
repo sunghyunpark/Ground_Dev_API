@@ -92,4 +92,28 @@ router.put('/profile/:uid/:userName', function(req, res){
   })
 })
 
+/*
+* User's fcmToken update
+*/
+router.put('/profile/fcmToken/:uid/:fcmToken', function(req, res){
+  var uid = req.params.uid;
+  var fcmToken = req.params.fcmToken;
+
+  var sql = 'UPDATE users SET fcm_token=? WHERE uid=?';
+  conn.query(sql, [fcmToken, uid], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json({
+        code : 500,
+        message : 'Internal Server Error'
+      });
+    }else{
+      res.json({
+        code : 200,
+        message : 'Success'
+      });
+    }
+  })
+})
+
 module.exports = router;
