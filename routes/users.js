@@ -109,6 +109,7 @@ router.put('/profile/fcmToken/:uid/:fcmToken', function(req, res){
       });
     }else{
       res.json({
+        console.log("user's fcm update success");
         code : 200,
         message : 'Success'
       });
