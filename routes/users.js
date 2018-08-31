@@ -98,6 +98,7 @@ router.put('/profile/:uid/:userName', function(req, res){
 router.put('/profile/fcmToken/:uid/:fcmToken', function(req, res){
   var uid = req.params.uid;
   var fcmToken = req.params.fcmToken;
+  console.log(fcmToken);
 
   var sql = 'UPDATE users SET fcm_token=? WHERE uid=?';
   conn.query(sql, [fcmToken, uid], function(err, result, fields){
