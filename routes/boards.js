@@ -213,7 +213,7 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
   var order = req.params.order;
-  var matchDate = req.params.order;
+  var matchDate = req.params.matchDate;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var offsetSql = (no == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
   var matchData = (boardType == 'match') ? ' a.match_date, a.average_age,' : '';
