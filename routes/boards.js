@@ -222,9 +222,9 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   if(order == 'all'){
     orderData = '';
   }else if(order == 'matchDate'){
-    orderData = 'AND match_date=?';
+    orderData = 'AND a.match_date=?';
   }else if(order == 'matchState'){
-    orderData = 'AND match_state=N';
+    orderData = 'AND a.match_state=\'N\'';
   }
 
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
