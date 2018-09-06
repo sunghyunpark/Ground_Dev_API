@@ -214,15 +214,9 @@ router.get('/:boardType/:areaNo/:no/:order', function(req, res){
   var boardType = req.params.boardType;
   var order = req.params.order;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
+  var offsetSql = (no == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+  var matchData = (boardType == 'match') ? ' a.match_date, a.average_age,' : '';
 
-  var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
-  var matchData = '';
-  if(no == 0){
-    offsetSql = '';
-  }
-  if(boardType == 'match'){
-    matchData = ' a.match_date, a.average_age,';
-  }
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
   'a.comment_cnt,'+matchData+' a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
   tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
