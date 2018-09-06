@@ -208,7 +208,7 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
 * [게시판 목록]
 * 상세 지역 > 게시판 List를 내려준다.
 */
-router.get([]'/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
+router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var no = req.params.no;
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
