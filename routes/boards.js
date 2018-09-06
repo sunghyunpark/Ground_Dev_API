@@ -208,11 +208,12 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
 * [게시판 목록]
 * 상세 지역 > 게시판 List를 내려준다.
 */
-router.get('/:boardType/:areaNo/:no/:order', function(req, res){
+router.get([]'/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var no = req.params.no;
   var areaNo = req.params.areaNo;
   var boardType = req.params.boardType;
   var order = req.params.order;
+  var matchDate = req.params.order;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var offsetSql = (no == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
   var matchData = (boardType == 'match') ? ' a.match_date, a.average_age,' : '';
@@ -228,9 +229,9 @@ router.get('/:boardType/:areaNo/:no/:order', function(req, res){
 
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
   'a.comment_cnt,'+matchData+' a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+orderData+' ORDER BY a.created_at DESC LIMIT 10';
 
-  conn.query(sql, [areaNo, no], function(err, result, fields){
+  conn.query(sql, [areaNo, matchDate], function(err, result, fields){
     if(err){
       console.log(err);
       res.json({
