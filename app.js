@@ -12,7 +12,7 @@ app.use('/api/boards', require('./routes/boards'));
 app.use('/api/my', require('./routes/my'));
 app.use('/api/support', require('./routes/report'));
 app.use('/api/chatbot', require('./routes/chatbot'));
-//app.use('/api/push', require('./routes/push'));
+app.use('/api/comment', require('./routes/comment'));
 app.use('/api/home', require('./routes/home'));
 
 app.use(function(req, res, next){
