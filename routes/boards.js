@@ -256,7 +256,7 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
 * 조회수 update 쿼리가 성공하게되면 해당 게시글의 데이터를 조회한다.
 * FavoriteState > 0: not like, 1: like
 */
-router.get('/:boardType/detailView/favorite/:areaNo/:no/:uid', function(req, res){
+router.get('/list/detailView/favorite/:boardType/:areaNo/:no/:uid', function(req, res){
   var boardType = req.params.boardType;
   var areaNo = req.params.areaNo;
   var no = req.params.no;
@@ -347,9 +347,9 @@ router.get('/:boardType/detailView/favorite/:areaNo/:no/:uid', function(req, res
 /*
 * 위의 api와는 다른게 사용해야함
 * 본 api는 boardType, areaNo, articleNo, uid만 있으면 해당 게시글의 데이터를 가져올 수 있다.
-* 스키마, 푸시, 댓글 탭하여 상세 게시글 이동에 사용된다.
+* 스키마, 푸시, 댓글 탭하여 상세 게시글 이동에 사용된다.    /list/detailView/:boardType/:areaNo/:no/:uid
 */
-router.get('/:boardType/detailView/:areaNo/:no/:uid', function(req, res){
+router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
   var boardType = req.params.boardType;
   var areaNo = req.params.areaNo;
   var no = req.params.no;
@@ -449,7 +449,7 @@ router.get('/:boardType/detailView/:areaNo/:no/:uid', function(req, res){
 /*
 * match / hire / recruit의 게시글의 최근 업데이트 시간 리스트를 내려준다.
 */
-router.get('/:boardType/updated', function(req, res){
+router.get('/updated/:boardType', function(req, res){
   var boardType = req.params.boardType;
   var updateTableName = sortModule.sortUpdateTableName(boardType);
   var sql = 'SELECT * FROM '+updateTableName;
