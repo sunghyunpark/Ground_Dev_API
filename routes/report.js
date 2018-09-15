@@ -18,7 +18,7 @@ conn.connect();
 serviceName -> article / comment
 serviceNo -> article의 경우 articleNo, comment의 경우 commentNo
 */
-router.post('/report/:serviceName/:serviceNo/:boardType/:uid/:contents', function(req, res){
+router.post('/report', function(req, res){
   var serviceName = req.body.serviceName;
   var serviceNo = req.body.serviceNo;
   var boardType = req.body.boardType;
