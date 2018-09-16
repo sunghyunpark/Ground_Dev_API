@@ -61,11 +61,6 @@ router.post('/', function(req, res){
         //MBoard insert 실패
         console.log(err);
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-        /*
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });*/
       }else{
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?,?)';
@@ -73,27 +68,16 @@ router.post('/', function(req, res){
           if(err){
             //SubTable insert 실패
             console.log(err);
-            res.json({
-              code : 500,
-              message : 'Internal Server Error'
-            });
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
             //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
             var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
             conn.query(sql, [currentTime, areaNo], function(err, result, fields){
               if(err){
                 console.log(err);
-                res.json({
-                  code : 500,
-                  message : 'Internal Server Error'
-                });
+                res.json(responseUtil.successFalse(500, 'Internal Server Error'));
               }else{
                 res.json(responseUtil.successTrue('Success'));
-                /*
-                res.json({
-                  code : 200,
-                  message : 'Success'
-                });*/
               }
             })
           }
@@ -109,25 +93,16 @@ router.post('/', function(req, res){
     if(err){
       // insert 실패
       console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
       // insert 성공 후 해당 테이블의 UpdateTable에 최근 시간 업데이트
       var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
         }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
+          res.json(responseUtil.successTrue('Success'));
         }
       })
     }
@@ -154,10 +129,7 @@ router.put('/edit', function(req, res){
     conn.query(sql, [title, contents, matchDate, averageAge, no], function(err, result, fields){
       if(err){
         console.log(err);
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }
     })
   }
@@ -166,15 +138,9 @@ router.put('/edit', function(req, res){
   conn.query(sql, [title, contents, no], function(err, result, fields){
     if(err){
       console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
-      res.json({
-        code : 200,
-        message : 'Success'
-      });
+      res.json(responseUtil.successTrue('Success'));
     }
   })
 })
@@ -192,17 +158,7 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
   conn.query(sql, [no, uid], function(err, result, fields){
-    if(err){
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
-    }else{
-      res.json({
-        code : 200,
-        message : 'Success'
-      });
-    }
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
   })
 })
 
@@ -234,19 +190,7 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+orderData+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [areaNo, matchDate], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
-    }else{
-      res.json({
-        code : 200,
-        message : 'Success',
-        result : result
-      });
-    }
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
 
@@ -275,10 +219,7 @@ router.get('/list/detailView/favorite/:boardType/:areaNo/:no/:uid', function(req
       conn.query(sql, [no], function(err, result, fields){
         if(err){
           console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
         }else{
           // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
           var sql = 'UPDATE '+tableName+' SET view_cnt = view_cnt +1 WHERE no=?';
@@ -286,20 +227,14 @@ router.get('/list/detailView/favorite/:boardType/:areaNo/:no/:uid', function(req
             if(err){
               //조회수 쿼리 실패
               console.log(err);
-              res.json({
-                code : 500,
-                message : 'Internal Server Error'
-              });
+              res.json(responseUtil.successFalse(500, 'Internal Server Error'));
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 etc data를 내려준다.
               var sql = 'SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?) AS favoriteState';
               conn.query(sql, [no, uid], function(err, result, fields){
                 if(err){
                   console.log(err);
-                  res.json({
-                    code : 500,
-                    message : 'Internal Server Error'
-                  });
+                  res.json(responseUtil.successFalse(500, 'Internal Server Error'));
                 }else{
                   res.json({
                     code : 200,
@@ -320,20 +255,14 @@ router.get('/list/detailView/favorite/:boardType/:areaNo/:no/:uid', function(req
       if(err){
         //조회수 쿼리 실패
         console.log(err);
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
         var sql = 'SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?) AS favoriteState';
         conn.query(sql, [no, uid], function(err, result, fields){
           if(err){
             console.log(err);
-            res.json({
-              code : 500,
-              message : 'Internal Server Error'
-            });
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
             res.json({
               code : 200,
@@ -369,10 +298,7 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
       conn.query(sql, [no], function(err, result, fields){
         if(err){
           console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
         }else{
           // MBoard에 해당 게시글의 조회수 업데이트 후 분기처리된 Table의 게시판 조회수를 +1하도록 update 쿼리를 수행한다.
           var sql = 'UPDATE '+tableNameOfArticle+' SET view_cnt = view_cnt +1 WHERE no=?';
@@ -380,10 +306,7 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
             if(err){
               //조회수 쿼리 실패
               console.log(err);
-              res.json({
-                code : 500,
-                message : 'Internal Server Error'
-              });
+              res.json(responseUtil.successFalse(500, 'Internal Server Error'));
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
               var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.match_date, a.average_age, '+
@@ -392,17 +315,10 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
               conn.query(sql, [no, uid, no], function(err, result, fields){
                 if(err){
                   console.log(err);
-                  res.json({
-                    code : 500,
-                    message : 'Internal Server Error'
-                  });
+                  res.json(responseUtil.successFalse(500, 'Internal Server Error'));
                 }else{
                   console.log(result[0].created_at);
-                  res.json({
-                    code : 200,
-                    message : 'Success',
-                    result : result
-                  });
+                  res.json(responseUtil.successTrueWithData(result));
                 }
               })
             }
@@ -417,10 +333,7 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
       if(err){
         //조회수 쿼리 실패
         console.log(err);
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
         var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
@@ -429,17 +342,10 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
         conn.query(sql, [no, uid, no], function(err, result, fields){
           if(err){
             console.log(err);
-            res.json({
-              code : 500,
-              message : 'Internal Server Error'
-            });
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
             console.log(result[0].created_at);
-            res.json({
-              code : 200,
-              message : 'Success',
-              result : result
-            });
+            res.json(responseUtil.successTrueWithData(result));
           }
         })
       }
@@ -456,19 +362,7 @@ router.get('/updated/:boardType', function(req, res){
   var sql = 'SELECT * FROM '+updateTableName;
 
   conn.query(sql, function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
-    }else{
-      res.json({
-        code : 200,
-        message : 'Success',
-        result : result
-      });
-    }
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
 
