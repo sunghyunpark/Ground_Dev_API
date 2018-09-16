@@ -70,9 +70,9 @@ router.get('/:uid', function(req, res){
 /*
 * User profile(nickName) 수정
 */
-router.put('/profile/:uid/:userName', function(req, res){
-  var uid = req.params.uid;
-  var userName = req.params.userName;
+router.put('/profile', function(req, res){
+  var uid = req.body.uid;
+  var userName = req.body.userName;
 
   var sql = 'UPDATE users SET nick_name=? WHERE uid=?';
 
