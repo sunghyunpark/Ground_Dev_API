@@ -3,7 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
-var sortModule = require('../util/sortModule.js');
+var sortModule = require('../util/sortModule');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -22,7 +22,6 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
   var articleNo = req.params.no;
   var tableName;
   var limit = req.params.limit;
-  var offsetSql;
   var matchData = '';
 
   if(boardType == 'match'){
@@ -33,11 +32,7 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
   }else if(boardType == 'recruit'){
     tableName = 'RBoard';
   }
-  if(articleNo == 0){
-    offsetSql = '';
-  }else{
-    offsetSql = ' WHERE a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
-  }
+  var offsetSql = (articleNo == 0) ? '' : ' WHERE a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
 
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.comment_cnt, '+matchData+
   ' a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
@@ -63,16 +58,10 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
 * 오늘의 시합
 */
 router.get('/today/:no/:limit', function(req, res){
-  console.log('today api');
   var articleNo = req.params.no;
   var limit = req.params.limit;
   var todayDate = new Date().toFormat('YYYY-MM-DD');
-  var offsetSql;
-  if(articleNo == 0){
-    offsetSql = '';
-  }else{
-    offsetSql = 'AND a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
-  }
+  var offsetSql = (articleNo == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
 
   var sql = 'SELECT a.*, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.match_date=? '+
   offsetSql+' ORDER BY a.created_at DESC LIMIT '+limit;

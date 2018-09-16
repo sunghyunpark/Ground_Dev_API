@@ -3,8 +3,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
-var sortModule = require('../util/sortModule.js');
-var fcmModule = require('./push.js');
+var sortModule = require('../util/sortModule');
+var fcmModule = require('./push');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -180,13 +180,8 @@ router.delete('/delete/:boardType/:no/:uid', function(req, res){
   var boardType = req.params.boardType;
   var no = req.params.no;
   var uid = req.params.uid;
-  var tableName;
-
-  if(boardType == 'match'){
-    tableName = 'MBoard';
-  }else{
-    tableName = sortModule.sortTableNameOfArticle(boardType, 0);    // hire, recruit 의 경우엔 areaNo가 필요없어서 0값으로 넣어준다.
-  }
+  // hire, recruit 의 경우엔 areaNo가 필요없어서 0값으로 넣어준다.
+  var tableName = (boardType == 'match') ? 'MBoard' : sortModule.sortTableNameOfArticle(boardType, 0);
 
   var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
   conn.query(sql, [no, uid], function(err, result, fields){
@@ -357,7 +352,6 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
 
   var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
-  console.log(areaNo);
 
   /**
   * boardType으로 먼저 매칭, 용병, 모집을 나눈다.

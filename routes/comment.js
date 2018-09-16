@@ -3,8 +3,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
-var sortModule = require('../util/sortModule.js');
-var fcmModule = require('./push.js');
+var sortModule = require('../util/sortModule');
+var fcmModule = require('./push');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -109,15 +109,9 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
   var areaNo = req.params.areaNo;
-  var offsetSql;
   var areaName = sortModule.sortAreaName(boardType, areaNo);    // 게시글의 지역 HBoard, RBoard에서는 빈값으로 들어간다.
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
-
-  if(commentNo == 0){
-    offsetSql = '';
-  }else{
-    offsetSql = 'AND a.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
-  }
+  var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
 
     if(boardType == 'match'){
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
