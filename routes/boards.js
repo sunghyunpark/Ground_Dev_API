@@ -516,10 +516,10 @@ router.post('/favorite', function(req, res){
 /*
 * 게시글의 매칭 상태 변경
 */
-router.put('/view/matchState/:areaNo/:no/:state', function(req, res){
-  var areaNo = req.params.areaNo;
-  var articleNo = req.params.no;
-  var state = req.params.state;
+router.put('/view/matchState', function(req, res){
+  var areaNo = req.body.areaNo;
+  var articleNo = req.body.no;
+  var state = req.body.state;
   var updateTableName;
 
   if(areaNo < 9){
