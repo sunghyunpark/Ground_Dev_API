@@ -7,6 +7,7 @@ var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('../util/sortModule');
 var fcmModule = require('./push');
+var responseUtil = require('../util/responseUtil');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -59,10 +60,12 @@ router.post('/', function(req, res){
       if(err){
         //MBoard insert 실패
         console.log(err);
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+        /*
         res.json({
           code : 500,
           message : 'Internal Server Error'
-        });
+        });*/
       }else{
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?,?)';
@@ -85,10 +88,12 @@ router.post('/', function(req, res){
                   message : 'Internal Server Error'
                 });
               }else{
+                res.json(responseUtil.successTrue('Success'));
+                /*
                 res.json({
                   code : 200,
                   message : 'Success'
-                });
+                });*/
               }
             })
           }
