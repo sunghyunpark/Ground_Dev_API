@@ -132,14 +132,14 @@ router.post('/', function(req, res){
 * [게시판 글 수정]
 * boardType을 가지고 분기처리 후 그에 맞게 Update문을 실행한다.
 */
-router.put('/edit/:boardType/:areaNo/:no/:title/:contents/:matchDate/:averageAge', function(req, res){
-  var boardType = req.params.boardType;
-  var areaNo = req.params.areaNo;
-  var no = req.params.no;
-  var title = req.params.title;
-  var contents = req.params.contents;
-  var matchDate = req.params.matchDate;
-  var averageAge = req.params.averageAge;
+router.put('/edit', function(req, res){
+  var boardType = req.body.boardType;
+  var areaNo = req.body.areaNo;
+  var no = req.body.no;
+  var title = req.body.title;
+  var contents = req.body.contents;
+  var matchDate = req.body.matchDate;
+  var averageAge = req.body.averageAge;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
   if(boardType == 'match'){
