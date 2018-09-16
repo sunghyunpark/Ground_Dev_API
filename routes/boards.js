@@ -1,4 +1,6 @@
 require('date-utils');
+require('dotenv').config();
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
@@ -8,10 +10,10 @@ var fcmModule = require('./push');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'qkr103838!@',
-  database : 'ground_dev'
+  host     : process.env.DB_HOST,
+  user     : process.env.DB_USER,
+  password : process.env.DB_PASS,
+  database : process.env.DB_NAME
 });
 conn.connect();
 
