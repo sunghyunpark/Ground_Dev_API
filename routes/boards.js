@@ -3,7 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
-var sortModule = require('./module.js');
+var sortModule = require('../util/sortModule.js');
 var fcmModule = require('./push.js');
 
 var mysql = require('mysql');
