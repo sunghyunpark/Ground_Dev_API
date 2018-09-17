@@ -20,3 +20,5 @@ router.get('/ad/home/banner', function(req, res){
     ]
   });
 });
+
+module.exports = router;
