@@ -11,11 +11,11 @@ router.get('/ad/home', function(req, res){
     result : [
       {
         imgPath : 'static/banner/banner_test_1.png',
-        url : 'www.m.naver.com'
+        url : 'https://m.naver.com'
       },
       {
         imgPath : 'static/banner/banner_test_2.png',
-        url : 'www.daum.net'
+        url : 'https://www.daum.net'
       }
     ]
   });
