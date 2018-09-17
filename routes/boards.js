@@ -381,35 +381,13 @@ router.post('/favorite', function(req, res){
     //like
     var sql = 'INSERT INTO '+tableNameOfFavorite+' (article_no, uid, created_at) VALUES(?,?,?)';
     conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
-      if(err){
-        console.log(err);
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });
-      }else{
-        res.json({
-          code : 200,
-          message : 'Success'
-        });
-      }
+      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
     })
   }else{
     //not like
     var sql = 'DELETE FROM '+tableNameOfFavorite+' WHERE uid =? AND article_no =?';
     conn.query(sql, [uid, articleNo], function(err, result, fields){
-      if(err){
-        console.log(err);
-        res.json({
-          code : 500,
-          message : 'Internal Server Error'
-        });
-      }else{
-        res.json({
-          code : 200,
-          message : 'Success'
-        });
-      }
+      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
     })
   }
 })
@@ -436,25 +414,12 @@ router.put('/view/matchState', function(req, res){
   conn.query(sql, [state, articleNo], function(err, result, fields){
     if(err){
       console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
       //서브 테이블의 match_state를 변경 후 부모테이블의 상태도 변경해준다.
       var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
       conn.query(sql, [state, articleNo], function(err, result, fields){
-        if(err){
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
-        }
+        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
       })
     }
   })
