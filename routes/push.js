@@ -14,10 +14,6 @@ module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOf
       notification: {
         type : 'comment',
         title: 'GROUND-그라운드',
-        uid: uidOfArticle,
-        articleNo: noOfArticle,
-        areaNo: areaNum,
-        boardType: typeOfBoard,
         message: '작성한 게시글에 댓글이 달렸습니다.'
       },
 
