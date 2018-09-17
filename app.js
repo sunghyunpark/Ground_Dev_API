@@ -16,6 +16,7 @@ app.use('/api/support', require('./routes/report'));
 app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/comment', require('./routes/comment'));
 app.use('/api/home', require('./routes/home'));
+app.use('/api/banner', require('./routes/banner'));
 
 app.use(function(req, res, next){
   res.status(404);

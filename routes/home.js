@@ -16,23 +16,6 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-router.get('/ad/banner', function(req, res){
-  res.json({
-    code : 200,
-    message : 'Success',
-    result : [
-      {
-        bannerImg : 'static/banner/banner_test_1.png',
-        bannerUrl : 'naver.com'
-      },
-      {
-        bannerImg : 'static/banner/banner_test_2.png',
-        bannerUrl : 'daum.net'
-      }
-    ]
-  });
-});
-
 /*
 * 최신글 리스트를 5개씩 내려준다.(match / hire / recruit)
 */
