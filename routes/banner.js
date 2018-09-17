@@ -4,7 +4,7 @@ var router = express.Router();
 /*
 * HOME > 상단 슬라이드 배너 정보
 */
-router.get('/ad/home/banner', function(req, res){
+router.get('/ad/home', function(req, res){
   res.json({
     code : 200,
     message : 'Success',
