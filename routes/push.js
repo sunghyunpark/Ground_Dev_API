@@ -11,10 +11,10 @@ module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOf
       to: toToken,
       //collapse_key: 'your_collapse_key',
 
-      //notification: {
-        //title: 'GROUND-그라운드',
-        //body: '작성한 게시글에 댓글이 달렸습니다. body'
-      //},
+      notification: {
+          title: 'Title of your push notification',
+          body: 'Body of your push notification'
+      },
 
       data: {  //you can send only notification or only data(or include both)
           type : 'comment',
@@ -35,5 +35,3 @@ module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOf
       }
   });
 }
-
-//module.exports = router;
