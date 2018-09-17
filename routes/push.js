@@ -6,7 +6,7 @@ var FCM = require('fcm-node');
 var serverKey = 'AAAAYpyLRuA:APA91bHTx-Hr4U5_BOwXzZerbNmqHpE3qFi524p1DAQzug_GyU_-NrrWEM_esngFImr2S4WKYnBGhQZ1HV0_qHWFqVHj45mqvCgY_y6xX-3yDhRboWJPNBaR5OcvCYzqifEB62aglxTrXpc2xsGTKZ6myaSSX1T_ZQ'; //put your server key here
 var fcm = new FCM(serverKey);
 
-module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOfArticle, areaNum, typeOfBoard){
+module.exports.sendPushMyArticleByComment = function(toToken, noOfArticle, areaNum, typeOfBoard){
   var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
       to: toToken,
       //collapse_key: 'your_collapse_key',
@@ -19,7 +19,6 @@ module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOf
       data: {  //you can send only notification or only data(or include both)
           type : 'comment',
           title: 'GROUND-그라운드',
-          uid: uidOfArticle,
           articleNo: noOfArticle,
           areaNo: areaNum,
           boardType: typeOfBoard,
