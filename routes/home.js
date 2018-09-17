@@ -22,11 +22,11 @@ router.get('/ad/banner', function(req, res){
     message : 'Success',
     result : [
       {
-        bannerImg : 'img',
+        bannerImg : 'static/banner/banner_test_1.png',
         bannerUrl : 'naver.com'
       },
       {
-        bannerImg : 'img2',
+        bannerImg : 'static/banner/banner_test_2.png',
         bannerUrl : 'daum.net'
       }
     ]
