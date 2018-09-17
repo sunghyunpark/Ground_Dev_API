@@ -21,4 +21,25 @@ router.get('/ad/home', function(req, res){
   });
 });
 
+/*
+* 지역별 게시판 상단 배너
+*/
+
+router.get('/ad/board', function(req, res){
+  res.json({
+    code : 200,
+    message : 'Success',
+    result : [
+      {
+        imgPath : 'static/banner/banner_test_1.png',
+        url : 'https://www.daum.net'
+      },
+      {
+        imgPath : 'static/banner/banner_test_2.png',
+        url : 'https://m.naver.com'
+      }
+    ]
+  })
+})
+
 module.exports = router;
