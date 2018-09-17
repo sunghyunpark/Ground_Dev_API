@@ -14,7 +14,7 @@ module.exports.sendPushMyArticleByComment = function(uidOfArticle, toToken, noOf
       notification: {
         type : 'comment',
         title: 'GROUND-그라운드',
-        message: '작성한 게시글에 댓글이 달렸습니다.'
+        body: '작성한 게시글에 댓글이 달렸습니다.'
       },
 
       data: {  //you can send only notification or only data(or include both)
