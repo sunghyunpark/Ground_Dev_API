@@ -88,7 +88,7 @@ router.post('/', function(req, res){
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
-  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?,?,?)';
+  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
     if(err){
       // insert 실패
@@ -98,12 +98,7 @@ router.post('/', function(req, res){
       // insert 성공 후 해당 테이블의 UpdateTable에 최근 시간 업데이트
       var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-        }else{
-          res.json(responseUtil.successTrue('Success'));
-        }
+        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
       })
     }
   })
