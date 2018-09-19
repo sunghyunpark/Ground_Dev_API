@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var responseUtil = require('../util/responseUtil');
 var router = express.Router();
+var jwt = require('jsonwebtoken');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -22,28 +23,21 @@ router.post('/', function(req, res){
   var loginType = req.body.loginType;
   var fcmToken = req.body.fcmToken;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var sql = 'INSERT INTO users (uid, login_type, nick_name, fcm_token, created_at) VALUES(?, ?, ?, ?, ?)';
 
-  conn.query(sql, [uid, loginType, nickName, fcmToken, currentTime], function(err, result, fields){
+  var payload = {
+    uid : uid,
+    nickName : nickName
+  };
+  var secretOrPrivateKey = process.env.JWT_SECRET;
+  var options = {expiresIn : 60 * 60 * 24};
+  jwt.sign(patload, secretOrPrivateKey, options, function(err, token){
     if(err){
       console.log(err);
-      res.status(500).send('Internal Server Error');
     }else{
-      var sql = 'SELECT * FROM users WHERE uid=?';
-      conn.query(sql, [uid], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.status(500).send('Internal Server Error');
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success',
-            result : result[0]
-          });
-        }
-      })
+      console.log(token);
     }
-  });
+  })
+
 })
 
 /*
@@ -51,20 +45,8 @@ router.post('/', function(req, res){
  */
 router.get('/:uid', function(req, res){
   var uid = req.params.uid;
-  var sql = 'SELECT * FROM users WHERE uid=?';
 
-  conn.query(sql, [uid], function(err, result, fields){
-    if(err){
-      console.log(err);
-      res.status(500).send('Internal Server Error');
-    }else{
-      res.json({
-        code : 200,
-        message : 'Success',
-        result : result[0]
-      });
-    }
-  })
+
 })
 
 module.exports = router;
