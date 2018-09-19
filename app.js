@@ -7,6 +7,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+app.use(function(erq, res, next){
+  res.header('Access-Control-Allow_Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'content-type, x-access-token');
+  next();
+});
+
 app.use('/static', express.static('public'));
 
 app.use('/api/users', require('./routes/users'));
