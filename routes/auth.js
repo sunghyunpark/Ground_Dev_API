@@ -34,7 +34,7 @@ router.post('/', function(req, res){
     if(err){
       console.log(err);
     }else{
-      res.json({responseUtil.successTrueWithData(token)});
+      res.json(responseUtil.successTrueWithData(token));
       console.log(token);
     }
   })
