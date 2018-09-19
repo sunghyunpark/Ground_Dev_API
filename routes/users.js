@@ -4,6 +4,7 @@ require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
+var responseUtil = require('../util/responseUtil');
 var router = express.Router();
 
 var mysql = require('mysql');
