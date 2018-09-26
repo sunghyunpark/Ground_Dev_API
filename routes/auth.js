@@ -29,7 +29,7 @@ router.post('/', function(req, res){
     nickName : nickName
   };
   var secretOrPrivateKey = process.env.JWT_SECRET;
-  var options = {expiresIn : 60 * 60 * 24};
+  var options = {expiresIn : 60};    //60 * 60 * 24
   jwt.sign(payload, secretOrPrivateKey, options, function(err, token){
     if(err){
       console.log(err);
