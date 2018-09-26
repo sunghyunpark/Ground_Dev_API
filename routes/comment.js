@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('../util/sortModule');
-var fcmModule = require('./push');
+var fcmModule = require('../util/fcmModule');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
