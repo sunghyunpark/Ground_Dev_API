@@ -89,7 +89,7 @@ router.post('/kakao/message', function(req, res){
     responseText += '매칭 게시판의 최신글 목록입니다.\n';
     var sql = 'SELECT title, area_no, match_state FROM MBoard WHERE ORDER BY created_at DESC LIMIT 5';
 
-    conn.query(sql, [todayDate], function(err, result, fields){
+    conn.query(sql, function(err, result, fields){
       if(err){
         responseText = err;
       }else{
