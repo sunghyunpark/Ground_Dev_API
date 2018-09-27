@@ -136,61 +136,6 @@ router.post('/kakao/message', function(req, res){
           'content-type': 'application/json'
       }).send(JSON.stringify(response));
   }
-  }
-
-/*
-  switch (msg) {
-
-    case '오늘의 시합':
-    var todayDate = new Date().toFormat('YYYY-MM-DD');
-    var sql = 'SELECT title FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
-
-    conn.query(sql, [todayDate], function(err, result, fields){
-      if(err){
-        responseText = err;
-      }else{
-        for(var i=0;i<result.length;i++){
-          responseText += result[i].title;
-        }
-        console.log('log'+responseText);
-        response = {
-          'message' : {
-            'text' : responseText
-          },
-          keyboard : {
-            'type' : 'buttons',
-            'buttons' : ['오늘의 시합', '최신글 보기']
-          }
-        }
-        return;
-      }
-    })
-      break;
-
-      case '최신글 보기':
-      response = {
-        'message' : {
-          'text' : '최신글 보기 선택'
-        },
-        keyboard : {
-          'type' : 'buttons',
-          'buttons' : ['오늘의 시합', '최신글 보기']
-        }
-      }
-      break;
-
-    default:
-    response = {
-      'message' : {
-        'text' : '다시 선택해주세요.'
-      }
-    }
-      break;
-  }
-  res.set({
-        'content-type': 'application/json'
-    }).send(JSON.stringify(response));
-    */
 })
 
 
