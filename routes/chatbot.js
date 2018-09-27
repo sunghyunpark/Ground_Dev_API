@@ -71,16 +71,13 @@ router.post('/kakao/message', function(req, res){
       }
     });
   }else if(msg == '최신글 보기'){
-    response = {
-      keyboard : {
-        'type' : 'buttons',
-        'buttons' : ['매칭', '용병', '모집', '취소']
-      }
-    }
-
+    var data = {
+      'type' : 'buttons',
+      'buttons' : ['매칭', '용병', '모집', '취소']
+    };
     res.set({
-          'content-type': 'application/json'
-      }).send(JSON.stringify(response));
+        'content-type': 'application/json'
+    }).send(JSON.stringify(data));
   }
 
 /*
