@@ -72,9 +72,6 @@ router.post('/kakao/message', function(req, res){
     });
   }else if(msg == '최신글 보기'){
     response = {
-      'message' : {
-        'text' : "최신글 보기 선택"
-      },
       keyboard : {
         'type' : 'buttons',
         'buttons' : ['매칭', '용병', '모집', '취소']
