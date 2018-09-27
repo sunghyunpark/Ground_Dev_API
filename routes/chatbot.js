@@ -73,7 +73,7 @@ router.post('/kakao/message', function(req, res){
   }else if(msg == '최신글 보기'){
     response = {
       'message' : {
-        //'text' : "최신글 보기 선택"
+        'text' : "최신글 보기를 선택하셨습니다.\n각 게시판의 최근 5개 글을 보여줍니다."
       },
       keyboard : {
         'type' : 'buttons',
