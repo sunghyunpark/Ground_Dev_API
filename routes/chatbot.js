@@ -85,6 +85,57 @@ router.post('/kakao/message', function(req, res){
           'content-type': 'application/json'
       }).send(JSON.stringify(response));
 
+  }else if(msg == '매칭'){
+    responseText += '매칭 게시판의 최신글 목록입니다.\n';
+    var sql = 'SELECT title, area_no, match_state FROM MBoard WHERE ORDER BY created_at DESC LIMIT 5';
+
+    conn.query(sql, [todayDate], function(err, result, fields){
+      if(err){
+        responseText = err;
+      }else{
+        var matchState;
+        for(var i=0;i<result.length;i++){
+          if(result[i].match_state == 'Y'){
+            matchState = '매칭완료';
+          }else{
+            matchState = '진행중';
+          }
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
+        }
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
+        }
+
+        res.set({
+              'content-type': 'application/json'
+          }).send(JSON.stringify(response));
+      }
+    });
+  }else if(msg == '용병'){
+
+  }else if(msg == '모집'){
+
+  }else if(msg == '취소'){
+    response = {
+      'message' : {
+        'text' : responseText
+      },
+      keyboard : {
+        'type' : 'buttons',
+        'buttons' : ['오늘의 시합', '최신글 보기']
+      }
+    }
+
+    res.set({
+          'content-type': 'application/json'
+      }).send(JSON.stringify(response));
+  }
   }
 
 /*
