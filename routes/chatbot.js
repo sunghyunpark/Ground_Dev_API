@@ -118,9 +118,57 @@ router.post('/kakao/message', function(req, res){
       }
     });
   }else if(msg == '용병'){
+    responseText += '용병 게시판의 최신글 목록입니다.\n';
+    var sql = 'SELECT title, area_no, match_state FROM HBoard ORDER BY created_at DESC LIMIT 5';
 
+    conn.query(sql, function(err, result, fields){
+      if(err){
+        responseText = err;
+      }else{
+        for(var i=0;i<result.length;i++){
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
+        }
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
+        }
+
+        res.set({
+              'content-type': 'application/json'
+          }).send(JSON.stringify(response));
+      }
+    });
   }else if(msg == '모집'){
+    responseText += '모집 게시판의 최신글 목록입니다.\n';
+    var sql = 'SELECT title, area_no, match_state FROM RBoard ORDER BY created_at DESC LIMIT 5';
 
+    conn.query(sql, function(err, result, fields){
+      if(err){
+        responseText = err;
+      }else{
+        for(var i=0;i<result.length;i++){
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
+        }
+        response = {
+          'message' : {
+            'text' : responseText
+          },
+          keyboard : {
+            'type' : 'buttons',
+            'buttons' : ['오늘의 시합', '최신글 보기']
+          }
+        }
+
+        res.set({
+              'content-type': 'application/json'
+          }).send(JSON.stringify(response));
+      }
+    });
   }else if(msg == '취소'){
     response = {
       'message' : {
