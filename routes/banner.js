@@ -42,4 +42,29 @@ router.get('/ad/board', function(req, res){
   })
 })
 
+/*
+* 지역별 목록 하단 띠배너
+*/
+
+router.get('/ad/areaList', function(req, res){
+  res.json({
+    code : 200,
+    message : 'Success',
+    result : [
+      {
+        imgPath : 'static/banner/banner_test_3.png',
+        url : 'https://www.daum.net'
+      },
+      {
+        imgPath : 'static/banner/banner_test_3.png',
+        url : 'https://www.daum.net'
+      },
+      {
+        imgPath : 'static/banner/banner_test_3.png',
+        url : 'https://www.daum.net'
+      }
+    ]
+  })
+})
+
 module.exports = router;
