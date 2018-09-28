@@ -73,7 +73,7 @@ router.post('/kakao/message', function(req, res){
   }else if(msg == '최신글 보기'){
     response = {
       'message' : {
-        'text' : "최신글 보기를 선택하셨습니다.\n각 게시판의 최근 5개 글을 보여줍니다."
+        'text' : "최신글 보기를 선택하셨습니다.\n각 게시판의 최근 10개 글을 보여줍니다."
       },
       keyboard : {
         'type' : 'buttons',
@@ -87,7 +87,7 @@ router.post('/kakao/message', function(req, res){
 
   }else if(msg == '매칭'){
     responseText += '매칭 게시판의 최신글 목록입니다.\n';
-    var sql = 'SELECT title, area_no, match_state FROM MBoard ORDER BY created_at DESC LIMIT 5';
+    var sql = 'SELECT title, area_no, match_state FROM MBoard ORDER BY created_at DESC LIMIT 10';
 
     conn.query(sql, function(err, result, fields){
       if(err){
@@ -119,7 +119,7 @@ router.post('/kakao/message', function(req, res){
     });
   }else if(msg == '용병'){
     responseText += '용병 게시판의 최신글 목록입니다.\n';
-    var sql = 'SELECT title, area_no, match_state FROM HBoard ORDER BY created_at DESC LIMIT 5';
+    var sql = 'SELECT title, area_no, match_state FROM HBoard ORDER BY created_at DESC LIMIT 10';
 
     conn.query(sql, function(err, result, fields){
       if(err){
@@ -145,7 +145,7 @@ router.post('/kakao/message', function(req, res){
     });
   }else if(msg == '모집'){
     responseText += '모집 게시판의 최신글 목록입니다.\n';
-    var sql = 'SELECT title, area_no, match_state FROM RBoard ORDER BY created_at DESC LIMIT 5';
+    var sql = 'SELECT title, area_no, match_state FROM RBoard ORDER BY created_at DESC LIMIT 10';
 
     conn.query(sql, function(err, result, fields){
       if(err){
