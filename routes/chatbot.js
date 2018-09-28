@@ -77,7 +77,7 @@ router.post('/kakao/message', function(req, res){
       },
       keyboard : {
         'type' : 'buttons',
-        'buttons' : ['매칭', '용병', '모집', '취소']
+        'buttons' : ['매칭', '용병', '모집', '뒤로가기']
       }
     }
 
@@ -169,7 +169,7 @@ router.post('/kakao/message', function(req, res){
           }).send(JSON.stringify(response));
       }
     });
-  }else if(msg == '취소'){
+  }else if(msg == '뒤로가기'){
     response = {
       'message' : {
         'text' : responseText
