@@ -20,20 +20,18 @@ router.get('/ad/home', function(req, res){
         url : 'https://www.daum.net'
       }
     ],
-    RBBanner : [
+    RBBanner :
       {
         type : 'app',
         imgPath : 'static/banner/recent_board_banner.png',
         url : 'https://play.google.com/store/apps/details?id='
-      }
-    ],
-    TBBanner : [
+      },
+    TBBanner :
       {
         type : 'web',
         imgPath : 'static/banner/today_match_board_banner.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
-    ]
   });
 });
 
