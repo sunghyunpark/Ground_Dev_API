@@ -43,12 +43,14 @@ router.get('/ad/board', function(req, res){
   res.json({
     code : 200,
     message : 'Success',
-    result : [
+    mainBanner : [
       {
+        type : 'web',
         imgPath : 'static/banner/banner_test_1.png',
         url : 'https://www.daum.net'
       },
       {
+        type : 'web',
         imgPath : 'static/banner/banner_test_2.png',
         url : 'https://m.naver.com'
       }
