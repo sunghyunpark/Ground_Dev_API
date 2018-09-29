@@ -8,14 +8,30 @@ router.get('/ad/home', function(req, res){
   res.json({
     code : 200,
     message : 'Success',
-    result : [
+    mainBanner : [
       {
+        type : 'web',
         imgPath : 'static/banner/banner_test_1.png',
         url : 'https://m.naver.com'
       },
       {
+        type : 'web',
         imgPath : 'static/banner/banner_test_2.png',
         url : 'https://www.daum.net'
+      }
+    ],
+    RBBanner : [
+      {
+        type : 'app',
+        imgPath : 'static/banner/recent_board_banner.png',
+        url : 'https://play.google.com/store/apps/details?id='
+      }
+    ],
+    TBBanner : [
+      {
+        type : 'web',
+        imgPath : 'static/banner/today_match_board_banner.png',
+        url : 'http://pf.kakao.com/_xkYIIj'
       }
     ]
   });
