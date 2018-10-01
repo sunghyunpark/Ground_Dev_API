@@ -25,7 +25,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({storage: storage});
 
-app.post('/board/free', upload.single('photo'), function(req, res){
+router.post('/board/free', upload.single('photo'), function(req, res){
   console.log(req.file);
   res.send('Uploaded : '+req.file.filename);
 })
