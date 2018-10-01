@@ -23,13 +23,13 @@ router.get('/ad/home', function(req, res){
     RBBanner :
       {
         type : 'app',
-        imgPath : 'static/banner/recent_board_banner.png',
+        imgPath : 'static/banner/recent_board_banner_2018_10_01.png',
         url : 'https://play.google.com/store/apps/details?id='
       },
     TBBanner :
       {
         type : 'web',
-        imgPath : 'static/banner/today_match_board_banner.png',
+        imgPath : 'static/banner/today_match_board_banner_2018_10_01.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
   });
