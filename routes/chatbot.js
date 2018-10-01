@@ -35,7 +35,7 @@ router.post('/kakao/message', function(req, res){
   var msg = req.body.content;
   var type = req.body.type;
   var response = {};
-  var responseText = 'GROUND-그라운드입니다.\n';
+  var responseText = '안녕하세요. \nGROUND-그라운드입니다.\n';
 
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
@@ -53,7 +53,10 @@ router.post('/kakao/message', function(req, res){
           }else{
             matchState = '진행중';
           }
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          '매칭 상태 : ' + matchState +'\n'+
+          '제목 : ' + result[i].title + '\n';
+          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
           'message' : {
