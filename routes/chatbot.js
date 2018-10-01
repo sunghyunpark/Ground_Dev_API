@@ -103,7 +103,10 @@ router.post('/kakao/message', function(req, res){
           }else{
             matchState = '진행중';
           }
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          '매칭 상태 : ' + matchState +'\n'+
+          '제목 : ' + result[i].title + '\n\n';
+          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
           'message' : {
@@ -129,7 +132,9 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          '제목 : ' + result[i].title + '\n\n';
+          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
         }
         response = {
           'message' : {
@@ -155,7 +160,9 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
+          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          '제목 : ' + result[i].title + '\n\n';
+          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
         }
         response = {
           'message' : {
