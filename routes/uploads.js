@@ -14,38 +14,20 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-router.post('/board/free/:filename', function(req, res, next){
-  upload(req, res).then(function (file) {
-    res.json(file);
-  }, function (err) {
-    res.send(500, err);
-  });
-});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+var upload = multer({storage: storage});
 
-var upload = function (req, res) {
-  var deferred = Q.defer();
-  var storage = multer.diskStorage({
-    // 서버에 저장할 폴더
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/board/');
-    },
+app.post('/board/free', upload.single('photo'), function(req, res){
+  console.log(req.file);
+  res.send('Uploaded : '+req.file.filename);
+})
 
-    // 서버에 저장할 파일 명
-    filename: function (req, file, cb) {
-      file.uploadedFile = {
-        name: req.params.filename,
-        ext: file.mimetype.split('/')[1]
-      };
-      cb(null, file.uploadedFile.name + '.' + file.uploadedFile.ext);
-    }
-  });
-
-  var upload = multer({ storage: storage }).single('file');
-  upload(req, res, function (err) {
-    if (err) deferred.reject();
-    else deferred.resolve(req.file.uploadedFile);
-  });
-  return deferred.promise;
-};
 
 module.exports = router;
