@@ -55,7 +55,7 @@ router.post('/kakao/message', function(req, res){
           }
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
-          '제목 : ' + result[i].title + '\n';
+          '제목 : ' + result[i].title + '\n\n';
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
