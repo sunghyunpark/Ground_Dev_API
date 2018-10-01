@@ -15,6 +15,7 @@ app.use(function(erq, res, next){
 });
 
 app.use('/static', express.static('public'));
+app.use('/uploads/board', express.static('uploads'));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
@@ -26,6 +27,7 @@ app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/comment', require('./routes/comment'));
 app.use('/api/home', require('./routes/home'));
 app.use('/api/banner', require('./routes/banner'));
+app.use('/api/uploads', require('./routes/uploads'));
 
 app.use(function(req, res, next){
   res.status(404);

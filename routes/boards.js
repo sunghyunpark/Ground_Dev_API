@@ -8,7 +8,6 @@ var router = express.Router();
 var sortModule = require('../util/sortModule');
 var responseUtil = require('../util/responseUtil');
 
-var mysql = require('mysql');
 var conn = mysql.createConnection({
   host     : process.env.DB_HOST,
   user     : process.env.DB_USER,
