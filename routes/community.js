@@ -34,6 +34,7 @@ router.post('/free', upload.single('photo'), function(req, res){
   var title = req.body.title;
   var contents = req.body.contents;
   var photo = req.file.filename;
+  var photoThumb = 'N';
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
 
   var sql = 'INSERT INTO FBoard (writer_id, title, contents, photo, photo_thumb, created_at) VALUES(?,?,?,?,?,?)';
