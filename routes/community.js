@@ -3,8 +3,8 @@ require('dotenv').config();
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
 var router = express.Router();
+var multer = require('multer');
 var responseUtil = require('../util/responseUtil');
 
 var mysql = require('mysql');
@@ -16,10 +16,27 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/board/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+var upload = multer({storage: storage}).single('photo');
+
 /*
 * 자유 게시판 글쓰기
 */
-router.post('/free', function(req, res){
+router.post('/free', upload(req, res, function(err){
+  if(err instanceof multer.MulterError){
+    console.log('upload fail!');
+    responseUtil.successFalse(500, 'Internal Server Error');
+  }else{
+    console.log('uploaded!');
+  }
+}), function(req, res){
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
@@ -33,6 +50,9 @@ router.post('/free', function(req, res){
   })
 })
 
+/*
+* 자유 게시글 List 받기
+*/
 router.get('/free/:no', function(req, res){
   var no = req.params.no;
   var offsetSql = (no == 0) ? '' : 'WHERE a.created_at < (SELECT created_at FROM FBoard WHERE no='+no+')';
