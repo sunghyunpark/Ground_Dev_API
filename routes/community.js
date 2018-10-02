@@ -24,12 +24,12 @@ var storage = multer.diskStorage({
     cb(null, file.originalname)
   }
 })
-var upload = multer({storage: storage}).single('photo');
+var upload = multer({storage: storage});
 
 /*
 * 자유 게시판 글쓰기
 */
-router.post('/free', function(req, res){
+router.post('/free', upload.single('photo'), function(req, res){
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
@@ -41,14 +41,7 @@ router.post('/free', function(req, res){
   conn.query(sql, [uid, title, contents, photo, photoThumb, currentTime], function(err, result, fields){
     res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
   })
-}, upload(req, res, function(err){
-  if(err instanceof multer.MulterError){
-    console.log('upload fail!');
-    responseUtil.successFalse(500, 'Internal Server Error');
-  }else{
-    console.log('uploaded!');
-  }
-}))
+})
 
 /*
 * 자유 게시글 List 받기
