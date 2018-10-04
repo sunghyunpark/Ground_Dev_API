@@ -59,4 +59,55 @@ router.get('/free/:no', function(req, res){
   })
 })
 
+/*
+* 자유게시판 좋아요 상태
+*/
+router.get('/free/detailView/favorite/:no/:uid', function(req, res){
+  var no = req.params.no;
+  var uid = req.params.uid;
+
+  var sql = 'UPDATE FBoard SET view_cnt = view_cnt +1 WHERE no=?';
+  conn.query(sql, [no], function(err, result, fields){
+    if(err){
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+    }else{
+      var sql = 'SELECT EXISTS (SELECT * FROM FBFavorite WHERE article_no=? AND uid=?) AS favoriteState';
+      conn.query(sql, [no, uid], function(err, result, fields){
+        if(err){
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+        }else{
+          res.json({
+            code : 200,
+            message : 'Success',
+            favoriteState : result[0].favoriteState
+          });
+        }
+      })
+    }
+  })
+})
+
+/*
+* 자유 게시판 좋아요
+*/
+
+router.post('/free/favorite', function(req, res){
+  var favoriteState = req.body.favoriteState;
+  var articleNo = req.body.articleNo;
+  var uid = req.body.uid;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+
+  if(favoriteState == 'Y'){
+    var sql = 'INSERT INTO FBFavorite (article_no, uid, created_at) VALUES(?,?,?)';
+    conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
+      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+    })
+  }else {
+    var sql = 'DELETE FROM FBFavorite WHERE uid =? AND article_no=?';
+    conn.query(sql, [uid, articleNo], function(err, result, fields){
+      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+    })
+  }
+})
+
 module.exports = router;
