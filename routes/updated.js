@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
@@ -25,7 +26,7 @@ router.get('/updated/:boardType', function(req, res){
     // 자유게시판인 경우
     sql = 'SELECT created_at FROM FBoard ORDER BY created_at DESC limit 1';
   }else{
-    // 매칭 / 용병 / 모집 게시판의 경우 
+    // 매칭 / 용병 / 모집 게시판의 경우
     sql = 'SELECT * FROM '+updateTableName;
   }
 
