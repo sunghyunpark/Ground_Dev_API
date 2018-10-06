@@ -119,7 +119,7 @@ router.get('/free/updated', function(req, res){
     if(err){
       console.log(err);
     }
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error111') : responseUtil.successTrueWithData(result));
   })
 })
 
