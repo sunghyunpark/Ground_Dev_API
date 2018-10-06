@@ -55,7 +55,7 @@ router.get('/free/:no', function(req, res){
   +offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [no], function(err, result, fields){
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error2222') : responseUtil.successTrueWithData(result));
   })
 })
 
