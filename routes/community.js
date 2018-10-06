@@ -116,7 +116,7 @@ router.post('/free/favorite', function(req, res){
 router.get('/updated', function(req, res){
   var sql = 'SELECT created_at FROM FBoard ORDER BY created_at DESC limit 1';
   conn.query(sql, function(err, result, fields){
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result[0].created_at));
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
 
