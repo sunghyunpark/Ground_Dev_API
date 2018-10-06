@@ -55,7 +55,7 @@ router.get('/free/:no', function(req, res){
   +offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, [no], function(err, result, fields){
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error2222') : responseUtil.successTrueWithData(result));
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
 
@@ -113,13 +113,13 @@ router.post('/free/favorite', function(req, res){
 /*
 * 자유게시판 최근 업데이트 시간
 */
-router.get('/free/updated', function(req, res){
+router.get('/updated', function(req, res){
   var sql = 'SELECT created_at FROM FBoard ORDER BY created_at DESC limit 1';
   conn.query(sql, function(err, result, fields){
     if(err){
       console.log(err);
     }
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error111') : responseUtil.successTrueWithData(result));
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
 
