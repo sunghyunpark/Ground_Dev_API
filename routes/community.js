@@ -110,14 +110,4 @@ router.post('/free/favorite', function(req, res){
   }
 })
 
-/*
-* 자유게시판 최근 업데이트 시간
-*/
-router.get('/updated', function(req, res){
-  var sql = 'SELECT created_at FROM FBoard ORDER BY created_at DESC limit 1';
-  conn.query(sql, function(err, result, fields){
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
-  })
-})
-
 module.exports = router;

@@ -18,7 +18,7 @@ conn.connect();
 * match / hire / recruit / free의 게시글의 최근 업데이트 시간 리스트를 내려준다.
 *
 */
-router.get('/updated/:boardType', function(req, res){
+router.get('/:boardType', function(req, res){
   var boardType = req.params.boardType;
   var updateTableName = sortModule.sortUpdateTableName(boardType);
   var sql = '';

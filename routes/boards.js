@@ -345,20 +345,6 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
     })
 })
 
-
-/*
-* match / hire / recruit의 게시글의 최근 업데이트 시간 리스트를 내려준다.
-*/
-router.get('/updated/:boardType', function(req, res){
-  var boardType = req.params.boardType;
-  var updateTableName = sortModule.sortUpdateTableName(boardType);
-  var sql = 'SELECT * FROM '+updateTableName;
-
-  conn.query(sql, function(err, result, fields){
-    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
-  })
-})
-
 /*
 * 임의의 아티클을 좋아요 눌렀을 때 favoriteState(boolean)을 통해 좋아요인지 취소인지 판별한다.
 */
