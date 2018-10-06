@@ -17,6 +17,7 @@ app.use(function(erq, res, next){
 app.use('/static', express.static('public'));
 app.use('/upload', express.static('uploads'));
 
+app.use('/api/config', require('./routes/config'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/community', require('./routes/community'));
