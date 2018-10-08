@@ -37,7 +37,7 @@ router.post('/free', upload.single('photo'), function(req, res){
   if(req.file){
     photo = 'upload/board/'+req.file.filename;
   }else{
-    'N';
+    photo = 'N';
   }
   //var photo = 'upload/board/'+req.file.filename;
   var photoThumb = 'N';
