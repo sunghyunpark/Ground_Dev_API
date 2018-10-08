@@ -33,7 +33,13 @@ router.post('/free', upload.single('photo'), function(req, res){
   var uid = req.body.uid;
   var title = req.body.title;
   var contents = req.body.contents;
-  var photo = 'upload/board/'+req.file.filename;
+  var photo = '';
+  if(req.file.filname){
+    photo = 'upload/board/'+req.file.filename;
+  }else{
+    'N';
+  }
+  //var photo = 'upload/board/'+req.file.filename;
   var photoThumb = 'N';
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
 
