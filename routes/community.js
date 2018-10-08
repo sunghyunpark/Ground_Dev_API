@@ -34,7 +34,7 @@ router.post('/free', upload.single('photo'), function(req, res){
   var title = req.body.title;
   var contents = req.body.contents;
   var photo = '';
-  if(req.file.filname){
+  if(req.file){
     photo = 'upload/board/'+req.file.filename;
   }else{
     'N';
