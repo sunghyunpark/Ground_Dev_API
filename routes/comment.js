@@ -130,43 +130,24 @@ router.delete('/view/comment/delete/:boardType/:no/:articleNo/:areaNo', function
   var sql = 'DELETE FROM '+tableNameOfComment+' WHERE no=?';
   conn.query(sql, [no], function(err, result, fields){
     if(err){
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
       //댓글 delete 성공 후 해당 게시글 Table에서 comment_Cnt를 -1 업데이트해준다.
       var sql = 'UPDATE '+tableNameOfArticle+' SET comment_cnt = comment_cnt -1 WHERE no=?';
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
         }else{
           //boardType이 match인 경우 MBoard내에서도 comnment_cnt를 업데이트해준다.
           if(boardType == 'match'){
           var sql = 'UPDATE MBoard SET comment_cnt = comment_cnt -1 WHERE no=?';
           conn.query(sql, [articleNo], function(err, result, fields){
-            if(err){
-              res.json({
-                code : 500,
-                message : 'Internal Server Error'
-              });
-            }else{
-              res.json({
-                code : 200,
-                message : 'Success'
-              });
-            }
+            res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
           })
         }else{
           //boardType이 match가 아닌 경우
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
+          res.json(responseUtil.successTrue('Success'));
         }
         }
       })
