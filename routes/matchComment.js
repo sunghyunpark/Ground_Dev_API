@@ -3,7 +3,6 @@ require('dotenv').config();
 
 var express = require('express');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('../util/sortModule');
 var fcmModule = require('../util/fcmModule');
@@ -40,10 +39,7 @@ router.post('/view/comment', function(req, res){
   conn.query(sql, [articleNo, areaName, writer_id, comment, currentTime], function(err, result, fields){
     if(err){
       console.log(err);
-      res.json({
-        code : 500,
-        message : 'Internal Server Error'
-      });
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
       //댓글 insert 성공 후 해당 게시글 Table에서 comment_Cnt를 +1 업데이트해준다.
       var sql = 'UPDATE '+tableNameOfArticle+' SET comment_cnt = comment_cnt +1 WHERE no=?';

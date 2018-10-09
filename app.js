@@ -22,6 +22,7 @@ app.use('/api/updated', require('./routes/updated'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/community', require('./routes/community'));
+app.use('/api/communityComment', require('./routes/communityComment'));
 app.use('/api/boards', require('./routes/boards'));
 app.use('/api/my', require('./routes/my'));
 app.use('/api/support', require('./routes/report'));
