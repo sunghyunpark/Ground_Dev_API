@@ -7,6 +7,7 @@ var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('../util/sortModule');
 var fcmModule = require('../util/fcmModule');
+var responseUtil = require('../util/responseUtil');
 
 var mysql = require('mysql');
 var conn = mysql.createConnection({
@@ -49,33 +50,17 @@ router.post('/view/comment', function(req, res){
       conn.query(sql, [articleNo], function(err, result, fields){
         if(err){
           console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
         }else{
           //boardType이 match인 경우 MBoard내에서도 comnment_cnt를 업데이트해준다.
           if(boardType == 'match'){
           var sql = 'UPDATE MBoard SET comment_cnt = comment_cnt +1 WHERE no=?';
           conn.query(sql, [articleNo], function(err, result, fields){
-            if(err){
-              res.json({
-                code : 500,
-                message : 'Internal Server Error'
-              });
-            }else{
-              res.json({
-                code : 200,
-                message : 'Success'
-              });
-            }
+            res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
           })
         }else{
           //boardType이 match가 아닌 경우
-          res.json({
-            code : 200,
-            message : 'Success'
-          });
+          res.json(responseUtil.successTrue('Success'));
         }
         }
       })
