@@ -26,7 +26,7 @@ app.use('/api/boards', require('./routes/boards'));
 app.use('/api/my', require('./routes/my'));
 app.use('/api/support', require('./routes/report'));
 app.use('/api/chatbot', require('./routes/chatbot'));
-app.use('/api/comment', require('./routes/comment'));
+app.use('/api/matchComment', require('./routes/matchComment'));
 app.use('/api/home', require('./routes/home'));
 app.use('/api/banner', require('./routes/banner'));
 app.use('/api/uploads', require('./routes/uploads'));
