@@ -81,7 +81,6 @@ router.post('/view/comment', function(req, res){
       console.log(err);
     }else{
       fcmModule.sendPushMyArticleByComment(result[0].fcm_token, result[0].no, result[0].area_no, result[0].board_type);
-      console.log('push ok');
     }
   })
 
@@ -104,38 +103,14 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
       ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
       conn.query(sql, [articleNo, areaName, commentNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success',
-            result : result
-          });
-        }
+        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
       })
 
     }else{
       var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
       ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
       conn.query(sql, [articleNo, commentNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.json({
-            code : 500,
-            message : 'Internal Server Error'
-          });
-        }else{
-          res.json({
-            code : 200,
-            message : 'Success',
-            result : result
-          });
-        }
+        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
       })
 
     }
