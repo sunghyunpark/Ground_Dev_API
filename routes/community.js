@@ -35,6 +35,7 @@ router.post('/', upload.single('photo'), function(req, res){
   var title = req.body.title;
   var contents = req.body.contents;
   var boardType = req.body.boardType;
+  console.log(boardType);
   var tableName = sortModule.sortTableNameOfArticle(boardType);
   var photo = '';
   if(req.file){
