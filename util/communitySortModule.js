@@ -2,8 +2,6 @@ module.exports.sortTableNameOfArticle = function (boardType){
   var tableName;
   if(boardType == 'free'){
     tableName = 'FBoard';
-  }else{
-    return console.log('error to boardType');
   }
 
   return tableName;
