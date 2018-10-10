@@ -50,6 +50,7 @@ router.get('/commentList/:boardType/:articleNo/:commentNo', function(req, res){
   var boardType = req.params.boardType;
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
+  console.log(boardType);
 
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
 
