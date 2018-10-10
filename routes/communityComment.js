@@ -53,7 +53,7 @@ router.get('/commentList/:boardType/:articleNo/:commentNo', function(req, res){
 
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
 
-  var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM FComment WHERE no=?)';
+  var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
 
   var sql = 'SELECT a.no, a.article_no, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, '+
   'b.profile_thumb FROM '+tableNameOfComment+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY '+
