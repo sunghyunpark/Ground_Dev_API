@@ -61,7 +61,7 @@ router.get('/:boardType/:no', function(req, res){
   var tableName = sortModule.sortTableNameOfArticle(boardType);
   var offsetSql = (no == 0) ? '' : 'WHERE a.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
 
-  var sql = 'SELECT a.no, a.writer_id, a.title, a.contents, a.photo, a.photo_thumb, a.blocked, a.view_cnt, '+
+  var sql = 'SELECT a.no, a.board_type, a.writer_id, a.title, a.contents, a.photo, a.photo_thumb, a.blocked, a.view_cnt, '+
   'a.comment_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) '
   +offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
 
