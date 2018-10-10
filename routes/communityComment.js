@@ -48,7 +48,7 @@ router.get('/free/commentList/:articleNo/:commentNo', function(req, res){
 
   var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM FComment WHERE no=?)';
 
-  var sql = 'SELECT a.no, a.articleNo, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, '+
+  var sql = 'SELECT a.no, a.article_no, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, '+
   'b.profile_thumb FROM FComment AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY '+
   'a.created_at ASC LIMIT 10';
   conn.query(sql, [articleNo, commentNo], function(err, result, fields){
