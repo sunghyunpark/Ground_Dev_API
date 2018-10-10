@@ -18,3 +18,13 @@ module.exports.sortTableNameOfFavorite = function(boardType){
 
   return tableNameOfFavorite;
 }
+
+module.exports.sortTableNameOfComment = function(boardType){
+  var tableNameOfComment;
+
+  if(boardType == 'free'){
+    tableNameOfComment = 'FComment';
+  }
+
+  return tableNameOfComment;
+}
