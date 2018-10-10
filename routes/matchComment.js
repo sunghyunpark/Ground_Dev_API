@@ -4,7 +4,7 @@ require('dotenv').config();
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
-var sortModule = require('../util/sortModule');
+var sortModule = require('../util/matchSortModule');
 var fcmModule = require('../util/fcmModule');
 var responseUtil = require('../util/responseUtil');
 
