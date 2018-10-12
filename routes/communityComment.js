@@ -74,7 +74,7 @@ router.delete('/delete/:boardType/:no/:articleNo', function(req, res){
   var no = req.params.no;
   var articleNo = req.params.articleNo;
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
-  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
+  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType);
 
   var sql = 'DELETE FROM '+tableNameOfComment+' WHERE no=?';
   conn.query(sql, [no], function(err, result, fields){
