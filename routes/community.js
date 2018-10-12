@@ -37,7 +37,7 @@ router.post('/', upload.single('photo'), function(req, res){
   var boardType = req.body.boardType;
 
   var tableName = sortModule.sortTableNameOfArticle(boardType);
-  
+
   var photo = '';
   if(req.file){
     photo = 'upload/board/'+req.file.filename;
@@ -50,6 +50,21 @@ router.post('/', upload.single('photo'), function(req, res){
 
   var sql = 'INSERT INTO '+tableName+' (writer_id, title, contents, photo, photo_thumb, created_at) VALUES(?,?,?,?,?,?)';
   conn.query(sql, [uid, title, contents, photo, photoThumb, currentTime], function(err, result, fields){
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
+  })
+})
+
+/*
+* 게시글 삭제
+*/
+router.delete('/delete/:boardType/:no/:uid', function(req, res){
+  var boardType = req.params.boardType;
+  var no = req.params.no;
+  var uid = req.params.uid;
+  var tableName = sortModule.sortTableNameOfArticle(boardType);
+
+  var sql = 'DELETE FROM '+tableName+' WHERE no=? AND writer_id=?';
+  conn.query(sql, [no, uid], function(err, result, fields){
     res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
   })
 })
