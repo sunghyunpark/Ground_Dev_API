@@ -66,4 +66,28 @@ router.get('/commentList/:boardType/:articleNo/:commentNo', function(req, res){
   })
 })
 
+/*
+* 댓글 삭제
+*/
+router.delete('/delete/:boardType/:no/:articleNo', function(req, res){
+  var boardType = req.params.boardType;
+  var no = req.params.no;
+  var articleNo = req.params.articleNo;
+  var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
+  var tableNameOfArticle = sortModule.sortTableNameOfArticle(boardType, areaNo);
+
+  var sql = 'DELETE FROM '+tableNameOfComment+' WHERE no=?';
+  conn.query(sql, [no], function(err, result, fields){
+    if(err){
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+    }else{
+      //댓글 delete 성공 후 해당 게시글 Table에서 comment_Cnt를 -1 업데이트해준다.
+      var sql = 'UPDATE '+tableNameOfArticle+' SET comment_cnt = comment_cnt -1 WHERE no=?';
+      conn.query(sql, [articleNo], function(err, result, fields){
+        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
+      })
+    }
+  })
+})
+
 module.exports = router;
