@@ -45,6 +45,7 @@ router.post('/comment', function(req, res){
         if(err){
           console.log(err);
         }else{
+          console.log(result[0].no+" articleNo");
           fcmModule.sendPushMyCommunityArticleByComment(result[0].fcm_token, result[0].no, result[0].board_type);
         }
       })
