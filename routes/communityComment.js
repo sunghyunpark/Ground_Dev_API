@@ -39,6 +39,15 @@ router.post('/comment', function(req, res){
       conn.query(sql, [articleNo], function(err, result, fields){
         res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
       })
+
+      var sql = 'SELECT a.fcm_token, b.no, b.board_type FROM users AS a JOIN '+tableNameOfArticle+' AS b ON(a.uid = b.writer_id) WHERE b.no=?';
+      conn.query(sql, [articleNo], function(err, result, fields){
+        if(err){
+          console.log(err);
+        }else{
+          fcmModule.sendPushMyCommunityArticleByComment(result[0].fcm_token, result[0].no, result[0].board_type);
+        }
+      })
     }
   })
 })
