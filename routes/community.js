@@ -88,6 +88,22 @@ router.get('/:boardType/:no', function(req, res){
 })
 
 /*
+* 자유게시판 디테일뷰 데이터 받기
+*/
+router.get('/detailView/:boardType/:no', function(req, res){
+  var boardType = req.params.boardType;
+  var no = req.params.no;
+  var tableName = sortModule.sortTableNameOfArticle(boardType);
+
+  var sql = 'SELECT a.no, a.board_type, a.writer_id, a.title, a.contens, a.photo, a.photo_thumb, a.blocked, a.view_cnt, '+
+  'a.comment_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid)';
+
+  conn.query(sql, [no], function(err, result, fields){
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
+  })
+})
+
+/*
 * 자유게시판 좋아요 상태
 */
 router.get('/detailView/favorite/:boardType/:no/:uid', function(req, res){
