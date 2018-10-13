@@ -99,6 +99,9 @@ router.get('/detailView/:boardType/:no', function(req, res){
   'a.comment_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid)';
 
   conn.query(sql, [no], function(err, result, fields){
+    if(err){
+      console.log(err);
+    }
     res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
   })
 })
