@@ -17,7 +17,7 @@ module.exports.sendPushMyArticleByComment = function(toToken, noOfArticle, areaN
       },
 
       data: {  //you can send only notification or only data(or include both)
-          type : 'comment',
+          type : 'commentOfMatch',
           title: 'GROUND-그라운드',
           articleNo: noOfArticle,
           areaNo: areaNum,
@@ -46,7 +46,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
       },
 
       data: {  //you can send only notification or only data(or include both)
-          type : 'comment',
+          type : 'commentOfFree',
           title: 'GROUND-그라운드',
           articleNo: noOfArticle,
           boardType: typeOfBoard,
