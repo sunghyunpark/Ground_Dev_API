@@ -7,6 +7,7 @@ var mysql = require('mysql');
 var router = express.Router();
 var sortModule = require('../util/matchSortModule');
 var responseUtil = require('../util/responseUtil');
+var fcmModule = require('../util/fcmModule');
 
 var conn = mysql.createConnection({
   host     : process.env.DB_HOST,
@@ -398,7 +399,21 @@ router.put('/view/matchState', function(req, res){
       //서브 테이블의 match_state를 변경 후 부모테이블의 상태도 변경해준다.
       var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
       conn.query(sql, [state, articleNo], function(err, result, fields){
-        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+        if(err){
+          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+        }else{
+          res.json(responseUtil.successTrue('Success'));
+          // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
+          var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article=?';
+          conn.query(sql, [articleNo], function(err, result, fields){
+            if(err){
+              console.log('push error favorite article is matched!');
+            }else{
+              console.log('success to favorite article is matched!');
+              fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
+            }
+          })
+        }
       })
     }
   })
