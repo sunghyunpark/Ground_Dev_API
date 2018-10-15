@@ -414,10 +414,10 @@ router.put('/view/matchState', function(req, res){
                 Object.keys(result).forEach(function(key){
                   var row = result[key];
                   console.log(row.fcm_token);
+                  fcmModule.sendPushMatchArticleOfFavorite(row.fcm_token, articleNo, 'match');
                 })
                 //console.log(result[1].fcm_token);
                 console.log('success to favorite article is matched!');
-                fcmModule.sendPushMatchArticleOfFavorite(JSON.parse(JSON.stringify(result)), articleNo, 'match');
               }
             })
           }
