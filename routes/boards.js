@@ -405,7 +405,7 @@ router.put('/view/matchState', function(req, res){
           res.json(responseUtil.successTrue('Success'));
           // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
           if(state == 'Y'){
-            var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article=?';
+            var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article_no=?';
             conn.query(sql, [articleNo], function(err, result, fields){
               if(err){
                 console.log(err);
