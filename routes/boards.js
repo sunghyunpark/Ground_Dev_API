@@ -404,15 +404,17 @@ router.put('/view/matchState', function(req, res){
         }else{
           res.json(responseUtil.successTrue('Success'));
           // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
-          var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article=?';
-          conn.query(sql, [articleNo], function(err, result, fields){
-            if(err){
-              console.log('push error favorite article is matched!');
-            }else{
-              console.log('success to favorite article is matched!');
-              fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
-            }
-          })
+          if(state == 'Y'){
+            var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article=?';
+            conn.query(sql, [articleNo], function(err, result, fields){
+              if(err){
+                console.log('push error favorite article is matched!');
+              }else{
+                console.log('success to favorite article is matched!');
+                fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
+              }
+            })  
+          }
         }
       })
     }
