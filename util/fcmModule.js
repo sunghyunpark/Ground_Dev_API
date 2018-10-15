@@ -72,7 +72,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
 /*
 * 사용자가 관심을 누른 임의의 게시글의 매칭 상태가 '완료' 로 바뀐 경우
 */
-  module.exports.sendPushMatchArticleOfFavorite = function(toToken, noOfArticle, typeOfBoard){
+  module.exports.sendPushMatchArticleOfFavorite = function(toToken, noOfArticle, areaNo, typeOfBoard){
     var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
         to: toToken,
         //collapse_key: 'your_collapse_key',
@@ -86,6 +86,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
             type : 'match',
             title: 'GROUND-그라운드',
             articleNo: noOfArticle,
+            areaNo: areaNum,
             boardType: typeOfBoard,
             message: '관심을 누른 게시글의 매칭 상태가 완료로 변경되었습니다.'
         }
