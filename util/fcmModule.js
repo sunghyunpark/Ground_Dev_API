@@ -86,7 +86,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
             type : 'match',
             title: 'GROUND-그라운드',
             articleNo: noOfArticle,
-            areaNo: areaNum,
+            areaNo: areaNo,
             boardType: typeOfBoard,
             message: '관심을 누른 게시글의 매칭 상태가 완료로 변경되었습니다.'
         }
