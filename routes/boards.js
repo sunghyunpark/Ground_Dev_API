@@ -413,7 +413,7 @@ router.put('/view/matchState', function(req, res){
               }else{
                 console.log(result);
                 console.log('success to favorite article is matched!');
-                fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
+                fcmModule.sendPushMatchArticleOfFavorite(JSON.parse(JSON.stringify(result)), articleNo, 'match');
               }
             })
           }
