@@ -408,12 +408,13 @@ router.put('/view/matchState', function(req, res){
             var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article=?';
             conn.query(sql, [articleNo], function(err, result, fields){
               if(err){
+                console.log(err);
                 console.log('push error favorite article is matched!');
               }else{
                 console.log('success to favorite article is matched!');
                 fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
               }
-            })  
+            })
           }
         }
       })
