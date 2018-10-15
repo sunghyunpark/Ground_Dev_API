@@ -411,6 +411,7 @@ router.put('/view/matchState', function(req, res){
                 console.log(err);
                 console.log('push error favorite article is matched!');
               }else{
+                console.log(result);
                 console.log('success to favorite article is matched!');
                 fcmModule.sendPushMatchArticleOfFavorite(result, articleNo, 'match');
               }
