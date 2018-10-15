@@ -413,7 +413,7 @@ router.put('/view/matchState', function(req, res){
               }else{
                 Object.keys(result).forEach(function(key){
                   var row = result[key];
-                  console.log(row);
+                  console.log(row.fcm_token);
                 })
                 //console.log(result[1].fcm_token);
                 console.log('success to favorite article is matched!');
