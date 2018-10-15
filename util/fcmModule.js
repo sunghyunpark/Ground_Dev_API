@@ -67,6 +67,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
           console.log("Successfully sent with response: ", response);
       }
   });
+}
 
 /*
 * 사용자가 관심을 누른 임의의 게시글의 매칭 상태가 '완료' 로 바뀐 경우
@@ -97,4 +98,4 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
             console.log("Successfully sent with response: ", response);
         }
     });
-}
+  }
