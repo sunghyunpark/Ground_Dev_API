@@ -20,15 +20,19 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   var order = req.params.order;
   var matchDate = req.params.matchDate;
   var offsetSql = (no == 0) ? '' : ' AND a.created_at < (SELECT created_at FROM MBoard WHERE no='+no+')';
-  var whereSql1 = 'where area_no=?';
+  var whereSql1 = 'where (area_no=?';
   var whereSql2 = '';
 
   if(areaNoArray.length > 1){
     for(var i=0;i<areaNoArray.length-1;i++){
-      whereSql2 += ' or area_no=?';
+      if(i == areaNoArray.lenth-2){
+        whereSql2 == ' or area_no=?)';
+      }else{
+        whereSql2 += ' or area_no=?';
+      }
     }
   }else{
-    whereSql2 = '';
+    whereSql2 = ')';
   }
 
   whereSql1 += whereSql2;
