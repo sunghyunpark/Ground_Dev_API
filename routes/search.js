@@ -32,7 +32,6 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   }
 
   whereSql1 += whereSql2;
-  areaNoArray.push(no);
 
   if(order == 'all'){
     orderData = '';
@@ -43,9 +42,11 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
     orderData = ' AND a.match_state=\'N\'';
   }
 
+  areaNoArray.push(no);
+
   var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
   'a.comment_cnt, a.match_date, a.average_age, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a '+
-  'JOIN users AS b ON(a.writer_id=b.uid) ' + whereSql1 + offsetSql + orderData + ' ORDER BY a.created_at DESC LIMIT 10';
+  'JOIN users AS b ON(a.writer_id=b.uid) ' + whereSql1 + orderData + offsetSql + ' ORDER BY a.created_at DESC LIMIT 10';
 
   conn.query(sql, areaNoArray, function(err, result, fields){
     if(err){
