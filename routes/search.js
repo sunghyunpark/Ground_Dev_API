@@ -52,10 +52,6 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   'a.comment_cnt, a.match_date, a.average_age, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM MBoard AS a '+
   'JOIN users AS b ON(a.writer_id=b.uid) ' + whereSql1 + orderData + offsetSql + ' ORDER BY a.created_at DESC LIMIT 10';
 
-  console.log(sql);
-  for(var i=0;i<areaNoArray.lenth;i++){
-    console.log(areaNoArray[i]);
-  }
   conn.query(sql, areaNoArray, function(err, result, fields){
     if(err){
       console.log(err);
