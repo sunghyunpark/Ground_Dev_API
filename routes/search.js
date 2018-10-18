@@ -23,8 +23,8 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   var whereSql1 = 'where area_no=?';
   var whereSql2 = ' or area_no=?';
 
-  if(areaNoArray.length() > 1){
-    for(var i=0;i<areaNoArray.length()-1;i++){
+  if(areaNoArray.length > 1){
+    for(var i=0;i<areaNoArray.length-1;i++){
       whereSql2 += whereSql2;
     }
   }else{
