@@ -28,7 +28,7 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
       if(i == areaNoArray.lenth-2){
         whereSql2 += ' or area_no=?)';
       }else{
-        whereSql2 += ' or area_no=?';
+        whereSql2 += ' ()or area_no=?';
       }
     }
   }else{
