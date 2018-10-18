@@ -32,13 +32,13 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   }
 
   whereSql1 += whereSql2;
-  areaNoArray.append(no);
+  areaNoArray.push(no);
 
   if(order == 'all'){
     orderData = '';
   }else if(order == 'matchDate'){
     orderData = 'AND a.match_date=?';
-    areaNoArray.append(matchDate);
+    areaNoArray.push(matchDate);
   }else if(order == 'matchState'){
     orderData = 'AND a.match_state=\'N\'';
   }
