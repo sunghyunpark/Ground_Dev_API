@@ -31,6 +31,7 @@ app.use('/api/matchComment', require('./routes/matchComment'));
 app.use('/api/home', require('./routes/home'));
 app.use('/api/banner', require('./routes/banner'));
 app.use('/api/uploads', require('./routes/uploads'));
+app.use('/api/search', require('./routes/search'));
 
 app.use(function(req, res, next){
   res.status(404);
