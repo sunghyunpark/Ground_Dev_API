@@ -51,7 +51,7 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
     if(err){
       console.log(err);
     }else{
-      responseUtil.successTrueWithData(result);
+      res.json(responseUtil.successTrueWithData(result));
     }
   })
 })
