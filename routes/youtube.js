@@ -5,7 +5,7 @@ router.get('/recommend', function(req, res){
   res.json({
     code : 200,
     message : 'Success',
-    state : 'off',
+    state : 'on',
     youtubeList : [
       {
         type : 'app',
