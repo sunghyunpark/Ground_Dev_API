@@ -9,6 +9,12 @@ router.get('/recommend', function(req, res){
     youtubeList : [
       {
         type : 'app',
+        imgPath : 'https://img.youtube.com/vi/VqM7SZU1Qgk/0.jpg',
+        videoId : 'VqM7SZU1Qgk',
+        title : '박지성이 우리 팀에 일일용병으로 나온다면?'
+      },
+      {
+        type : 'app',
         imgPath : 'https://img.youtube.com/vi/CSyUOLGhqhw/0.jpg',
         videoId : 'CSyUOLGhqhw',
         title : '누구나 할 수 있는 화려하면서 유용한 기술'
