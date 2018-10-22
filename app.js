@@ -30,6 +30,7 @@ app.use('/api/chatbot', require('./routes/chatbot'));
 app.use('/api/matchComment', require('./routes/matchComment'));
 app.use('/api/home', require('./routes/home'));
 app.use('/api/banner', require('./routes/banner'));
+app.use('/api/youtube', require('./routes/youtube'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/search', require('./routes/search'));
 
