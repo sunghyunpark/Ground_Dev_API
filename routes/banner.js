@@ -21,14 +21,14 @@ router.get('/ad/home', function(req, res){
       }
     ],
     RBBanner :
-      {
-        type : 'app',
+      {//app
+        type : 'off',
         imgPath : 'static/banner/recent_board_banner_2018_10_01.png',
         url : 'https://play.google.com/store/apps/details?id='
       },
     TBBanner :
-      {
-        type : 'web',
+      {//web
+        type : 'off',
         imgPath : 'static/banner/today_match_board_banner_2018_10_01.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
