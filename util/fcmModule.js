@@ -67,11 +67,6 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
         to: toToken,
         //collapse_key: 'your_collapse_key',
 
-        notification: {
-            title: 'Title of your push notification',
-            body: 'Body of your push notification'
-        },
-
         data: {  //you can send only notification or only data(or include both)
             type : 'match',
             title: 'GROUND-그라운드',
