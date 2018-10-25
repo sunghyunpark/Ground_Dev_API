@@ -49,14 +49,14 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
   var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
       to: toToken,
       //collapse_key: 'your_collapse_key',
-
+/*
       notification: {
           title: 'GROUND-그라운드',
           type : 'commentOfFree',
           articleNo: noOfArticle,
           boardType: typeOfBoard,
           body: '작성한 자유게시글에 댓글이 달렸습니다.'
-      },
+      },*/
 
       data: {  //you can send only notification or only data(or include both)
           type : 'commentOfFree',
