@@ -15,8 +15,12 @@ module.exports.sendPushMyArticleByComment = function(toToken, noOfArticle, areaN
       //collapse_key: 'your_collapse_key',
 
       notification: {
-          title: 'Title of your push notification',
-          body: 'Body of your push notification'
+          title: 'GROUND-그라운드',
+          type : 'commentOfMatch',
+          articleNo: noOfArticle,
+          areaNo: areaNum,
+          boardType: typeOfBoard,
+          body: '작성한 게시글에 댓글이 달렸습니다.'
       },
 
       data: {  //you can send only notification or only data(or include both)
@@ -47,8 +51,11 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
       //collapse_key: 'your_collapse_key',
 
       notification: {
-          title: 'Title of your push notification',
-          body: 'Body of your push notification'
+          title: 'GROUND-그라운드',
+          type : 'commentOfFree',
+          articleNo: noOfArticle,
+          boardType: typeOfBoard,
+          body: '작성한 자유게시글에 댓글이 달렸습니다.'
       },
 
       data: {  //you can send only notification or only data(or include both)
