@@ -167,21 +167,34 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var order = req.params.order;
   var matchDate = req.params.matchDate;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
-  var offsetSql = (no == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
-  var matchData = (boardType == 'match') ? ' a.match_date, a.average_age,' : '';
+  var offsetSql = (no == 0) ? '' : 'AND article.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
+  var matchData = (boardType == 'match') ? ' article.match_date, article.average_age,' : '';
   var orderData;
 
   if(order == 'all'){
     orderData = '';
   }else if(order == 'matchDate'){
-    orderData = 'AND a.match_date=?';
+    orderData = 'AND article.match_date=?';
   }else if(order == 'matchState'){
-    orderData = 'AND a.match_state=\'N\'';
+    orderData = 'AND article.match_state=\'N\'';
   }
 
-  var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
-  'a.comment_cnt,'+matchData+' a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.area_no=? '+offsetSql+orderData+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT article.no, '+
+  'article.board_type AS matchBoardType, '+
+  'article.area_no AS areaNo, '+
+  'article.writer_id AS writerId, '+
+  'article.title, '+
+  'article.contents, '+
+  'article.match_state AS matchState, '+
+  'article.blocked, '+
+  'article.view_cnt AS viewCnt, '+
+  'article.comment_cnt AS commentCnt, '+
+  matchData+' article.created_at AS createdAt, '+
+  'users.nick_name AS nickName, '+
+  'users.profile, '+
+  'users.profile_thumb AS profileThumb '+
+  'FROM '+ tableName + ' AS article JOIN users AS users ON(article.writer_id=users.uid) WHERE article.area_no=? '+
+  offsetSql+orderData+' ORDER BY article.created_at DESC LIMIT 10';
 
   conn.query(sql, [areaNo, matchDate], function(err, result, fields){
     res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
