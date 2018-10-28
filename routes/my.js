@@ -23,9 +23,11 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
   var uid = req.params.uid;
   var no = req.params.no;
   var tableName;
+  var matchData = '';
 
   if(boardType == 'match'){
     tableName = 'MBoard';
+    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge,'
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
   }else if(boardType == 'recruit'){
@@ -46,7 +48,7 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
   'article.blocked, '+
   'article.view_cnt AS viewCnt, '+
   'article.comment_cnt AS commentCnt, '+
-  'article.created_at AS createdAt, '+
+  matchData + 'article.created_at AS createdAt, '+
   'users.nick_name AS nickName FROM '+
   tableName+' AS article JOIN users AS users ON(article.writer_id=users.uid) WHERE article.writer_id=? '+offsetSql+' ORDER BY article.created_at DESC LIMIT 10';
 
