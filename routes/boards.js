@@ -316,9 +316,23 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
               res.json(responseUtil.successFalse(500, 'Internal Server Error'));
             }else{
               // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-              var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, a.match_date, a.average_age, '+
-              'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?)) AS favoriteState FROM '+
-              tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+              var sql = 'SELECT article.no, '+
+              'article.board_type AS matchBoardType, '+
+              'article.area_no AS areaNo, '+
+              'article.writer_id AS writerId, '+
+              'article.title, '+
+              'article.contents, '+
+              'article.match_state AS matchState, '+
+              'article.blocked, '+
+              'article.view_cnt AS viewCnt, '+
+              'article.match_date AS matchDate, '+
+              'article.average_age AS averageAge, '+
+              'article.created_at AS createdAt, '+
+              'users.nick_name AS nickName, '+
+              'users.profile, '+
+              'users.profile_thumb AS profileThumb, '+
+              '(SELECT EXISTS (SELECT * FROM MBFavorite where article_no=? AND uid=?)) AS favoriteState FROM '+
+              tableNameOfArticle+' AS article JOIN users AS users ON(article.writer_id = users.uid) WHERE article.no=?';
               conn.query(sql, [no, uid, no], function(err, result, fields){
                 if(err){
                   console.log(err);
@@ -343,9 +357,21 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
         // 조회수 쿼리 성공 시 해당 게시글의 데이터를 받아온다.
-        var sql = 'SELECT a.no, a.board_type, a.area_no, a.writer_id, a.title, a.contents, a.match_state, a.blocked, a.view_cnt, '+
-        'a.created_at, b.nick_name, b.profile, b.profile_thumb, (SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?)) AS favoriteState FROM '+
-        tableNameOfArticle+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.no=?';
+        var sql = 'SELECT article.no, '+
+        'article.board_type AS matchBoardType, '+
+        'article.area_no AS areaNo, '+
+        'article.writer_id AS writerId, '+
+        'article.title, '+
+        'article.contents, '+
+        'article.match_state AS matchState, '+
+        'article.blocked, '+
+        'article.view_cnt AS viewCnt, '+
+        'article.created_at AS createdAt, '+
+        'users.nick_name AS nickName, '+
+        'users.profile, '+
+        'users.profile_thumb AS profileThumb, '+
+        '(SELECT EXISTS (SELECT * FROM '+tableNameOfFavorite+' where article_no=? AND uid=?)) AS favoriteState FROM '+
+        tableNameOfArticle+' AS article JOIN users AS users ON(article.writer_id = users.uid) WHERE article.no=?';
         conn.query(sql, [no, uid, no], function(err, result, fields){
           if(err){
             console.log(err);
