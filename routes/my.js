@@ -32,12 +32,24 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
     tableName = 'RBoard';
   }
 
-  var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
+  var offsetSql = 'AND article.created_at < (SELECT created_at FROM '+tableName+' WHERE no=?)';
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.*, b.nick_name FROM '+
-  tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT article.no, '+
+  'article.board_type AS matchBoardType, '+
+  'article.area_no AS areaNo, '+
+  'article.writer_id AS writerId, '+
+  'article.title, '+
+  'article.contents, '+
+  'article.match_state AS matchState, '+
+  'article.blocked, '+
+  'article.view_cnt AS viewCnt, '+
+  'article.comment_cnt AS commentCnt, '+
+  'article.match_date AS matchDate, '+
+  'article.average_age AS averageAge, '+
+  'users.nick_name AS nickName FROM '+
+  tableName+' AS article JOIN users AS users ON(article.writer_id=users.uid) WHERE article.writer_id=? '+offsetSql+' ORDER BY article.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
     if(err){
