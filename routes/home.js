@@ -51,7 +51,7 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
   'users.profile, '+
   'users.profile_thumb AS profileThumb '+
   'FROM '+ tableName + ' AS article JOIN users AS users ON(article.writer_id=users.uid) WHERE article.area_no=? '+
-  offsetSql+orderData+' ORDER BY article.created_at DESC LIMIT ' + limit;
+  offsetSql+' ORDER BY article.created_at DESC LIMIT ' + limit;
 
   conn.query(sql, [articleNo], function(err, result, fields){
     if(err){
