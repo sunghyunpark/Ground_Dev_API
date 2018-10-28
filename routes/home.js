@@ -77,7 +77,7 @@ router.get('/today/:no/:limit', function(req, res){
   var articleNo = req.params.no;
   var limit = req.params.limit;
   var todayDate = new Date().toFormat('YYYY-MM-DD');
-  var offsetSql = (articleNo == 0) ? '' : 'AND a.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
+  var offsetSql = (articleNo == 0) ? '' : 'AND article.created_at < (SELECT created_at FROM MBoard WHERE no=?)';
 
   var sql = 'SELECT article.no, '+
   'article.board_type AS matchBoardType, '+
