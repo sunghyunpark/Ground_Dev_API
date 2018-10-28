@@ -121,9 +121,11 @@ router.get('/favorite/:boardType/:uid/:no', function(req, res){
   var no = req.params.no;
   var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
   var tableNameOfBoard;
+  var matchData = '';
 
   if(boardType == 'match'){
     tableNameOfBoard = 'MBoard';
+    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge,'
   }else if(boardType == 'hire'){
     tableNameOfBoard = 'HBoard';
   }else if(boardType == 'recruit'){
@@ -144,9 +146,7 @@ router.get('/favorite/:boardType/:uid/:no', function(req, res){
   'article.blocked, '+
   'article.view_cnt AS viewCnt, '+
   'article.comment_cnt AS commentCnt, '+
-  'article.match_date AS matchDate, '+
-  'article.average_age AS averageAge, '+
-  'article.created_at AS createdAt, '+
+  matchData + 'article.created_at AS createdAt, '+
   'users.nick_name AS nickName FROM '+
   tableNameOfFavorite+' AS favoriteArticle JOIN '+tableNameOfBoard +
   ' AS article ON(article.no=favoriteArticle.article_no) JOIN users AS users ON(article.writer_id=users.uid) WHERE favoriteArticle.uid=? '+
