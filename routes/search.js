@@ -64,7 +64,7 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   'users.nick_name AS nickName, '+
   'users.profile, '+
   'users.profile_thumb AS profileThumb FROM MBoard AS article '+
-  'JOIN users AS b ON(article.writer_id=users.uid) ' + whereSql1 + orderData + offsetSql + ' ORDER BY article.created_at DESC LIMIT 10';
+  'JOIN users AS users ON(article.writer_id=users.uid) ' + whereSql1 + orderData + offsetSql + ' ORDER BY article.created_at DESC LIMIT 10';
 
   conn.query(sql, areaNoArray, function(err, result, fields){
     if(err){
