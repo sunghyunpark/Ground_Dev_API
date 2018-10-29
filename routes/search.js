@@ -49,7 +49,7 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   areaNoArray.push(no);
 
   var sql = 'SELECT article.no, '+
-  'article.board_type AS boardType, '+
+  'article.board_type AS matchBoardType, '+
   'article.area_no AS areaNo, '+
   'article.writer_id AS writerId, '+
   'article.title, '+
