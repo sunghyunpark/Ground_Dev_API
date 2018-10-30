@@ -338,7 +338,7 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
                   console.log(err);
                   res.json(responseUtil.successFalse(500, 'Internal Server Error'));
                 }else{
-                  console.log(result[0].created_at);
+                  console.log(result[0].createdAt);
                   res.json(responseUtil.successTrueWithData(result));
                 }
               })
@@ -377,7 +377,7 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
             console.log(err);
             res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
-            console.log(result[0].created_at);
+            console.log(result[0].createdAt);
             res.json(responseUtil.successTrueWithData(result));
           }
         })
