@@ -24,10 +24,13 @@ router.get('/:boardType', function(req, res){
   var sql = '';
   if(boardType == 'free'){
     // 자유게시판인 경우
-    sql = 'SELECT 0 AS area_no, created_at AS updated_at FROM FBoard ORDER BY created_at DESC limit 1';
+    sql = 'SELECT 0 AS areaNo, '+
+    'created_at AS updatedAt '+
+    'FROM FBoard ORDER BY created_at DESC limit 1';
   }else{
     // 매칭 / 용병 / 모집 게시판의 경우
-    sql = 'SELECT * FROM '+updateTableName;
+    sql = 'SELECT area_no AS areaNo, '+
+    'updated_at AS updatedAt FROM '+updateTableName;
   }
 
   conn.query(sql, function(err, result, fields){
