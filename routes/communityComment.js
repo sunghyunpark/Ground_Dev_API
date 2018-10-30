@@ -62,11 +62,21 @@ router.get('/commentList/:boardType/:articleNo/:commentNo', function(req, res){
 
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
 
-  var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
+  var offsetSql = (commentNo == 0) ? '' : 'AND comment.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
 
-  var sql = 'SELECT a.no, a.article_no, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, '+
-  'b.profile_thumb FROM '+tableNameOfComment+' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY '+
-  'a.created_at ASC LIMIT 10';
+  var sql = 'SELECT comment.no, '+
+  'comment.article_no AS articleNo, '+
+  'comment.writer_id AS writerId, '+
+  'comment.comment, '+
+  'comment.blocked, '+
+  'comment.created_at AS createdAt, '+
+  'users.nick_name AS nickName, '+
+  'users.profile, '+
+  'users.profile_thumb AS profileThumb FROM '+
+  tableNameOfComment+
+  ' AS comment JOIN users AS users ON(comment.writer_id = users.uid) '+
+  'WHERE comment.article_no=? '+offsetSql+' ORDER BY '+
+  'comment.created_at ASC LIMIT 10';
   conn.query(sql, [articleNo, commentNo], function(err, result, fields){
     if(err){
       console.log(err);
