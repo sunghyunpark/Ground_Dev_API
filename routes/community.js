@@ -108,8 +108,21 @@ router.get('/detailView/:boardType/:no', function(req, res){
   var no = req.params.no;
   var tableName = sortModule.sortTableNameOfArticle(boardType);
 
-  var sql = 'SELECT a.no, a.board_type, a.writer_id, a.title, a.contents, a.photo, a.photo_thumb, a.blocked, a.view_cnt, '+
-  'a.comment_cnt, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableName+' AS a JOIN users AS b ON(a.writer_id=b.uid) WHERE no=?';
+  var sql = 'SELECT community.no, '+
+  'community.board_type AS boardType, '+
+  'community.writer_id AS writerId, '+
+  'community.title, '+
+  'community.contents, '+
+  'community.photo AS photoUrl, '+
+  'community.photo_thumb AS photoThumbUrl, '+
+  'community.blocked, '+
+  'community.view_cnt AS viewCnt, '+
+  'community.comment_cnt AS commentCnt, '+
+  'community.created_at AS createdAt, '+
+  'users.nick_name AS nickName, '+
+  'users.profile, '+
+  'users.profile_thumb AS profileThumb FROM '+
+  tableName + ' AS community JOIN users AS users ON(community.writer_id=users.uid) WHERE no=?';
 
   conn.query(sql, [no], function(err, result, fields){
     if(err){
