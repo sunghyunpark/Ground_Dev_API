@@ -91,25 +91,14 @@ router.get('/:boardType/view/:articleNo/:areaNo/commentList/:commentNo', functio
   var commentNo = req.params.commentNo;
   var articleNo = req.params.articleNo;
   var areaNo = req.params.areaNo;
-  var areaName = sortModule.sortAreaName(boardType, areaNo);    // 게시글의 지역 HBoard, RBoard에서는 빈값으로 들어간다.
   var tableNameOfComment = sortModule.sortTableNameOfComment(boardType);
   var offsetSql = (commentNo == 0) ? '' : 'AND a.created_at > (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
 
-    if(boardType == 'match'){
-      var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
-      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? AND a.area_name=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
-      conn.query(sql, [articleNo, areaName, commentNo], function(err, result, fields){
-        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
-      })
-
-    }else{
-      var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
-      ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
-      conn.query(sql, [articleNo, commentNo], function(err, result, fields){
-        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
-      })
-
-    }
+  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb FROM '+tableNameOfComment+
+  ' AS a JOIN users AS b ON(a.writer_id = b.uid) WHERE a.article_no=? '+offsetSql+' ORDER BY a.created_at ASC LIMIT 10';
+  conn.query(sql, [articleNo, commentNo], function(err, result, fields){
+    res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrueWithData(result));
+  })
 })
 
 /*
