@@ -32,7 +32,16 @@ router.post('/', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      var sql = 'SELECT * FROM users WHERE uid=?';
+      
+      var sql = 'SELECT uid, '+
+      'login_type AS loginType, '+
+      'nick_name AS nickName, '+
+      'profile, '+
+      'profile_thumb AS profileThumb, '+
+      'fcm_token AS fcmToken, '+
+      'created_at AS createdAt'+
+      ' FROM users WHERE uid=?';
+
       conn.query(sql, [uid], function(err, result, fields){
         if(err){
           console.log(err);
@@ -41,7 +50,7 @@ router.post('/', function(req, res){
           res.json({
             code : 200,
             message : 'Success',
-            result : result[0]
+            result : result
           });
         }
       })
