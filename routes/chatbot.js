@@ -58,7 +58,7 @@ router.post('/kakao/message', function(req, res){
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
-          '경기 방식 : ' + result[i].play_rule + '\n\n';
+          '경기 방식 : ' + result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
@@ -93,7 +93,7 @@ router.post('/kakao/message', function(req, res){
 
   }else if(msg == '매칭'){
     responseText += '매칭 게시판의 최신글 목록입니다.\n';
-    var sql = 'SELECT title, area_no, match_state FROM MBoard ORDER BY created_at DESC LIMIT 10';
+    var sql = 'SELECT title, area_no, match_state, match_date, charge, play_rule FROM MBoard ORDER BY created_at DESC LIMIT 10';
 
     conn.query(sql, function(err, result, fields){
       if(err){
@@ -108,7 +108,10 @@ router.post('/kakao/message', function(req, res){
           }
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
-          '제목 : ' + result[i].title + '\n\n';
+          '제목 : ' + result[i].title + '\n'+
+          '시합 날짜 : ' + result[i].match_date + '\n'+
+          '구장비 : ' + result[i].charge + '원\n' +
+          '경기 방식 : ' + result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
