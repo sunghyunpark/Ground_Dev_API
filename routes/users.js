@@ -32,7 +32,7 @@ router.post('/', function(req, res){
       console.log(err);
       res.status(500).send('Internal Server Error');
     }else{
-      
+
       var sql = 'SELECT uid, '+
       'login_type AS loginType, '+
       'nick_name AS nickName, '+
@@ -50,7 +50,7 @@ router.post('/', function(req, res){
           res.json({
             code : 200,
             message : 'Success',
-            result : result
+            result : result[0]
           });
         }
       })
