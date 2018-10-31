@@ -54,7 +54,14 @@ router.post('/', function(req, res){
  */
 router.get('/:uid', function(req, res){
   var uid = req.params.uid;
-  var sql = 'SELECT * FROM users WHERE uid=?';
+  var sql = 'SELECT uid, '+
+  'login_type AS loginType, '+
+  'nick_name AS nickName, '+
+  'profile, '+
+  'profile_thumb AS profileThumb, '+
+  'fcm_token AS fcmToken, '+
+  'created_at AS createdAt'+
+  ' FROM users WHERE uid=?';
 
   conn.query(sql, [uid], function(err, result, fields){
     if(err){
