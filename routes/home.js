@@ -28,7 +28,7 @@ router.get('/recent/:boardType/:no/:limit', function(req, res){
 
   if(boardType == 'match'){
     tableName = 'MBoard';
-    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge,'
+    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule,'
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
   }else if(boardType == 'recruit'){
@@ -91,6 +91,8 @@ router.get('/today/:no/:limit', function(req, res){
   'article.comment_cnt AS commentCnt, '+
   'article.match_date AS matchDate, '+
   'article.average_age AS averageAge, '+
+  'article.charge, '+
+  'article.play_rule AS playRule, '+
   'article.created_at AS createdAt, '+
   'users.nick_name AS nickName, '+
   'users.profile, '+
