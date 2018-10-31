@@ -60,6 +60,8 @@ router.get('/matchArticle/:no/:areaNoStr/:order/:matchDate',function(req, res){
   'article.comment_cnt AS commentCnt, '+
   'article.match_date AS matchDate, '+
   'article.average_age AS averageAge, '+
+  'article.charge, '+
+  'article.play_rule AS playRule, '+
   'article.created_at AS createdAt, '+
   'users.nick_name AS nickName, '+
   'users.profile, '+
