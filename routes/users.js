@@ -80,7 +80,7 @@ router.get('/:uid', function(req, res){
       res.json({
         code : 200,
         message : 'Success',
-        result : result
+        result : result[0]
       });
     }
   })
