@@ -87,12 +87,25 @@ router.get('/comment/:boardType/:uid/:no', function(req, res){
     boardTableName = 'RBoard';
   }
 
-  var offsetSql = 'AND a.created_at < (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
+  var offsetSql = 'AND comment.created_at < (SELECT created_at FROM '+tableNameOfComment+' WHERE no=?)';
   if(no == 0){
     offsetSql = '';
   }
-  var sql = 'SELECT a.no, a.article_no, a.area_name, a.writer_id, a.comment, a.blocked, a.created_at, b.nick_name, b.profile, b.profile_thumb, c.area_no, c.board_type FROM '+tableNameOfComment+
-  ' AS a JOIN users AS b ON(a.writer_id = b.uid) JOIN '+boardTableName+' AS c ON(a.article_no = c.no) WHERE a.writer_id=? '+offsetSql+' ORDER BY a.created_at DESC LIMIT 10';
+  var sql = 'SELECT comment.no, '+
+  'comment.article_no AS articleNo, '+
+  'comment.area_name AS areaName, '+
+  'comment.writer_id AS writerId, '+
+  'comment.comment, '+
+  'comment.blocked, '+
+  'comment.created_at AS createdAt, '+
+  'users.nick_name AS nickName, '+
+  'users.profile, '+
+  'users.profile_thumb AS profileThumb, '+
+  'article.area_no AS areaNo, '+
+  'article.board_type AS boardType FROM '+tableNameOfComment+
+  ' AS comment JOIN users AS users ON(comment.writer_id = users.uid) JOIN '+
+  boardTableName + ' AS article ON(comment.article_no = article.no) WHERE comment.writer_id=? '+
+  offsetSql+' ORDER BY comment.created_at DESC LIMIT 10';
 
   conn.query(sql, [uid, no], function(err, result, fields){
     if(err){
