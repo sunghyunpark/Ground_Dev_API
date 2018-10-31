@@ -65,7 +65,7 @@ router.post('/', function(req, res){
       }else{
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
-        conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
+        conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
           if(err){
             //SubTable insert 실패
             console.log(err);
