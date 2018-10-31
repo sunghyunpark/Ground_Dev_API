@@ -132,8 +132,8 @@ router.put('/edit', function(req, res){
         var sql = 'UPDATE '+tableName+' SET title=?, contents=?, match_date=?, average_age=?, charge=?, play_rule=? WHERE no=?';
         conn.query(sql, [title, contents, matchDate, averageAge, charge, playRule, no], function(err, result, fields){
           res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
-          return;
         })
+        return;
       }
     })
   }
