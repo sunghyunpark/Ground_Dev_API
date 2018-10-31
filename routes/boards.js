@@ -48,21 +48,23 @@ router.post('/', function(req, res){
   var boardType = req.body.boardType;
   var matchDate = req.body.matchDate;
   var averageAge = req.body.averageAge;
+  var charge = req.body.charge;
+  var playRule = req.body.playRule;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
     //Mboard에 insert를 한다.
-    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?)';
-    conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
+    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
+    conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
       if(err){
         //MBoard insert 실패
         console.log(err);
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
-        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, created_at) VALUES(?,?,?,?,?,?,?,?)';
+        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, currentTime], function(err, result, fields){
           if(err){
             //SubTable insert 실패
@@ -116,11 +118,13 @@ router.put('/edit', function(req, res){
   var contents = req.body.contents;
   var matchDate = req.body.matchDate;
   var averageAge = req.body.averageAge;
+  var charge = req.body.charge;
+  var playRule = req.body.playRule;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
 
   if(boardType == 'match'){
-    var sql = 'UPDATE MBoard SET title=?, contents=?, match_date=?, average_age=? WHERE no=?';
-    conn.query(sql, [title, contents, matchDate, averageAge, no], function(err, result, fields){
+    var sql = 'UPDATE MBoard SET title=?, contents=?, match_date=?, average_age=?, charge=?, play_rule=? WHERE no=?';
+    conn.query(sql, [title, contents, matchDate, averageAge, charge, playRule, no], function(err, result, fields){
       if(err){
         console.log(err);
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
@@ -168,7 +172,7 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var matchDate = req.params.matchDate;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var offsetSql = (no == 0) ? '' : 'AND article.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
-  var matchData = (boardType == 'match') ? ' article.match_date AS matchDate, article.average_age AS averageAge,' : '';
+  var matchData = (boardType == 'match') ? ' article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule' : '';
   var orderData;
 
   if(order == 'all'){
@@ -327,6 +331,8 @@ router.get('/list/detailView/:boardType/:areaNo/:no/:uid', function(req, res){
               'article.view_cnt AS viewCnt, '+
               'article.match_date AS matchDate, '+
               'article.average_age AS averageAge, '+
+              'article.charge, '+
+              'article.play_rule AS playRule, '+
               'article.created_at AS createdAt, '+
               'users.nick_name AS nickName, '+
               'users.profile, '+
