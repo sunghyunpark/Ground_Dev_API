@@ -40,7 +40,7 @@ router.post('/kakao/message', function(req, res){
   if(msg == '오늘의 시합'){
     var todayDate = new Date().toFormat('YYYY-MM-DD');
     responseText += todayDate+' 기준 오늘의 시합 게시글입니다.\n';
-    var sql = 'SELECT title, area_no, match_state FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
+    var sql = 'SELECT title, area_no, match_state, match_date, charge, play_rule FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
 
     conn.query(sql, [todayDate], function(err, result, fields){
       if(err){
@@ -55,7 +55,10 @@ router.post('/kakao/message', function(req, res){
           }
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
-          '제목 : ' + result[i].title + '\n\n';
+          '제목 : ' + result[i].title + '\n'+
+          '시합 날짜 : ' + result[i].match_date + '\n'+
+          '구장비 : ' + result[i].charge + '원\n' +
+          '경기 방식 : ' + result[i].play_rule + '\n\n';
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
