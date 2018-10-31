@@ -27,7 +27,7 @@ router.get('/article/:boardType/:uid/:no', function(req, res){
 
   if(boardType == 'match'){
     tableName = 'MBoard';
-    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge,'
+    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule,'
   }else if(boardType == 'hire'){
     tableName = 'HBoard';
   }else if(boardType == 'recruit'){
@@ -125,7 +125,7 @@ router.get('/favorite/:boardType/:uid/:no', function(req, res){
 
   if(boardType == 'match'){
     tableNameOfBoard = 'MBoard';
-    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge,'
+    matchData = 'article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule,'
   }else if(boardType == 'hire'){
     tableNameOfBoard = 'HBoard';
   }else if(boardType == 'recruit'){
