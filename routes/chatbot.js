@@ -47,6 +47,12 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         var matchState;
+        var playRuleStr;
+        if(result[i].play_rule == 0){
+          playRuleStr = '기타\n\n';
+        }else{
+          playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+        }
         for(var i=0;i<result.length;i++){
           if(result[i].match_state == 'Y'){
             matchState = '매칭완료';
@@ -58,7 +64,7 @@ router.post('/kakao/message', function(req, res){
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
-          '경기 방식 : ' + result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+          '경기 방식 : ' + playRuleStr;
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
@@ -100,6 +106,12 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         var matchState;
+        var playRuleStr;
+        if(result[i].play_rule == 0){
+          playRuleStr = '기타\n\n';
+        }else{
+          playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+        }
         for(var i=0;i<result.length;i++){
           if(result[i].match_state == 'Y'){
             matchState = '매칭완료';
@@ -111,7 +123,7 @@ router.post('/kakao/message', function(req, res){
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
-          '경기 방식 : ' + result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+          '경기 방식 : ' + playRuleStr;
           //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
