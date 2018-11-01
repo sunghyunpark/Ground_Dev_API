@@ -48,16 +48,17 @@ router.post('/kakao/message', function(req, res){
       }else{
         var matchState;
         var playRuleStr;
-        if(result[i].play_rule == 0){
-          playRuleStr = '기타\n\n';
-        }else{
-          playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
-        }
         for(var i=0;i<result.length;i++){
           if(result[i].match_state == 'Y'){
             matchState = '매칭완료';
           }else{
             matchState = '진행중';
+          }
+
+          if(result[i].play_rule == 0){
+            playRuleStr = '기타\n\n';
+          }else{
+            playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
           }
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
@@ -107,17 +108,18 @@ router.post('/kakao/message', function(req, res){
       }else{
         var matchState;
         var playRuleStr;
-        if(result[i].play_rule == 0){
-          playRuleStr = '기타\n\n';
-        }else{
-          playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
-        }
         for(var i=0;i<result.length;i++){
           if(result[i].match_state == 'Y'){
             matchState = '매칭완료';
           }else{
             matchState = '진행중';
           }
+          if(result[i].play_rule == 0){
+            playRuleStr = '기타\n\n';
+          }else{
+            playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+          }
+
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
           '제목 : ' + result[i].title + '\n'+
