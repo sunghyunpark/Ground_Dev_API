@@ -12,7 +12,7 @@ router.get('/ad/home', function(req, res){
     mainBanner : [
       {
         type : 'web',
-        imgPath : 'static/banner/banner_test_1_2018_11_03.png',
+        imgPath : 'static/banner/banner_test_1_2018_11_03_2.png',
         url : 'https://m.naver.com'
       },
       {
@@ -30,7 +30,7 @@ router.get('/ad/home', function(req, res){
     TBBanner :
       {//web
         type : 'web',
-        imgPath : 'static/banner/today_match_board_banner_2018_11_03.png',
+        imgPath : 'static/banner/today_match_board_banner_2018_11_03_2.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
   });
