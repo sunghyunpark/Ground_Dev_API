@@ -30,7 +30,7 @@ router.get('/ad/home', function(req, res){
     TBBanner :
       {//web
         type : 'web',
-        imgPath : 'static/banner/today_match_board_banner_2018_10_01.png',
+        imgPath : 'static/banner/today_match_board_banner_2018_11_03.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
   });
