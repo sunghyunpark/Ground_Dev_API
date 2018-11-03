@@ -88,6 +88,7 @@ router.get('/:boardType/:no', function(req, res){
   'community.blocked, '+
   'community.view_cnt AS viewCnt, '+
   'community.comment_cnt AS commentCnt, '+
+  'community.like_cnt AS likeCnt, '+
   'community.created_at AS createdAt, '+
   'users.nick_name AS nickName, '+
   'users.profile, '+
@@ -118,6 +119,7 @@ router.get('/detailView/:boardType/:no', function(req, res){
   'community.blocked, '+
   'community.view_cnt AS viewCnt, '+
   'community.comment_cnt AS commentCnt, '+
+  'community.like_cnt AS likeCnt, '+
   'community.created_at AS createdAt, '+
   'users.nick_name AS nickName, '+
   'users.profile, '+
