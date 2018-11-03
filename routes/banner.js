@@ -47,7 +47,7 @@ router.get('/ad/board', function(req, res){
     mainBanner : [
       {
         type : 'web',
-        imgPath : 'static/banner/banner_test_1.png',
+        imgPath : 'static/banner/banner_test_1_2018_11_03_2.png',
         url : 'https://www.daum.net'
       },
       {
