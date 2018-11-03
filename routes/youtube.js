@@ -9,15 +9,15 @@ router.get('/recommend', function(req, res){
     youtubeList : [
       {
         type : 'app',
-        imgPath : 'https://img.youtube.com/vi/VqM7SZU1Qgk/0.jpg',
-        videoId : 'VqM7SZU1Qgk',
-        title : '박지성이 우리 팀에 일일용병으로 나온다면?'
+        imgPath : 'https://img.youtube.com/vi/QPd2phfNlZw/0.jpg',
+        videoId : 'QPd2phfNlZw',
+        title : '호날두 감아차기 꿀팁[비밀공개ㅋ]'
       },
       {
         type : 'app',
-        imgPath : 'https://img.youtube.com/vi/CSyUOLGhqhw/0.jpg',
-        videoId : 'CSyUOLGhqhw',
-        title : '누구나 할 수 있는 화려하면서 유용한 기술'
+        imgPath : 'https://img.youtube.com/vi/ZuIXlr3QOiA/0.jpg',
+        videoId : 'ZuIXlr3QOiA',
+        title : '발렌시아 이강인 손흥민 넘고 축구 새 역사 쓴이유!'
       },
       {
         type : 'app',

@@ -3,6 +3,7 @@ var router = express.Router();
 
 /*
 * HOME > 상단 슬라이드 배너 정보
+* off를 하려면 type에 off를 해주면된다.(RBBanner, TBBanner)
 */
 router.get('/ad/home', function(req, res){
   res.json({
@@ -22,13 +23,13 @@ router.get('/ad/home', function(req, res){
     ],
     RBBanner :
       {//app
-        type : 'app',
+        type : 'off',
         imgPath : 'static/banner/recent_board_banner_2018_10_01.png',
         url : 'https://play.google.com/store/apps/details?id='
       },
     TBBanner :
       {//web
-        type : 'web',
+        type : 'off',
         imgPath : 'static/banner/today_match_board_banner_2018_10_01.png',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
