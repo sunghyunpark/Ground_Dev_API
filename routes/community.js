@@ -174,16 +174,33 @@ router.post('/favorite', function(req, res){
   var boardType = req.body.boardType;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
   var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
+  var tableName = sortModule.sortTableNameOfArticle(boardType);
 
   if(favoriteState == 'Y'){
     var sql = 'INSERT INTO '+tableNameOfFavorite+' (article_no, uid, created_at) VALUES(?,?,?)';
     conn.query(sql, [articleNo, uid, currentTime], function(err, result, fields){
-      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+      //res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+      if(err){
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+      }else{
+        var sql = 'UPDATE '+tableName+' SET like_cnt = like_cnt +1 WHERE no=?';
+        conn.query(sql, [articleNo], function(err, result, fields){
+          res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
+        })
+      }
     })
   }else {
     var sql = 'DELETE FROM '+tableNameOfFavorite+' WHERE uid =? AND article_no=?';
     conn.query(sql, [uid, articleNo], function(err, result, fields){
-      res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+      //res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue());
+      if(err){
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+      }else{
+        var sql = 'UPDATE '+tableName+' SET like_cnt = like_cnt -1 WHERE no=?';
+        conn.query(sql, [articleNo], function(err, result, fields){
+          res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
+        })
+      }
     })
   }
 })
