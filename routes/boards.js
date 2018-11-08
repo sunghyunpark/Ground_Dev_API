@@ -463,8 +463,7 @@ router.put('/view/matchState', function(req, res){
             console.log('push error favorite article is matched!');
             res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
-            res.json(responseUtil.successTrue('Success'));
-            Object.keys(result).forEach(function(key){
+              Object.keys(result).forEach(function(key){
               var row = result[key];
               console.log(row.fcm_token);
               fcmModule.sendPushMatchArticleOfFavorite(row.fcm_token, articleNo, areaNo, boardType);
