@@ -15,10 +15,12 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-var areaArray = ['서울', '도봉/노원/강북/중랑', '성북/동대문/종로', '은평/서대문/마포', '용산/중구',
+var matchAreaArray = ['서울', '도봉/노원/강북/중랑', '성북/동대문/종로', '은평/서대문/마포', '용산/중구',
 '성동/광진/강동', '송파/서초/강남', '양천/구로/영등포/강서', '금천/관악/동작', '경기', '고양',
 '인천/부천/김포', '구리/남양주/하남', '시흥/안산/광명', '과천/안양/군포/의왕',
 '수원/용인/화성/오산', '파주', '성남/광주/이천', '평택/안성', '의정부/양주/그 외'];
+
+var hireAndRecruitAreaArray = ['서울', '인천/경기', '대전/세종/충청', '대구/경북', '부산/울산/경남', '광주/전라', '강원', '제주'];
 
 router.get('/kakao/keyboard', function(req, res){
   var data = {
@@ -60,7 +62,7 @@ router.post('/kakao/message', function(req, res){
           }else{
             playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
           }
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          responseText += (i+1)+'. ['+matchAreaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
@@ -119,7 +121,7 @@ router.post('/kakao/message', function(req, res){
             playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
           }
 
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          responseText += (i+1)+'. ['+matchAreaArray[result[i].area_no]+']\n' +
           '매칭 상태 : ' + matchState +'\n'+
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
@@ -150,7 +152,7 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          responseText += (i+1)+'. ['+hireAndRecruitAreaArray[result[i].area_no]+']\n' +
           '제목 : ' + result[i].title + '\n\n';
         }
         response = {
@@ -177,7 +179,7 @@ router.post('/kakao/message', function(req, res){
         responseText = err;
       }else{
         for(var i=0;i<result.length;i++){
-          responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
+          responseText += (i+1)+'. ['+hireAndRecruitAreaArray[result[i].area_no]+']\n' +
           '제목 : ' + result[i].title + '\n\n';
         }
         response = {
