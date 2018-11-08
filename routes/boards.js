@@ -463,7 +463,7 @@ router.put('/view/matchState', function(req, res){
             res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
             res.json(responseUtil.successTrue('Success'));
-            
+            console.log('성공성공성공');
             Object.keys(result).forEach(function(key){
               var row = result[key];
               console.log(row.fcm_token);
