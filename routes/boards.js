@@ -453,6 +453,7 @@ router.put('/view/matchState', function(req, res){
       console.log(err);
       res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
+      res.json(responseUtil.successTrue('Success'));
       // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
       if(state == 'Y'){
         var sql = 'SELECT b.fcm_token FROM '+tableNameOfFavorite+' AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article_no=?';
@@ -463,7 +464,6 @@ router.put('/view/matchState', function(req, res){
             res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
             res.json(responseUtil.successTrue('Success'));
-            console.log('성공성공성공');
             Object.keys(result).forEach(function(key){
               var row = result[key];
               console.log(row.fcm_token);
