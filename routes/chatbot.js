@@ -66,7 +66,6 @@ router.post('/kakao/message', function(req, res){
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
           '경기 방식 : ' + playRuleStr;
-          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
           'message' : {
@@ -126,7 +125,6 @@ router.post('/kakao/message', function(req, res){
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
           '경기 방식 : ' + playRuleStr;
-          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+'('+matchState+') '+result[i].title + '\n';
         }
         response = {
           'message' : {
@@ -154,7 +152,6 @@ router.post('/kakao/message', function(req, res){
         for(var i=0;i<result.length;i++){
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '제목 : ' + result[i].title + '\n\n';
-          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
         }
         response = {
           'message' : {
@@ -182,7 +179,6 @@ router.post('/kakao/message', function(req, res){
         for(var i=0;i<result.length;i++){
           responseText += (i+1)+'. ['+areaArray[result[i].area_no]+']\n' +
           '제목 : ' + result[i].title + '\n\n';
-          //responseText += (i+1)+'. ['+areaArray[result[i].area_no]+'] \n'+result[i].title + '\n';
         }
         response = {
           'message' : {
