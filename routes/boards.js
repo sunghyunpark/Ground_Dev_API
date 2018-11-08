@@ -460,7 +460,10 @@ router.put('/view/matchState', function(req, res){
           if(err){
             console.log(err);
             console.log('push error favorite article is matched!');
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
           }else{
+            res.json(responseUtil.successTrue('Success'));
+            
             Object.keys(result).forEach(function(key){
               var row = result[key];
               console.log(row.fcm_token);
