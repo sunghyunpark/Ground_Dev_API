@@ -430,50 +430,47 @@ router.put('/view/matchState', function(req, res){
   var areaNo = req.body.areaNo;
   var articleNo = req.body.no;
   var state = req.body.state;
-  var updateTableName;
+  var boardType = req.body.boardType;
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
+  var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
 
-  if(areaNo < 9){
-    //seoul
-    updateTableName = 'MBoard_Seoul';
-  }else if(areaNo > 9){
-    //gyeong gi
-    updateTableName = 'MBoard_Gyeonggi';
+  if(boardType == 'match'){
+    // 매치 게시글인 경우
+    var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
+    conn.query(sql, [state, articleNo], function(err, result, fields){
+      if(err){
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+      }else{
+        res.json(responseUtil.successTrue('Success'));
+      }
+    })
   }
 
   //Sub 테이블의 match_state의 상태를 변경해준다.
-  var sql = 'UPDATE '+updateTableName+' SET match_state=? WHERE no=?';
+  var sql = 'UPDATE '+tableName+' SET match_state=? WHERE no=?';
   conn.query(sql, [state, articleNo], function(err, result, fields){
     if(err){
       console.log(err);
       res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
-      //서브 테이블의 match_state를 변경 후 부모테이블의 상태도 변경해준다.
-      var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
-      conn.query(sql, [state, articleNo], function(err, result, fields){
-        if(err){
-          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-        }else{
-          res.json(responseUtil.successTrue('Success'));
-          // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
-          if(state == 'Y'){
-            var sql = 'SELECT b.fcm_token FROM MBFavorite AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article_no=?';
-            conn.query(sql, [articleNo], function(err, result, fields){
-              if(err){
-                console.log(err);
-                console.log('push error favorite article is matched!');
-              }else{
-                Object.keys(result).forEach(function(key){
-                  var row = result[key];
-                  console.log(row.fcm_token);
-                  fcmModule.sendPushMatchArticleOfFavorite(row.fcm_token, articleNo, areaNo, 'match');
-                })
-                //console.log(result[1].fcm_token);
-                console.log('success to favorite article is matched!');
-              }
+      // 해당 게시글을 관심했던 사용자들의 fcmToken 추출
+      if(state == 'Y'){
+        var sql = 'SELECT b.fcm_token FROM '+tableNameOfFavorite+' AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.article_no=?';
+        conn.query(sql, [articleNo], function(err, result, fields){
+          if(err){
+            console.log(err);
+            console.log('push error favorite article is matched!');
+          }else{
+            Object.keys(result).forEach(function(key){
+              var row = result[key];
+              console.log(row.fcm_token);
+              fcmModule.sendPushMatchArticleOfFavorite(row.fcm_token, articleNo, areaNo, boardType);
             })
+            //console.log(result[1].fcm_token);
+            console.log('success to favorite article is matched!');
           }
-        }
-      })
+        })
+      }
     }
   })
 })
