@@ -435,18 +435,18 @@ router.put('/view/matchState', function(req, res){
   var tableNameOfFavorite = sortModule.sortTableNameOfFavorite(boardType);
 
   if(boardType == 'match'){
-    // 매치 게시글인 경우
+    // 매치 게시글인 경우 부모 테이블에 업데이틀 해준다.
     var sql = 'UPDATE MBoard SET match_state=? WHERE no=?';
     conn.query(sql, [state, articleNo], function(err, result, fields){
       if(err){
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
-        res.json(responseUtil.successTrue('Success'));
+        console.log('Parent Table Update Success');
       }
     })
   }
 
-  //Sub 테이블의 match_state의 상태를 변경해준다.
+  //Mboard 의 서브 테이블, HBoard, RBoard 에 업데이트를 해준다.
   var sql = 'UPDATE '+tableName+' SET match_state=? WHERE no=?';
   conn.query(sql, [state, articleNo], function(err, result, fields){
     if(err){
