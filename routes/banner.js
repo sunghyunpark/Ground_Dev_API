@@ -12,7 +12,7 @@ router.get('/ad/home', function(req, res){
     mainBanner : [
       {
         type : 'web',
-        imgPath : 'static/banner/banner_test_1_2018_11_03_2.png',
+        imgPath : 'static/banner/banner_test_1_2018_11_15_1.png',
         url : 'https://m.naver.com'
       },
       {
