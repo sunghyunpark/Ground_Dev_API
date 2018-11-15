@@ -25,12 +25,14 @@ router.get('/ad/home', function(req, res){
       {//app
         type : 'off',
         imgPath : 'static/banner/recent_board_banner_2018_10_01.png',
+        bgColor : '#263238',
         url : 'https://play.google.com/store/apps/details?id='
       },
     TBBanner :
       {//web
         type : 'web',
         imgPath : 'static/banner/today_match_board_banner_2018_11_03_2.png',
+        bgColor : '#facc2e',
         url : 'http://pf.kakao.com/_xkYIIj'
       }
   });
