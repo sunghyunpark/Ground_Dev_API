@@ -12,6 +12,9 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+/*
+* 원하는 날짜 알림 리스트를 받아온다.
+*/
 router.get('/matchDateAlarm/:uid/:boardType', function(req, res){
   var uid = req.params.uid;
   var boardType = req.params.boardType;
@@ -23,12 +26,16 @@ router.get('/matchDateAlarm/:uid/:boardType', function(req, res){
   conn.query(sql, [boardType, uid], function(err, result, fields){
     if(err){
       console.log(err);
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
     }else{
       res.json(responseUtil.successTrueWithData(result));
     }
   })
 })
 
+/*
+* 원하는 날짜 알림을 match/hire (boardType)을 통해 구분하여 등록한다.
+*/
 router.post('/matchDateAlarm', function(req, res){
   var uid = req.body.uid;
   var boardType = req.body.boardType;
@@ -39,6 +46,26 @@ router.post('/matchDateAlarm', function(req, res){
   var sql = 'INSERT INTO MatchDateAlarm (uid, board_type, area_no, match_date, created_at) VALUES(?,?,?,?,?)';
 
   conn.query(sql, [uid, boardType, areaNo, matchDate, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+    }else{
+      res.json(responseUtil.successTrue('Success'));
+    }
+  })
+})
+
+/*
+* 원하는 날짜 알림을 삭제한다.
+*/
+router.delete('/matchDateAlarm/:uid/:boardType/:areaNo/:matchDate', function(req, res){
+  var uid = req.params.uid;
+  var boardType = req.params.boardType;
+  var areaNo = req.params.areaNo;
+  var matchDate = req.params.matchDate;
+
+  var sql = 'DELETE FROM MatchDateAlarm WHERE uid=? AND board_type=? AND area_no=? AND match_date=?';
+  conn.query(sql, [uid, boardType, areaNo, matchDate], function(err, result, fields){
     if(err){
       console.log(err);
       res.json(responseUtil.successFalse(500, 'Internal Server Error'));
