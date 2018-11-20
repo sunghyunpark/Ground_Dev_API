@@ -18,9 +18,9 @@ router.get('/matchDateAlarm/:uid/:boardType', function(req, res){
 
   var sql = 'SELECT board_type AS boardType, '+
   'area_no AS areaNo, '+
-  'match_date AS matchDate FROM MatchDateAlarm WHERE board_type=?';
+  'match_date AS matchDate FROM MatchDateAlarm WHERE board_type=? AND uid=?';
 
-  conn.query(sql, [boardType], function(err, result, fields){
+  conn.query(sql, [boardType, uid], function(err, result, fields){
     if(err){
       console.log(err);
     }else{
