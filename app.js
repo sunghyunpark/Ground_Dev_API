@@ -33,6 +33,7 @@ app.use('/api/banner', require('./routes/banner'));
 app.use('/api/youtube', require('./routes/youtube'));
 app.use('/api/uploads', require('./routes/uploads'));
 app.use('/api/search', require('./routes/search'));
+app.use('/api/alarm', require('./routes/alarm'));
 
 app.use(function(req, res, next){
   res.status(404);
