@@ -82,3 +82,17 @@ module.exports.sortAreaName = function(boardType, areaNo){
 
   return areaName;
 }
+
+module.exports.sortMatchData = function(boardType){
+  var matchData;
+
+  if(boardType == 'match'){
+    matchData = ' article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule,'
+  }else if(boardType == 'hire'){
+    matchData = ' article.match_date AS matchDate,';
+  }else{
+    matchData = '';
+  }
+
+  return matchData;
+}

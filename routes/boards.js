@@ -71,8 +71,17 @@ router.post('/', function(req, res){
     })
   }else{    // hire/recruit 인 경우
     new Promise(function(resolve, reject){
-      conn.query('INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)',
-      [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+      var sql;
+      var sqlValueArray;
+
+      if(boardType == 'hire'){
+        sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, match_date, created_at) VALUES(?,?,?,?,?,?)';
+        sqlValueArray = [areaNo, uid, title, contents, matchDate, currentTime]
+      }else{
+        sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
+        sqlValueArray = [areaNo, uid, title, contents, currentTime]
+      }
+      conn.query(sql, sqlValueArray, function(err, result, fields){
         if (err) reject(err);
         else resolve(result);
       })
@@ -167,7 +176,7 @@ router.get('/:boardType/:areaNo/:no/:order/:matchDate', function(req, res){
   var matchDate = req.params.matchDate;
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var offsetSql = (no == 0) ? '' : 'AND article.created_at < (SELECT created_at FROM '+tableName+' WHERE no='+no+')';
-  var matchData = (boardType == 'match') ? ' article.match_date AS matchDate, article.average_age AS averageAge, article.charge, article.play_rule AS playRule,' : '';
+  var matchData = sortModule.sortMatchData(boardType);
   var orderData;
 
   if(order == 'all'){
