@@ -63,8 +63,7 @@ router.post('/', function(req, res){
         console.log(err);
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
-
-        console.log("adf   "+result.insertId);
+        // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
         fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
 
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
