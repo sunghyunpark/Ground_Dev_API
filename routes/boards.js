@@ -56,7 +56,7 @@ router.post('/', function(req, res){
 
   if(boardType == 'match'){
     //Mboard에 insert를 한다.
-    MboardInsertQuery(areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
+    MboardInsertQuery(boardType, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
     return;
   }
 
@@ -99,7 +99,7 @@ router.post('/', function(req, res){
 
 })
 
-var MboardInsertQuery = function(areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
+var MboardInsertQuery = function(boardType, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
   var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
   conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
     if(err){
