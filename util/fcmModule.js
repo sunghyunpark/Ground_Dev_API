@@ -100,29 +100,6 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
   /*
   * 원하는 날짜 및 지역 게시글 등록 시 푸시 알림
   */
-  module.exports.sendPushMatchDateAlarm = function(toToken, onOfArticle, areaNo, typeOfBoard){
-    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-        to: toToken,
-        //collapse_key: 'your_collapse_key',
-
-        data: {  //you can send only notification or only data(or include both)
-            type : 'matchDateAlarm',
-            title: 'GROUND-그라운드',
-            articleNo: noOfArticle,
-            areaNo: areaNo,
-            boardType: typeOfBoard,
-            message: '알림을 설정하신 날짜 및 지역에 게시글이 등록되었습니다.'
-        }
-    };
-
-    fcm.send(message, function(err, response){
-        if (err) {
-            console.log("Something has gone wrong!");
-        } else {
-            console.log("Successfully sent with response: ", response);
-        }
-    });
-  }
 
   module.exports.getMatchDateAlarmFcmToken = function(noOfArticle, areaNo, typeOfBoard, matchDate){
     var sql = 'SELECT b.fcm_token FROM MatchDateAlarm AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.board_type=? AND a.area_no=? AND a.match_date=?';
@@ -135,7 +112,6 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
           Object.keys(result).forEach(function(key){
           var row = result[key];
           console.log(row.fcm_token);
-          //sendPushMatchDateAlarm(row.fcm_token, noOfArticle, areaNo, boardType);
 
           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
               to: row.fcm_token,
@@ -160,8 +136,6 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
           });
 
         })
-        //console.log(result[1].fcm_token);
-        console.log('success to matchDateAlarm');
       }
     })
   }

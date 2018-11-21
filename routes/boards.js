@@ -81,6 +81,7 @@ router.post('/', function(req, res){
                 res.json(responseUtil.successTrue('Success'));
               }
             })
+            console.log("adf"+result.insertId);
             fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
           }
         })
