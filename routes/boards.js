@@ -89,9 +89,9 @@ router.post('/', function(req, res){
         })
       })
     })
-    .catch(function(err)){
+    .catch(function(err){
       console.log(err);
-    }
+    })
   }
 })
 
