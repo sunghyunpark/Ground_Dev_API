@@ -81,13 +81,13 @@ router.post('/', function(req, res){
       if(boardType == 'hire'){
         fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);    // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
       }
-      return new Promise(resolve, reject){
+      return new Promise(function(resolve, reject){
         conn.query('UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?',
         [currentTime, areaNo], function(err, result, fields){
           if (err) reject(err);
           else res.json(responseUtil.successTrue('Success'));
         })
-      }
+      })
     })
     .catch(function(err)){
       console.log(err);
