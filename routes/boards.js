@@ -63,6 +63,10 @@ router.post('/', function(req, res){
         console.log(err);
         res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       }else{
+
+        console.log("adf   "+result.insertId);
+        fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
+
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
@@ -81,8 +85,6 @@ router.post('/', function(req, res){
                 res.json(responseUtil.successTrue('Success'));
               }
             })
-            console.log("adf   "+result.no);
-            //fcmModule.getMatchDateAlarmFcmToken(result[0].no, areaNo, boardType, matchDate);
           }
         })
       }
