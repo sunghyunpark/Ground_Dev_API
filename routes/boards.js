@@ -65,6 +65,8 @@ router.post('/', function(req, res){
       });
     })
     .then(function(result){
+      fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);    // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
+
       return new Promise(function(resolve, reject){    // MBoard의 subTable인 MBoard_Seoul 혹은 MBoard_Gyeonggi에도 insert를 해준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
@@ -79,12 +81,10 @@ router.post('/', function(req, res){
         conn.query(sql, [currentTime, areaNo], function(err, result, fields){
           if (err) reject(err);
           else res.json(responseUtil.successTrue('Success'));
-
-          return;
         })
       })
     })
-    .catch(function(err){
+    .catch(function(err){    // reject의 경우
       console.log(err);
     })
     /*
@@ -123,7 +123,7 @@ router.post('/', function(req, res){
     })
     return;
     */
-  
+  return;
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
