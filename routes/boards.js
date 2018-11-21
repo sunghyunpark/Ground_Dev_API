@@ -83,11 +83,9 @@ router.post('/', function(req, res){
     })
     .then(function(){
       res.json(responseUtil.successTrue('Success'));
-      return;
     })
     .catch(function(err){
       console.log(err);
-      return;
     })
     /*
     //Mboard에 insert를 한다.
