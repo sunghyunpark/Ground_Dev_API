@@ -121,6 +121,7 @@ router.post('/', function(req, res){
     })
     return;
     */
+    return;
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
