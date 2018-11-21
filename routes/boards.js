@@ -77,12 +77,9 @@ router.post('/', function(req, res){
         var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
         conn.query(sql, [currentTime, areaNo], function(err, result, fields){
           if (err) reject(err);
-          else resolve();
+          else res.json(responseUtil.successTrue('Success'));
         })
       })
-    })
-    .then(function(){
-      res.json(responseUtil.successTrue('Success'));
     })
     .catch(function(err){
       console.log(err);
