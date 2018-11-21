@@ -69,44 +69,30 @@ router.post('/', function(req, res){
     .catch(function(err){    // reject의 경우
       console.log(err);
     })
-}else{    // hire/recruit 인 경우
-  //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
-  var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
-    if(err){
-      // insert 실패
-      console.log(err);
-      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-    }else{
-      // insert 성공 후 해당 테이블의 UpdateTable에 최근 시간 업데이트
-      var sql = 'UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
+  }else{    // hire/recruit 인 경우
+    new Promise(function(resolve, reject){
+      conn.query('INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)',
+      [areaNo, uid, title, contents, currentTime], function(err, result, fields){
+        if (err) reject(err);
+        else resolve(result);
       })
-
-      /*  아직 용병 게시글에는 시합날짜가 적용안되어있어서 주석처리해둠.
+    })
+    .then(function(result){
       if(boardType == 'hire'){
-        var sql = 'SELECT b.fcm_token FROM MatchDateAlarm AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.board_type=? AND a.area_no=? AND a.match_date=?';
-        conn.query(sql, [boardType, areaNo, matchDate], function(err, result, fields){
-          if(err){
-            console.log(err);
-            console.log('push error matchDateAlarm fcm!');
-            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-          }else{
-              Object.keys(result).forEach(function(key){
-              var row = result[key];
-              console.log(row.fcm_token);
-              fcmModule.sendPushMatchDateAlarm(row.fcm_token, result.insertId, areaNo, boardType);
-            })
-            //console.log(result[1].fcm_token);
-            console.log('success to matchDateAlarm');
-          }
+        fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);    // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
+      }
+      return new Promise(resolve, reject){
+        conn.query('UPDATE '+updateTableName+' SET updated_at=? WHERE area_no=?',
+        [currentTime, areaNo], function(err, result, fields){
+          if (err) reject(err);
+          else res.json(responseUtil.successTrue('Success'));
         })
       }
-      */
+    })
+    .catch(function(err)){
+      console.log(err);
     }
-  })
-}
+  }
 })
 
 /**
