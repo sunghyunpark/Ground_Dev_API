@@ -51,12 +51,43 @@ router.post('/', function(req, res){
   var charge = req.body.charge;
   var playRule = req.body.playRule;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
     //Mboard에 insert를 한다.
-    MboardInsertQuery(boardType, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
+    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
+    conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
+      if(err){
+        //MBoard insert 실패
+        console.log(err);
+        res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+      }else{
+        // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
+        fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
+
+        //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
+        var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
+        conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
+          if(err){
+            //SubTable insert 실패
+            console.log(err);
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+          }else{
+            //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
+            var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+            conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+              if(err){
+                console.log(err);
+                res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+              }else{
+                res.json(responseUtil.successTrue('Success'));
+              }
+            })
+          }
+        })
+      }
+    })
     return;
   }
 
@@ -98,45 +129,6 @@ router.post('/', function(req, res){
   })
 
 })
-
-var MboardInsertQuery = function(boardType, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
-  var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
-  conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
-    if(err){
-      //MBoard insert 실패
-      console.log(err);
-      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-    }else{
-      // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
-      fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
-      SubTableOfMBoardInsertQeury(boardType, result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
-    }
-  })
-}
-
-var SubTableOfMBoardInsertQeury = function(boardType, noOfArticle, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
-  //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
-  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
-  var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
-  conn.query(sql, [noOfArticle, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
-    if(err){
-      //SubTable insert 실패
-      console.log(err);
-      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-    }else{
-      //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
-      var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if(err){
-          console.log(err);
-          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-        }else{
-          res.json(responseUtil.successTrue('Success'));
-        }
-      })
-    }
-  })
-}
 
 /**
 * [게시판 글 수정]
