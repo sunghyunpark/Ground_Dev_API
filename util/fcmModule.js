@@ -126,7 +126,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
 
   module.exports.getMatchDateAlarmFcmToken = function(noOfArticle, areaNo, typeOfBoard, matchDate){
     var sql = 'SELECT b.fcm_token FROM MatchDateAlarm AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.board_type=? AND a.area_no=? AND a.match_date=?';
-    conn.query(sql, [boardType, areaNo, matchDate], function(err, result, fields){
+    conn.query(sql, [typeOfBoard, areaNo, matchDate], function(err, result, fields){
       if(err){
         console.log(err);
         console.log('push error matchDateAlarm fcm!');
@@ -135,7 +135,7 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
           Object.keys(result).forEach(function(key){
           var row = result[key];
           console.log(row.fcm_token);
-          sendPushMatchDateAlarm(row.fcm_token, articleNo, areaNo, boardType);
+          sendPushMatchDateAlarm(row.fcm_token, noOfArticle, areaNo, boardType);
         })
         //console.log(result[1].fcm_token);
         console.log('success to matchDateAlarm');
