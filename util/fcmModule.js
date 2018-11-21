@@ -135,7 +135,30 @@ module.exports.sendPushMyCommunityArticleByComment = function(toToken, noOfArtic
           Object.keys(result).forEach(function(key){
           var row = result[key];
           console.log(row.fcm_token);
-          sendPushMatchDateAlarm(row.fcm_token, noOfArticle, areaNo, boardType);
+          //sendPushMatchDateAlarm(row.fcm_token, noOfArticle, areaNo, boardType);
+
+          var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+              to: row.fcm_token,
+              //collapse_key: 'your_collapse_key',
+
+              data: {  //you can send only notification or only data(or include both)
+                  type : 'matchDateAlarm',
+                  title: 'GROUND-그라운드',
+                  articleNo: noOfArticle,
+                  areaNo: areaNo,
+                  boardType: typeOfBoard,
+                  message: '알림을 설정하신 날짜 및 지역에 게시글이 등록되었습니다.'
+              }
+          };
+
+          fcm.send(message, function(err, response){
+              if (err) {
+                  console.log("Something has gone wrong!");
+              } else {
+                  console.log("Successfully sent with response: ", response);
+              }
+          });
+
         })
         //console.log(result[1].fcm_token);
         console.log('success to matchDateAlarm');
