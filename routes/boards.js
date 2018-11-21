@@ -41,41 +41,6 @@ conn.connect();
 * Hire, Recruit의 경우는 SubTable이 없으므로 바로 insert를 해준다.
 * boardType으로 먼저 매칭, 용병, 모집을 나눈다.
 */
-
-function insertMBoard(boardType, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
-  return new Promise(function(resolve, reject){
-    var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
-    conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
-      if (err) reject(err);
-      else resolve(result);
-    });
-  })
-  .then(function(result){
-    return new Promise(function(resolve, reject){
-      var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
-      var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
-      conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
-        if(err){
-          //SubTable insert 실패
-          console.log(err);
-          res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-        }else{
-          //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
-          var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
-          conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-            if(err){
-              console.log(err);
-              res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-            }else{
-              res.json(responseUtil.successTrue('Success'));
-            }
-          })
-        }
-      })
-    })
-  })
-}
-
 router.post('/', function(req, res){
   var areaNo = req.body.areaNo;
   var uid = req.body.uid;
@@ -102,24 +67,26 @@ router.post('/', function(req, res){
       return new Promise(function(resolve, reject){
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
-          if(err){
-            //SubTable insert 실패
-            console.log(err);
-            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-          }else{
-            //SubTable insert 성공 후 MBoardUpdate에 최근 시간을 업데이트해준다.
-            var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
-            conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-              if(err){
-                console.log(err);
-                res.json(responseUtil.successFalse(500, 'Internal Server Error'));
-              }else{
-                res.json(responseUtil.successTrue('Success'));
-              }
-            })
-          }
+          if (err) reject(err);
+          else resolve(areaNo);
         })
       })
+    })
+    .then(function(areaNo){
+      var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+        if (err) reject(err);
+        else resolve();
+      })
+    })
+    .then(function(){
+      res.json(responseUtil.successTrue('Success'));
+      return;
+    })
+    .catch(function(err){
+      console.log(err);
+      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+      return;
     })
     /*
     //Mboard에 insert를 한다.
@@ -155,8 +122,8 @@ router.post('/', function(req, res){
         })
       }
     })
-    */
     return;
+    */
   }
 
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
