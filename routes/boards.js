@@ -55,17 +55,17 @@ router.post('/', function(req, res){
   var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
+  // boardType이 match인 경우
   if(boardType == 'match'){
-    new Promise(function(resolve, reject){
-      var sql = 'INSERT INTO MBoard (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
+    new Promise(function(resolve, reject){    // MBoard에 먼저 insert를 해준다.
+      var sql = 'INSERT INTO MBoarda (area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?)';
       conn.query(sql, [areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
         if (err) reject(err);
         else resolve(result);
       });
     })
     .then(function(result){
-      console.log(result.insertId);
-      return new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject){    // MBoard의 subTable인 MBoard_Seoul 혹은 MBoard_Gyeonggi에도 insert를 해준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
           if (err) reject(err);
@@ -74,7 +74,7 @@ router.post('/', function(req, res){
       })
     })
     .then(function(areaNo){
-      return new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject){    // MBoardUpdate에 업데이트 날짜를 수정한다.
         var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
         conn.query(sql, [currentTime, areaNo], function(err, result, fields){
           if (err) reject(err);
@@ -84,6 +84,7 @@ router.post('/', function(req, res){
     })
     .catch(function(err){
       console.log(err);
+      console.log('MBoard 테이블 명 오류');
     })
     /*
     //Mboard에 insert를 한다.
