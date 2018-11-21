@@ -66,6 +66,7 @@ router.post('/', function(req, res){
         //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
+          var articleNo = result.insertId;
           if(err){
             //SubTable insert 실패
             console.log(err);
@@ -92,7 +93,7 @@ router.post('/', function(req, res){
                   Object.keys(result).forEach(function(key){
                   var row = result[key];
                   console.log(row.fcm_token);
-                  fcmModule.sendPushMatchDateAlarm(row.fcm_token, result.insertId, areaNo, boardType);
+                  fcmModule.sendPushMatchDateAlarm(row.fcm_token, articleNo, areaNo, boardType);
                 })
                 //console.log(result[1].fcm_token);
                 console.log('success to matchDateAlarm');
