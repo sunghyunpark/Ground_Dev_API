@@ -81,8 +81,8 @@ router.post('/', function(req, res){
                 res.json(responseUtil.successTrue('Success'));
               }
             })
-            console.log("adf"+result.insertId);
-            fcmModule.getMatchDateAlarmFcmToken(result[0].no, areaNo, boardType, matchDate);
+            console.log("adf   "+result.no);
+            //fcmModule.getMatchDateAlarmFcmToken(result[0].no, areaNo, boardType, matchDate);
           }
         })
       }
