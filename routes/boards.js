@@ -64,6 +64,7 @@ router.post('/', function(req, res){
       });
     })
     .then(function(result){
+      console.log(result.insertId);
       return new Promise(function(resolve, reject){
         var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
         conn.query(sql, [result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
