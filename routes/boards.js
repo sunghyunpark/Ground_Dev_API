@@ -51,7 +51,7 @@ router.post('/', function(req, res){
   var charge = req.body.charge;
   var playRule = req.body.playRule;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
+
   var updateTableName = sortModule.sortUpdateTableName(boardType);
 
   if(boardType == 'match'){
@@ -109,13 +109,14 @@ var MboardInsertQuery = function(boardType, areaNo, uid, title, contents, matchD
     }else{
       // 원하는 날짜 및 지역 게시글 등록 시 푸시 설정한 사용자들에게만 푸시 전송
       fcmModule.getMatchDateAlarmFcmToken(result.insertId, areaNo, boardType, matchDate);
-      SubTableOfMBoardInsertQeury(result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
+      SubTableOfMBoardInsertQeury(boardType, result.insertId, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime);
     }
   })
 }
 
-var SubTableOfMBoardInsertQeury = function(noOfArticle, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
+var SubTableOfMBoardInsertQeury = function(boardType, noOfArticle, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime){
   //SubTable에 MBoard에 insert 한 내용을 그대로 넣어준다. 이때, SubTable의 no은 auto_increment가 아니므로 MBoard의 no(auto_increment)을 넣어준다.
+  var tableName = sortModule.sortTableNameOfArticle(boardType, areaNo);
   var sql = 'INSERT INTO '+tableName+' (no, area_no, writer_id, title, contents, match_date, average_age, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?,?,?,?)';
   conn.query(sql, [noOfArticle, areaNo, uid, title, contents, matchDate, averageAge, charge, playRule, currentTime], function(err, result, fields){
     if(err){
