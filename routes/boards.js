@@ -81,6 +81,24 @@ router.post('/', function(req, res){
                 res.json(responseUtil.successTrue('Success'));
               }
             })
+
+            var sql = 'SELECT b.fcm_token FROM MatchDateAlarm AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.board_type=? AND a.area_no=? AND a.match_date=?';
+            conn.query(sql, [boardType, areaNo, matchDate], function(err, result, fields){
+              if(err){
+                console.log(err);
+                console.log('push error matchDateAlarm fcm!');
+                res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+              }else{
+                  Object.keys(result).forEach(function(key){
+                  var row = result[key];
+                  console.log(row.fcm_token);
+                  fcmModule.sendPushMatchDateAlarm(row.fcm_token, result.insertId, areaNo, boardType);
+                })
+                //console.log(result[1].fcm_token);
+                console.log('success to matchDateAlarm');
+              }
+            })
+
           }
         })
       }
@@ -101,6 +119,27 @@ router.post('/', function(req, res){
       conn.query(sql, [currentTime, areaNo], function(err, result, fields){
         res.json(err ? responseUtil.successFalse(500, 'Internal Server Error') : responseUtil.successTrue('Success'));
       })
+
+      /*  아직 용병 게시글에는 시합날짜가 적용안되어있어서 주석처리해둠.
+      if(boardType == 'hire'){
+        var sql = 'SELECT b.fcm_token FROM MatchDateAlarm AS a JOIN users AS b ON(a.uid=b.uid) WHERE a.board_type=? AND a.area_no=? AND a.match_date=?';
+        conn.query(sql, [boardType, areaNo, matchDate], function(err, result, fields){
+          if(err){
+            console.log(err);
+            console.log('push error matchDateAlarm fcm!');
+            res.json(responseUtil.successFalse(500, 'Internal Server Error'));
+          }else{
+              Object.keys(result).forEach(function(key){
+              var row = result[key];
+              console.log(row.fcm_token);
+              fcmModule.sendPushMatchDateAlarm(row.fcm_token, result.insertId, areaNo, boardType);
+            })
+            //console.log(result[1].fcm_token);
+            console.log('success to matchDateAlarm');
+          }
+        })
+      }
+      */
     }
   })
 
