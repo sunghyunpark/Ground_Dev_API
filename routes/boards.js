@@ -19,27 +19,9 @@ var conn = mysql.createConnection({
 conn.connect();
 
 /*
-* post > '/' -> 글 쓰기
-* put > '/edit/:boardType/:areaNo/:no/:title/:contents' -> 글 수정
-* delete > '/delete/:boardType/:no/:uid' -> 글 삭제
-* get > '/:boardType/:areaNo/:no' -> 글 목록 내려줌.
-* get > '/:boardType/view/:areaNo/:no/:uid' -> 글 상세화면
-* post > '/view/comment' -> 댓글 입력
-* get > '/:boardType/view/:articleNo/:areaNo/commentList/:commentNo' -> 댓글 목록 내려줌.
-* get > '/:boardType/updated' -> 게시글 업데이트 시간
-* get > '/recent/:boardType/:no/:limit' -> 최신글 내려줌.
-* post > '/favorite' -> 좋아요 및 취소
-* put > 'view/matchState/:areaNo/:no/:state' -> 매칭 상태
-*
-*/
-
-/**
-* [게시판 글쓰기]
-* MBoard Table에 먼저 insert를 한다.
-* area_no을 통해 서울, 경기를 나눈뒤에 그에 맞는 SubTable(MBoard_Seoul, MBoard_Gyeonggi)에 insert한다.
-* MBoard에 insert를 한 뒤 insertId(no)를 받아와 SubTable에 똑같이 insert를 해준다.
-* Hire, Recruit의 경우는 SubTable이 없으므로 바로 insert를 해준다.
-* boardType으로 먼저 매칭, 용병, 모집을 나눈다.
+* POST 매치 게시글 등록
+* match / hire, recruit 로 나뉜다.(match의 경우 MBoard와 SubTable이 나뉘어져 있어서 분기처리 때문)
+* match, hire 게시글이 등록되면 원하는 날짜 및 지역을 설정해둔 사용자들에게는 fcm 푸시가 전송된다.
 */
 router.post('/', function(req, res){
   var areaNo = req.body.areaNo;
@@ -87,7 +69,7 @@ router.post('/', function(req, res){
     .catch(function(err){    // reject의 경우
       console.log(err);
     })
-}else{
+}else{    // hire/recruit 인 경우
   //hire / recruit를 통해 분기처리된 HBoard or RBoard에 insert 한다.
   var sql = 'INSERT INTO '+tableName+' (area_no, writer_id, title, contents, created_at) VALUES(?,?,?,?,?)';
   conn.query(sql, [areaNo, uid, title, contents, currentTime], function(err, result, fields){
