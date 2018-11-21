@@ -73,10 +73,12 @@ router.post('/', function(req, res){
       })
     })
     .then(function(areaNo){
-      var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
-      conn.query(sql, [currentTime, areaNo], function(err, result, fields){
-        if (err) reject(err);
-        else resolve();
+      return new Promise(function(resolve, reject){
+        var sql = 'UPDATE MBoardUpdate SET updated_at=? WHERE area_no=?';
+        conn.query(sql, [currentTime, areaNo], function(err, result, fields){
+          if (err) reject(err);
+          else resolve();
+        })
       })
     })
     .then(function(){
