@@ -87,7 +87,6 @@ router.post('/', function(req, res){
     })
     .catch(function(err){
       console.log(err);
-      res.json(responseUtil.successFalse(500, 'Internal Server Error'));
       return;
     })
     /*
