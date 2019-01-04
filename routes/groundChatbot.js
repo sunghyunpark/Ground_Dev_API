@@ -53,7 +53,7 @@ router.post('/kakao/message', function(req, res){
           '시합 날짜 : ' + result[i].match_date + '\n'+
           '구장비 : ' + result[i].charge + '원\n' +
           '경기 방식 : ' + playRuleStr + '\n' +
-          'URL : ' + result[i].article_url;
+          'URL : ' + result[i].article_url + '\n\n';
         }
         response = {
           'message' : {
