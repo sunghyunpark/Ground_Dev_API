@@ -48,12 +48,11 @@ router.post('/kakao/message', function(req, res){
           }else{
             playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule;
           }
-          responseText += (i+1)+'. '+
-          '제목 : ' + result[i].title + '\n'+
-          '시합 날짜 : ' + result[i].match_date + '\n'+
-          '구장비 : ' + result[i].charge + '원\n' +
-          '경기 방식 : ' + playRuleStr + '\n' +
-          'URL : ' + result[i].article_url + '\n\n';
+          responseText += (i+1)+'.'+result[i].title + '\n'+
+          '- 시합 날짜 : ' + result[i].match_date + '\n'+
+          '- 구장비 : ' + result[i].charge + '원\n' +
+          '- 경기 방식 : ' + playRuleStr + '\n' +
+          '- URL : ' + result[i].article_url + '\n\n';
         }
         response = {
           'message' : {
