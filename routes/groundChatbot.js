@@ -44,9 +44,9 @@ router.post('/kakao/message', function(req, res){
         var playRuleStr;
         for(var i=0;i<result.length;i++){
           if(result[i].play_rule == 0){
-            playRuleStr = '기타\n\n';
+            playRuleStr = '기타';
           }else{
-            playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+            playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule;
           }
           responseText += (i+1)+'. '+
           '제목 : ' + result[i].title + '\n'+
