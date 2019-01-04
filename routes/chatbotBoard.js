@@ -21,7 +21,7 @@ router.post('/', function(req, res){
   var articleUrl = req.body.articleUrl;
   var matchDate = req.body.matchDate;
   var charge = req.body.charge;
-  var playRule = req.body.palyRule;
+  var playRule = req.body.playRule;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
 
   var sql = 'INSERT INTO ChatbotBoard (writer_id, title, article_url, match_date, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?)';
