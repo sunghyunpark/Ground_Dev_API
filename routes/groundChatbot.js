@@ -43,6 +43,11 @@ router.post('/kakao/message', function(req, res){
       }else{
         var playRuleStr;
         for(var i=0;i<result.length;i++){
+          if(result[i].play_rule == 0){
+            playRuleStr = '기타\n\n';
+          }else{
+            playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
+          }
           responseText += (i+1)+'. '+
           '제목 : ' + result[i].title + '\n'+
           '시합 날짜 : ' + result[i].match_date + '\n'+
