@@ -24,7 +24,7 @@ router.post('/', function(req, res){
   var playRule = req.body.palyRule;
   var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
 
-  var sql = 'INSERT INTO ChaybotBoard (writer_id, title, article_url, match_date, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?)';
+  var sql = 'INSERT INTO ChatbotBoard (writer_id, title, article_url, match_date, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?)';
 
   conn.query(sql, [writerId, title, articleUrl, matchDate, charge, playRule, currentTime], function(err, result, fields){
     if(err){
