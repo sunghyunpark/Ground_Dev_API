@@ -15,7 +15,25 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
+router.post('/', function(req, res){
+  var title = req.body.title;
+  var contents = req.body.contents;
+  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
+
+  var sql = 'INSERT INTO chatbot_kakao (title, contents, created_at) VALUES (?,?,?)';
+
+  conn.query(sql, [title, contents, currentTime], function(err, result, fields){
+    if(err){
+      console.log(err);
+    }else{
+      console.log('Success');
+    }
+  })
+})
+
 router.post('/sayHello', function(req, res) {
+
+  var sql = 'SELECT '
 
   const responseBody = {
     version: "2.0",
