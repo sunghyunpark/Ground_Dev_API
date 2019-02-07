@@ -34,7 +34,7 @@ router.post('/', function(req, res){
 })
 
 router.post('/matchData', function(req, res){
-  var resultText = '안녕하세요.\n풋볼그라운드입니다. 오늘의 용병 모집글 리스트입니다.\n';
+  var resultText = '안녕하세요.\n풋볼그라운드입니다.\n오늘의 용병 모집글 리스트입니다.\n\n';
 
   var sql = 'SELECT * FROM chatbot_kakao';
   conn.query(sql, function(err, result, fields){
