@@ -34,7 +34,7 @@ router.post('/', function(req, res){
 })
 
 router.post('/matchData', function(req, res){
-  var resultText = '안녕하세요.\n풋볼그라운드입니다.\n오늘의 용병 모집글 리스트입니다.\n\n';
+  var resultText = '안녕하세요.\n풋볼그라운드입니다.\n오늘의 용병 모집글 리스트입니다.\n';
 
   var sql = 'SELECT * FROM chatbot_kakao';
   conn.query(sql, function(err, result, fields){
@@ -43,8 +43,8 @@ router.post('/matchData', function(req, res){
     }else{
       for(var i=0;i<result.length;i++){
         resultText +=
-        '제목 : ' + result[i].title + '\n' +
-        '내용 : ' + result[i].contents + '\n';
+        '\n\n제목 : ' + result[i].title + '\n' +
+        '내용 :\n' + result[i].contents + '\n';
       }
       const responseBody = {
         version: "2.0",
