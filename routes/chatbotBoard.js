@@ -17,53 +17,20 @@ conn.connect();
 
 router.post('/sayHello', function(req, res) {
 
-  var responseText = '안녕하세요. \nGROUND-그라운드입니다.\n';
-  var todayDate = new Date().toFormat('YYYY-MM-DD');
-  var sql = 'SELECT title, area_no, match_state, match_date, charge, play_rule FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
-  responseText += todayDate+' 기준 오늘의 시합 게시글입니다.\n';
-
-  conn.query(sql, [todayDate], function(err, result, fields){
-        if(err){
-          console.log(err);
-        }else{
-          var matchState;
-          var playRuleStr;
-          for(var i=0;i<result.length;i++){
-            if(result[i].match_state == 'Y'){
-              matchState = '매칭완료';
-            }else{
-              matchState = '진행중';
-            }
-
-            if(result[i].play_rule == 0){
-              playRuleStr = '기타\n\n';
-            }else{
-              playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
-            }
-            console.log(matchState);
-            responseText += (i+1)+'. [서울]\n' +
-            '매칭 상태 : ' + matchState +'\n'+
-            '제목 : ' + result[i].title + '\n'+
-            '시합 날짜 : ' + result[i].match_date + '\n'+
-            '구장비 : ' + result[i].charge + '원\n' +
-            '경기 방식 : ' + playRuleStr;
+  const responseBody = {
+    version: "2.0",
+    template: {
+      outputs: [
+        {
+          simpleText: {
+            text: "하이이이이이"
           }
-          const responseBody = {
-            version: "2.0",
-            template: {
-              outputs: [
-                {
-                  simpleText: {
-                    text: responseText
-                  }
-                }
-              ]
-            }
-          };
-
-          res.status(200).send(responseBody);
         }
-      });
+      ]
+    }
+  };
+
+  res.status(200).send(responseBody);
 
 });
 
