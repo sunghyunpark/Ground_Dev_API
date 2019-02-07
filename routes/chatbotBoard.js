@@ -16,7 +16,7 @@ var conn = mysql.createConnection({
 conn.connect();
 
 router.post('/sayHello', function(req, res) {
-  
+
   var responseText = '안녕하세요. \nGROUND-그라운드입니다.\n';
   var todayDate = new Date().toFormat('YYYY-MM-DD');
   var sql = 'SELECT title, area_no, match_state, match_date, charge, play_rule FROM MBoard WHERE match_date=? ORDER BY created_at DESC';
@@ -40,7 +40,7 @@ router.post('/sayHello', function(req, res) {
             }else{
               playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
             }
-            responseText += (i+1)+'. ['+matchAreaArray[result[i].area_no]+']\n' +
+            responseText += (i+1)+'. [서울]\n' +
             '매칭 상태 : ' + matchState +'\n'+
             '제목 : ' + result[i].title + '\n'+
             '시합 날짜 : ' + result[i].match_date + '\n'+
