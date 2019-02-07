@@ -26,7 +26,38 @@ router.post('/', function(req, res){
     if(err){
       console.log(err);
     }else{
-      console.log('Success');
+      res.json({
+        error : 'Success Insert Data'
+      });
+    }
+  })
+})
+
+router.post('/matchData', function(req, res){
+  var resultText = '안녕하세요.\n풋볼그라운드입니다. 오늘의 용병 모집글 리스트입니다.\n';
+
+  var sql = 'SELECT * FROM chatbot_kakao';
+  conn.query(sql, function(err, result, fields){
+    if(err){
+      console.log(err);
+    }else{
+      for(var i=0;i<result.length;i++){
+        console.log(result[i].title);
+      }
+      const responseBody = {
+        version: "2.0",
+        template: {
+          outputs: [
+            {
+              simpleText: {
+                text: "하이이이이이"
+              }
+            }
+          ]
+        }
+      };
+
+      res.status(200).send(responseBody);
     }
   })
 })
