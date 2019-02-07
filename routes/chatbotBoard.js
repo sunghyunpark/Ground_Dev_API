@@ -40,6 +40,7 @@ router.post('/sayHello', function(req, res) {
             }else{
               playRuleStr = result[i].play_rule + ' VS ' + result[i].play_rule + '\n\n';
             }
+            console.log(matchState);
             responseText += (i+1)+'. [서울]\n' +
             '매칭 상태 : ' + matchState +'\n'+
             '제목 : ' + result[i].title + '\n'+
