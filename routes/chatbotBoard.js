@@ -42,7 +42,8 @@ router.post('/matchData', function(req, res){
       console.log(err);
     }else{
       for(var i=0;i<result.length;i++){
-        console.log(result[i].title);
+        resultText += result[i].title+'\n' +
+        '내용 : ' + result[i].contents;
       }
       const responseBody = {
         version: "2.0",
@@ -50,7 +51,7 @@ router.post('/matchData', function(req, res){
           outputs: [
             {
               simpleText: {
-                text: "하이이이이이"
+                text: resultText
               }
             }
           ]
