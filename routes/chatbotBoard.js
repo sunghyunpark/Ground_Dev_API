@@ -42,8 +42,9 @@ router.post('/matchData', function(req, res){
       console.log(err);
     }else{
       for(var i=0;i<result.length;i++){
-        resultText += result[i].title+'\n' +
-        '내용 : ' + result[i].contents;
+        resultText +=
+        '제목 : ' + result[i].title + '\n' +
+        '내용 : ' + result[i].contents + '\n';
       }
       const responseBody = {
         version: "2.0",
