@@ -15,25 +15,42 @@ var conn = mysql.createConnection({
 });
 conn.connect();
 
-router.post('/', function(req, res){
-  var writerId = req.body.writerId;
-  var title = req.body.title;
-  var articleUrl = req.body.articleUrl;
-  var matchDate = req.body.matchDate;
-  var charge = req.body.charge;
-  var playRule = req.body.playRule;
-  var currentTime = new Date().toFormat('YYYY-MM-DD HH24:MI:SS');
-
-  var sql = 'INSERT INTO ChatbotBoard (writer_id, title, article_url, match_date, charge, play_rule, created_at) VALUES(?,?,?,?,?,?,?)';
-
-  conn.query(sql, [writerId, title, articleUrl, matchDate, charge, playRule, currentTime], function(err, result, fields){
-    if(err){
-      console.log(err);
-    }else{
-      res.json(responseUtil.successTrue('Success'));
+router.post('/sayHello', function(req, res) {
+  const responseBody = {
+    version: "2.0",
+    template: {
+      outputs: [
+        {
+          simpleText: {
+            text: "hello I'm Ryan"
+          }
+        }
+      ]
     }
-  })
-})
+  };
+
+  res.status(200).send(responseBody);
+});
+
+router.post('/showHello', function(req, res) {
+  console.log(req.body);
+
+  const responseBody = {
+    version: "2.0",
+    template: {
+      outputs: [
+        {
+          simpleImage: {
+            imageUrl: "https://t1.daumcdn.net/friends/prod/category/M001_friends_ryan2.jpg",
+            altText: "hello I'm Ryan"
+          }
+        }
+      ]
+    }
+  };
+
+  res.status(200).send(responseBody);
+});
 
 
 module.exports = router;
